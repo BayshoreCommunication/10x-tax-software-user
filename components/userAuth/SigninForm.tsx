@@ -17,7 +17,7 @@ const SigninForm = () => {
         Sign in to you account
       </h2>
 
-      <form className="max-w-2xl mx-auto">
+      <form className="">
         {/* Email Input */}
         <div className="py-3">
           <label

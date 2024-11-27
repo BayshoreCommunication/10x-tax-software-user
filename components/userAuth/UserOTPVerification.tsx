@@ -12,7 +12,7 @@ const UserOTPVerification = () => {
 
           {/* Right Section */}
           <div className="bg-white p-10 col-span-2 rounded-e-xl flex items-center justify-center">
-            <div className="w-full max-w-md">
+            <div className="w-full">
               <OTPVerificationForm />
             </div>
           </div>

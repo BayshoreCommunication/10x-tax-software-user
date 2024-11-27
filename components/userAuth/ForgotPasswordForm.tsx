@@ -11,7 +11,7 @@ const ForgotPassword = () => {
         Forget Password
       </h2>
 
-      <form className="max-w-2xl mx-auto">
+      <form className="">
         {/* Email Input */}
         <div className="py-3">
           <label
@@ -27,7 +27,6 @@ const ForgotPassword = () => {
             <input
               autoComplete="off"
               type="text"
-              id="email-address-icon"
               className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-3 placeholder-gray-400  active:border-primary outline-none"
               placeholder="carlosrosario@gmail.com"
             />

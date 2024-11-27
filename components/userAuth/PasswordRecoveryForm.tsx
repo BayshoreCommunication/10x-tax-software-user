@@ -22,7 +22,7 @@ const PasswordRecoveryForm = () => {
         Password Recovery
       </h2>
 
-      <form className="max-w-2xl mx-auto">
+      <form className="">
         {/* Password Input */}
         <div className="py-3">
           <label

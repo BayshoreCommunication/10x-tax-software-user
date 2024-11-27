@@ -22,7 +22,7 @@ const SignupForm = () => {
         Signup to you account
       </h2>
 
-      <form className="max-w-2xl mx-auto">
+      <form className="">
         {/* Name Input */}
         <div className="py-3">
           <label

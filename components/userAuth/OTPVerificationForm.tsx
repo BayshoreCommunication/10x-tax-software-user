@@ -21,7 +21,7 @@ const OTPVerificationForm = () => {
       </p>
       <p className="font-normal text-lg text-black">s***78@gmail.com</p>
 
-      <form className="max-w-2xl mx-auto">
+      <form className="">
         <div className="flex space-x-6 my-5 text-black">
           <input
             type="text"
