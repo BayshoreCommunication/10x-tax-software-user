@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { Providers } from "../providers";
 import Sidebar from "@/components/layout/Sidebar";
 import TopNavbar from "@/components/layout/TopNavbar";
+import MainHeader from "@/components/layout/MainHeader";
+import MainFooter from "@/components/layout/MainFooter";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://10x-tax-software-admin.vercel.app"),
@@ -20,14 +22,10 @@ export default function RootLayout({
       <head />
       <body className={clsx("antialiased")}>
         <Providers themeProps={{ attribute: "className" }}>
-          <div className="flex items-start">
-            <div className="2xl:w-[15%] xl:w-[22%] lg:w-[30%]">
-              <Sidebar />
-            </div>
-            <div className="overflow-x-hidden 2xl:w-[85%] xl:w-[78%] lg:w-[70%]">
-              <TopNavbar />
-              {children}
-            </div>
+          <div className="overflow-x-hidden">
+            <MainHeader />
+            {children}
+            <MainFooter />
           </div>
         </Providers>
       </body>

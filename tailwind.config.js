@@ -15,6 +15,9 @@ module.exports = {
         black: "#000000",
         white: "#FFFFFF",
       },
+      maxWidth: {
+        custom: "1920px",
+      },
     },
     container: {
       center: true,
@@ -23,14 +26,13 @@ module.exports = {
         sm: "2rem",
         lg: "4rem",
         xl: "5rem",
-        "2xl": "1rem",
+        "2xl": "6rem",
+      },
+      screens: {
+        "2xl": "1920px",
       },
     },
-    maxWidth: {
-      "2xl": "1536px",
-    },
   },
-
-  darkMode: "className",
+  darkMode: "class",
   plugins: [nextui()],
 };
