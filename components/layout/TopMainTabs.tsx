@@ -2,51 +2,45 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type Tab = {
-  key: string;
+  slug: string;
   label: string;
 };
 
-const TopMainTabs = () => {
-  const [selectedTab, setSelectedTab] = useState("Dashboard");
+const TopMainTabs: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [selectedTab, setSelectedTab] = useState<string>("/");
 
   const tabs: Tab[] = [
-    { key: "dashboard", label: "Dashboard" },
-    { key: "client", label: "Client" },
-    { key: "tax", label: "Tax Plan Generator" },
+    { slug: "/", label: "Dashboard" },
+    { slug: "/client", label: "Client" },
+    { slug: "/tax-plan-generator", label: "Tax Plan Generator" },
   ];
 
-  const handleKeyPress = (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    label: string
-  ) => {
-    if (event.key === "Enter" || event.key === " ") {
-      setSelectedTab(label);
-    }
+  // Explicitly typing the function parameters
+  const handleSelectTab = (slug: string): void => {
+    router.push(slug);
   };
 
   return (
     <section className="bg-secondary border-t-1 border-gray-700">
       <div className="container">
         <div className="relative flex justify-center items-center w-full py-5">
-          {/* Tabs */}
           <div className="grid grid-cols-3 divide-x divide-gray-500 bg-[#383E54] relative w-full">
             {tabs.map((tab) => (
               <button
-                key={tab.key}
-                onClick={() => setSelectedTab(tab.label)}
-                // onKeyDown={(e) => handleKeyPress(e, tab.label)}
-                // role="button"
-                // tabIndex={0}
+                key={tab.slug}
+                onClick={() => handleSelectTab(tab.slug)}
                 className="relative px-6 py-3 cursor-pointer text-center text-xl font-semibold transition"
-                // aria-selected={selectedTab === tab.label}
-                // aria-label={`Select ${tab.label} tab`}
               >
-                {/* Tab Text */}
-                <span className={`relative z-10 text-white`}>{tab.label}</span>
-                {/* Active tab indicator */}
-                {selectedTab === tab.label && (
+                <span className="relative z-10 text-white">{tab.label}</span>
+
+                {pathname === tab.slug && (
                   <motion.div
                     layoutId="activeTabIndicator"
                     className="absolute inset-0 bg-primary z-0 border-none"

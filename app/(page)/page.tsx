@@ -1,6 +1,6 @@
-import DashboardMonthlySubscriptionsChart from "@/components/dashboard/DashboardMonthlySubscriptionsChart";
-import OverviewSection from "@/components/dashboard/OverviewSection";
-import SubscribersSection from "@/components/dashboard/SubscribersSection";
+import ClientListTable from "@/components/dashboard/ClientListTable";
+import DashboardOverview from "@/components/dashboard/DashboardOverview";
+import SubscriptionPlan from "@/components/subscription/SubscriptionPlan";
 
 export const metadata = {
   title: "10x Tax Software",
@@ -19,10 +19,10 @@ export const metadata = {
 
 const page = () => {
   return (
-    <div className="p-7  bg-[#eeeeee]">
-      <DashboardMonthlySubscriptionsChart />
-      <SubscribersSection />
-      <OverviewSection />
+    <div className="bg-[#eeeeee]">
+      {/* <SubscriptionPlan /> */}
+      <DashboardOverview />
+      <ClientListTable />
     </div>
   );
 };
