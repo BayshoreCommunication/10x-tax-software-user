@@ -1,6 +1,7 @@
+import { auth } from "@/auth";
 import ClientListTable from "@/components/dashboard/ClientListTable";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
-import SubscriptionPlan from "@/components/subscription/SubscriptionPlan";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "10x Tax Software",
@@ -17,10 +18,15 @@ export const metadata = {
   },
 };
 
-const page = () => {
+const page = async () => {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   return (
     <div className="bg-[#eeeeee]">
-      {/* <SubscriptionPlan /> */}
       <DashboardOverview />
       <ClientListTable />
     </div>

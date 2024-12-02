@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import { LuUsers2, LuLock, LuEyeOff, LuEye } from "react-icons/lu";
-import { Checkbox } from "@nextui-org/react";
 import Link from "next/link";
+import { useState } from "react";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +35,7 @@ const SignupForm = () => {
             autoComplete="off"
             type="text"
             id="email-address-icon"
-            className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-3 placeholder-gray-400  active:border-primary outline-none"
+            className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
             placeholder="Carlos Rosario"
           />
         </div>
@@ -54,7 +53,7 @@ const SignupForm = () => {
             autoComplete="off"
             type="text"
             id="email-address-icon"
-            className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-3 placeholder-gray-400  active:border-primary outline-none"
+            className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
             placeholder="carlosrosario@gmail.com"
           />
         </div>
@@ -72,7 +71,7 @@ const SignupForm = () => {
             autoComplete="off"
             type="text"
             id="email-address-icon"
-            className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-3 placeholder-gray-400  active:border-primary outline-none"
+            className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
             placeholder="(555) 555-1234"
           />
         </div>
@@ -90,7 +89,7 @@ const SignupForm = () => {
             <input
               type={showPassword ? "text" : "password"}
               id="password-input"
-              className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-3 placeholder-gray-400  active:border-primary outline-none"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
               placeholder="*********"
             />
             {/* Eye Icon */}
@@ -120,7 +119,7 @@ const SignupForm = () => {
             <input
               type={showConfrimPassword ? "text" : "password"}
               id="password-input"
-              className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-3 placeholder-gray-400  active:border-primary outline-none"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
               placeholder="*********"
             />
             {/* Eye Icon */}

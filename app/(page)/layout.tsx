@@ -1,12 +1,10 @@
-import "@/styles/globals.css";
-import { Metadata } from "next";
-
-import clsx from "clsx";
-import { Providers } from "../providers";
-import Sidebar from "@/components/layout/Sidebar";
-import TopNavbar from "@/components/layout/TopNavbar";
-import MainHeader from "@/components/layout/MainHeader";
 import MainFooter from "@/components/layout/MainFooter";
+import MainHeader from "@/components/layout/MainHeader";
+import GlobalToast from "@/components/shared/ui/GlobalToast";
+import "@/styles/globals.css";
+import clsx from "clsx";
+import { Metadata } from "next";
+import { Providers } from "../providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://10x-tax-software-admin.vercel.app"),
@@ -25,6 +23,7 @@ export default function RootLayout({
           <div className="overflow-x-hidden">
             <MainHeader />
             {children}
+            <GlobalToast />
             <MainFooter />
           </div>
         </Providers>
