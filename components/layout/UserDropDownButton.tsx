@@ -113,7 +113,7 @@ const UserDropDownButton = ({ user }: any) => {
 
               <button
                 onClick={notify}
-                href={"/settings"}
+                // href={"/settings"}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <RiSettings3Line className="size-4" />

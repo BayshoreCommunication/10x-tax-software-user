@@ -27,9 +27,17 @@ const users = [
       "https://i.ibb.co.com/3hRmXDJ/young-bearded-man-with-striped-shirt-273609-5677.jpg",
     domain: "abu.10xtax.com",
   },
+
+  {
+    email: "bayshore@gmail.com",
+    password: "12345",
+    company: "Bayshore",
+    name: "Bayshore",
+    image: "https://i.ibb.co.com/Mcnmvq6/Mask-group-1.png",
+  },
 ];
 
-export const getUserByEmail = (email) => {
-  const found = users.find((user) => user.email === email);
+export const getUserByEmail = (email: any) => {
+  const found = users.find((user: any) => user.email === email);
   return found;
 };

@@ -1,12 +1,33 @@
 "use client";
+
 import { credentialLoginOtpCheck } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
+type OtpType = {
+  digit1: string;
+  digit2: string;
+  digit3: string;
+  digit4: string;
+  digit5: string;
+  digit6: string;
+};
+
+type UserSignInInfoType = {
+  email: string;
+  password: string;
+  userOtp: string | undefined;
+} | null;
+
+type Props = {
+  userSignInOtpFlag: boolean;
+  userSignInInfo: UserSignInInfoType;
+};
+
+const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState<number>(120);
   const router = useRouter();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -18,13 +39,13 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds: number) => {
+  const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  const [otp, setOtp] = useState({
+  const [otp, setOtp] = useState<OtpType>({
     digit1: "",
     digit2: "",
     digit3: "",
@@ -41,7 +62,7 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
 
     if (value.length === 6) {
       const otpArray = value.split("");
-      const updatedOtp = {
+      const updatedOtp: OtpType = {
         digit1: otpArray[0],
         digit2: otpArray[1],
         digit3: otpArray[2],
@@ -69,8 +90,8 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (e.key === "Backspace" && !otp[`digit${index + 1}`]) {
-      inputRefs.current[index - 1]?.focus();
+    if (e.key === "Backspace" && !otp[`digit${index + 1}` as keyof OtpType]) {
+      inputRefs.current?.[index - 1]?.focus();
     }
   };
 
@@ -82,7 +103,7 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
     try {
       setLoading(true);
 
-      if (fullOtp === userSignInInfo.userOtp) {
+      if (fullOtp === userSignInInfo?.userOtp) {
         // Constructing FormData
         const formData = new FormData();
         formData.append("email", userSignInInfo.email);
@@ -91,11 +112,9 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
         const response = await credentialLoginOtpCheck(formData);
 
         if (!response) {
-          setError(response.error || "Invalid login OTP.");
-        } else if (response) {
-          router.push("/");
+          setError("Invalid login OTP.");
         } else {
-          setError("Login failed. Please try again.");
+          router.push("/");
         }
       } else {
         setError("Invalid OTP. Please try again.");
@@ -131,11 +150,11 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: any) => {
               type="text"
               className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-xl"
               placeholder="*"
-              maxLength={6}
-              ref={(el) => (inputRefs.current[index] = el)}
-              value={otp[`digit${index + 1}`]}
+              maxLength={1}
+              value={otp[`digit${index + 1}` as keyof OtpType]}
               onChange={(e) => handleInputChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
+              ref={(el: any) => (inputRefs.current[index] = el)}
             />
           ))}
         </div>

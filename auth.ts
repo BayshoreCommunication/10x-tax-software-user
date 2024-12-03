@@ -5,21 +5,21 @@ import { getUserByEmail } from "./config/users";
 export const { auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
-    secret: process.env.NEXTAUTH_SECRET,
+    // secret: process.env.NEXTAUTH_SECRET,
   },
   providers: [
     CredentialsProvider({
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials) return null;
 
         try {
-          const user = getUserByEmail(credentials?.email);
+          const user = getUserByEmail(credentials.email);
           if (user) {
-            const isMatch = user?.password === credentials.password;
+            const isMatch = user.password === credentials.password;
 
             if (isMatch) {
               // Redirect to OTP verification if password is correct
@@ -31,9 +31,13 @@ export const { auth, signIn, signOut } = NextAuth({
             throw new Error("User not found");
           }
         } catch (error) {
-          throw new Error(
-            error.message || "An error occurred during authorization."
-          );
+          if (error instanceof Error) {
+            throw new Error(
+              error.message || "An error occurred during authorization."
+            );
+          } else {
+            throw new Error("An unknown error occurred during authorization.");
+          }
         }
       },
     }),

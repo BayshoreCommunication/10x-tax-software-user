@@ -6,7 +6,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuEye, LuEyeOff, LuLock, LuUsers2 } from "react-icons/lu";
 
-const SigninForm = ({ setUserSignInOtpFlag, setUserSignInInfo }: any) => {
+interface SigninFormProps {
+  setUserSignInOtpFlag: (flag: boolean) => void;
+  setUserSignInInfo: (info: UserSignInInfo) => void;
+}
+
+interface UserSignInInfo {
+  email: string;
+  password: string;
+  userOtp: string | undefined;
+  [key: string]: any; // Extendable to include other fields
+}
+
+const SigninForm: React.FC<SigninFormProps> = ({
+  setUserSignInOtpFlag,
+  setUserSignInInfo,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -17,7 +32,7 @@ const SigninForm = ({ setUserSignInOtpFlag, setUserSignInInfo }: any) => {
 
   const router = useRouter();
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null); // Reset error on new attempt
 
@@ -34,19 +49,24 @@ const SigninForm = ({ setUserSignInOtpFlag, setUserSignInInfo }: any) => {
       setLoading(true);
       const response = await credentialLogin(formData);
 
-      if (response.error) {
-        setError(response.error.message || "Invalid login credentials.");
-      } else {
+      if (response?.error) {
+        setError("Invalid login credentials.");
+      } else if (response) {
+        // Assuming `response` contains email and OTP
         setUserSignInOtpFlag(true);
-        setUserSignInInfo(response);
+        setUserSignInInfo({
+          email,
+          password,
+          userOtp: response.userOtp,
+        });
       }
-    } catch (e) {
+    } catch (error) {
       setError("An unexpected error occurred. Please try again later.");
-      console.error(e);
+      console.error(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -79,6 +99,7 @@ const SigninForm = ({ setUserSignInOtpFlag, setUserSignInInfo }: any) => {
               type="email"
               id="email"
               name="email"
+              required
               className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 outline-none"
               placeholder="example@gmail.com"
             />
@@ -101,6 +122,7 @@ const SigninForm = ({ setUserSignInOtpFlag, setUserSignInInfo }: any) => {
               type={showPassword ? "text" : "password"}
               id="password"
               name="password"
+              required
               className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 outline-none"
               placeholder="*********"
             />

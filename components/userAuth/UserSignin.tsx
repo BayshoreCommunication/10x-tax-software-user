@@ -1,12 +1,23 @@
 "use client";
+
 import { useState } from "react";
 import OTPVerificationForm from "./OTPVerificationForm";
 import SigninForm from "./SigninForm";
 import UserSideBar from "./UserSideBar";
 
+// Define type for userSignInInfo (replace with your actual type if available)
+interface UserSignInInfo {
+  // Example fields; replace with actual data structure
+  email: string;
+  password: string;
+  userOtp: string | undefined;
+}
+
 const UserSignin = () => {
-  const [userSignInOtpFlag, setUserSignInOtpFlag] = useState(false);
-  const [userSignInInfo, setUserSignInInfo] = useState(null);
+  const [userSignInOtpFlag, setUserSignInOtpFlag] = useState<boolean>(false);
+  const [userSignInInfo, setUserSignInInfo] = useState<UserSignInInfo | null>(
+    null
+  );
 
   return (
     <section className="flex justify-center items-center min-h-screen">
