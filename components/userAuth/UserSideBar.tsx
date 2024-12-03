@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 const UserSideBar = ({ title }: any) => {
   return (
@@ -20,7 +19,7 @@ const UserSideBar = ({ title }: any) => {
       </div>
       <div className="flex justify-center">
         <Image
-          src="/assets/admin-image/home-welcome-image.png"
+          src="/assets/user-image/home-welcome-image.png"
           alt="10x Tax Software"
           width={500}
           height={500}
