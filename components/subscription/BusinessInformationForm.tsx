@@ -1,11 +1,5 @@
-import React from "react";
-import { BsCreditCard } from "react-icons/bs";
-import { LiaStripe } from "react-icons/lia";
-import { BsBank } from "react-icons/bs";
-import { FaCcPaypal } from "react-icons/fa6";
-import { SlPaypal } from "react-icons/sl";
-import { TbEditCircle } from "react-icons/tb";
 import Image from "next/image";
+import { TbEditCircle } from "react-icons/tb";
 import ColorPicker from "../shared/ui/ColorPicker";
 
 const BusinessInformationForm = () => {

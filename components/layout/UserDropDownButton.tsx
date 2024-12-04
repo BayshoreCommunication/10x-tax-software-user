@@ -3,8 +3,7 @@
 import { userLogOut } from "@/app/actions";
 import { siteConfig } from "@/config/site";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -26,6 +25,7 @@ const UserDropDownButton = ({ user }: any) => {
       theme: "light",
     });
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -50,6 +50,11 @@ const UserDropDownButton = ({ user }: any) => {
   const dashboardTitle = siteConfig?.sideBarItems?.find(
     (el: any, index: number) => el?.slug === pathname
   )?.label;
+
+  const handleMenuClick = (slug: any) => {
+    router.push(slug);
+    setIsOpen(false);
+  };
 
   return (
     <div>
@@ -95,25 +100,24 @@ const UserDropDownButton = ({ user }: any) => {
             aria-labelledby="menu-button"
           >
             <div className="py-1" role="none">
-              <Link
-                href={"/settings"}
+              <button
+                onClick={() => handleMenuClick("/account")}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <FaRegUser className="size-4" />
                 <p>Account</p>
-              </Link>
+              </button>
 
-              <Link
-                href={"/settings"}
+              <button
+                onClick={() => handleMenuClick("/subscription")}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <PiListPlusBold className="size-4" />
                 <p>Subscription</p>
-              </Link>
+              </button>
 
               <button
-                onClick={notify}
-                // href={"/settings"}
+                onClick={() => handleMenuClick("/settings")}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <RiSettings3Line className="size-4" />
