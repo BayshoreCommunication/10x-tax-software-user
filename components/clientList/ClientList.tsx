@@ -32,9 +32,12 @@ const ClientList = () => {
         </form>
 
         <div className="w-[25%]  flex items-center  justify-end">
-          <button className="px-4 py-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white">
+          <Link
+            href={"/add-new-client"}
+            className="px-4 py-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white"
+          >
             Add New Client
-          </button>
+          </Link>
         </div>
       </div>
       <div className="relative overflow-x-auto bg-white pb-10">
@@ -84,7 +87,7 @@ const ClientList = () => {
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
                   <button
                     className="bg-yellow-100 hover:bg-yellow-200 p-1.5 rounded-lg"
-                    onClick={() => router.push(`/users/${index}`)}
+                    onClick={() => router.push(`/client-edit`)}
                   >
                     <FiEdit className="text-[#D5AD45] size-4" />
                   </button>

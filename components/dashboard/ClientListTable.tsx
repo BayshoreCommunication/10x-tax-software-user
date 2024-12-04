@@ -15,9 +15,12 @@ const ClientListTable = () => {
         <h2 className="text-2xl font-bold text-white text-center py-4">
           Clients List
         </h2>
-        <button className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white flex items-center ">
+        <Link
+          href={"/add-new-client"}
+          className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white flex items-center "
+        >
           Add New Client
-        </button>
+        </Link>
       </div>
       <div className="relative overflow-x-auto bg-white pb-10">
         <table className="w-full text-left rtl:text-right text-gray-500 ">
@@ -66,7 +69,7 @@ const ClientListTable = () => {
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
                   <button
                     className="bg-yellow-100 hover:bg-yellow-200 p-1.5 rounded-lg"
-                    onClick={() => router.push(`/users/${index}`)}
+                    onClick={() => router.push(`/client-edit`)}
                   >
                     <FiEdit className="text-[#D5AD45] size-4" />
                   </button>

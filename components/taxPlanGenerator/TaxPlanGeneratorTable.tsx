@@ -68,9 +68,12 @@ const TaxPlanGeneratorTable = () => {
                 <td className="px-6 py-4">{el?.email}</td>
 
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
-                  <button className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white">
+                  <Link
+                    href={"/generate-plan"}
+                    className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white"
+                  >
                     Generate Plan
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}
