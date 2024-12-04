@@ -61,7 +61,7 @@ const ClientListTable = () => {
                 </td>
                 <td className="px-6 py-4">{el?.phone}</td>
                 <td className="px-6 py-4">{el?.email}</td>
-                <td className="px-6 py-4">{el?.phone}</td>
+                <td className="px-6 py-4">{el?.address}</td>
                 <td className="px-6 py-4">{el?.subscriptionsDate}</td>
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
                   <button

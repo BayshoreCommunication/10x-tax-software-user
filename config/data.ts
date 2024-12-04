@@ -5,6 +5,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "11-12-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Arjo Neel",
@@ -12,6 +13,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "unpaid",
     subscriptionsDate: "27-06-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Salman H Saikote",
@@ -19,6 +21,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "19-05-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Sadit Hasan",
@@ -26,6 +29,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "unpaid",
     subscriptionsDate: "1-02-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "AR Sahak",
@@ -33,6 +37,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "12-08-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "NJ Milon",
@@ -40,6 +45,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "12-07-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Raihan Ali",
@@ -47,6 +53,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "unpaid",
     subscriptionsDate: "12-12-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Abu Kawsar",
@@ -54,6 +61,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "12-12-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Rahat Rahman",
@@ -61,6 +69,7 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "unpaid",
     subscriptionsDate: "12-12-2024",
+    address: "Dhaka, Bangladesh",
   },
   {
     name: "Jannat Fardouse",
@@ -68,5 +77,6 @@ export const usersDemoData = [
     phone: "+1 863 567-6765",
     subscription: "paid",
     subscriptionsDate: "12-12-2024",
+    address: "Dhaka, Bangladesh",
   },
 ];
