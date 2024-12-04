@@ -2,7 +2,7 @@ import UserPasswordRecovery from "@/components/userAuth/UserPasswordRecovery";
 
 const page = () => {
   return (
-    <div>
+    <div className="bg-[#eeeeee]">
       <UserPasswordRecovery />
     </div>
   );

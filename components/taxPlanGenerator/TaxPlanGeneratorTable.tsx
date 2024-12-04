@@ -1,14 +1,10 @@
 "use client";
-import React from "react";
 import { usersDemoData } from "@/config/data";
-import { RiDeleteBin5Fill } from "react-icons/ri";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import { GoSearch } from "react-icons/go";
 
-import { FiEdit } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const TaxPlanGeneratorTable = () => {
   const router = useRouter();
@@ -72,7 +68,7 @@ const TaxPlanGeneratorTable = () => {
                 <td className="px-6 py-4">{el?.email}</td>
 
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
-                  <button className="px-4 py-2  bg-primary text-white rounded-md font-medium text-base hover:bg-yellow-600 hover:text-white">
+                  <button className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white">
                     Generate Plan
                   </button>
                 </td>

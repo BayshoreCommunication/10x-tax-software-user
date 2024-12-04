@@ -2,7 +2,7 @@ import UserForgotPassword from "@/components/userAuth/UserForgotPassword";
 
 const page = () => {
   return (
-    <div>
+    <div className="bg-[#eeeeee]">
       <UserForgotPassword />
     </div>
   );

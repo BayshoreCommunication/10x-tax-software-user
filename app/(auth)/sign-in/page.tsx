@@ -17,7 +17,7 @@ export const metadata = {
 
 const page = () => {
   return (
-    <div>
+    <div className="bg-[#eeeeee]">
       <UserSignin />
       {/* <LoginForm /> */}
     </div>
