@@ -1,6 +1,6 @@
 export const siteConfig = {
   siteMetadata: {
-    title: "",
+    title: " ",
     description: "",
   },
   siteLogo: { url: "" },
