@@ -1,15 +1,17 @@
 "use client";
 import { usersDemoData } from "@/config/data";
-import { GoSearch } from "react-icons/go";
-import { RiDeleteBin6Fill } from "react-icons/ri";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
+import { GoSearch } from "react-icons/go";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import ClientDeletedModal from "../shared/ui/Modal/ClientDeletedModal";
 
 const ClientList = () => {
   const router = useRouter();
+  const [clientDeletedModal, setClientDeletedModal] = useState(false);
 
   return (
     <div className="container py-10">
@@ -91,7 +93,10 @@ const ClientList = () => {
                   >
                     <FiEdit className="text-[#D5AD45] size-4" />
                   </button>
-                  <button className="bg-red-100 hover:bg-red-200 p-1.5 rounded-lg">
+                  <button
+                    className="bg-red-100 hover:bg-red-200 p-1.5 rounded-lg"
+                    onClick={() => setClientDeletedModal(!clientDeletedModal)}
+                  >
                     <RiDeleteBin6Fill className="text-red-500 size-4" />
                   </button>
                 </td>
@@ -142,6 +147,10 @@ const ClientList = () => {
           </ul>
         </nav>
       </div>
+      <ClientDeletedModal
+        clientDeletedModal={clientDeletedModal}
+        setClientDeletedModal={setClientDeletedModal}
+      />
     </div>
   );
 };

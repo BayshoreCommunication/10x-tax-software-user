@@ -1,9 +1,9 @@
-import GeneratePlan from "@/components/generatePlan/GeneratePlan";
+import GeneratePlanTabs from "@/components/generatePlan/GeneratePlanTabs";
 
 const page = () => {
   return (
     <div className="bg-[#eeeeee]">
-      <GeneratePlan />
+      <GeneratePlanTabs />
     </div>
   );
 };
