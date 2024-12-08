@@ -8,9 +8,8 @@ import UserSideBar from "./UserSideBar";
 // Define type for userSignInInfo (replace with your actual type if available)
 interface UserSignInInfo {
   // Example fields; replace with actual data structure
-  email: string;
-  password: string;
-  userOtp: string | undefined;
+  email: string | undefined;
+  otp: string | undefined;
 }
 
 const UserSignin = () => {

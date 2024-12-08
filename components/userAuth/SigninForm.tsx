@@ -12,9 +12,8 @@ interface SigninFormProps {
 }
 
 interface UserSignInInfo {
-  email: string;
-  password: string;
-  userOtp: string | undefined;
+  email: string | undefined;
+  otp: string | undefined;
   [key: string]: any; // Extendable to include other fields
 }
 
@@ -37,34 +36,39 @@ const SigninForm: React.FC<SigninFormProps> = ({
     setError(null); // Reset error on new attempt
 
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const email = formData.get("email") as string | null;
+    const password = formData.get("password") as string | null;
 
+    // Basic validation
     if (!email || !password) {
       setError("Both email and password are required.");
       return;
     }
 
     try {
-      setLoading(true);
+      setLoading(true); // Start loading state
+
+      // Call login API
       const response = await credentialLogin(formData);
 
       if (response?.error) {
-        setError("Invalid login email/password.");
-      } else if (response) {
-        // Assuming `response` contains email and OTP
+        setError(response.error); // Set error from response
+      } else if (response?.ok) {
+        // Set OTP flag and user info only if login is successful
         setUserSignInOtpFlag(true);
         setUserSignInInfo({
           email,
-          password,
-          userOtp: response.userOtp,
+          otp: "1258",
         });
+      } else {
+        setError("Unexpected response from server. Please try again later.");
       }
     } catch (error) {
+      // Handle unexpected errors
       setError("An unexpected error occurred. Please try again later.");
-      console.error(error);
+      console.error("Error during login:", error);
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading state
     }
   };
 

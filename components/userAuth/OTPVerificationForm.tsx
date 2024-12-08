@@ -14,9 +14,8 @@ type OtpType = {
 };
 
 type UserSignInInfoType = {
-  email: string;
-  password: string;
-  userOtp: string | undefined;
+  email: string | undefined;
+  otp: string | undefined;
 } | null;
 
 type Props = {
@@ -30,6 +29,21 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
   const [timeLeft, setTimeLeft] = useState<number>(120);
   const router = useRouter();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const maskEmail = (email: any): any => {
+    const [localPart, domain] = email.split("@");
+    if (localPart.length <= 2) {
+      return email; // If the local part is too short, return the email as is
+    }
+
+    const maskedLocalPart =
+      localPart[0] +
+      "***" +
+      localPart[localPart.length - 2] +
+      localPart[localPart.length - 1];
+
+    return `${maskedLocalPart}@${domain}`;
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,19 +74,21 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
   ) => {
     const value = e.target.value;
 
-    if (value.length === 6) {
-      const otpArray = value.split("");
+    if (value.length > 1) {
+      // Handling paste operation
+      const otpArray = value.slice(0, 6).split(""); // Ensure only 6 digits
       const updatedOtp: OtpType = {
-        digit1: otpArray[0],
-        digit2: otpArray[1],
-        digit3: otpArray[2],
-        digit4: otpArray[3],
-        digit5: otpArray[4],
-        digit6: otpArray[5],
+        digit1: otpArray[0] || "",
+        digit2: otpArray[1] || "",
+        digit3: otpArray[2] || "",
+        digit4: otpArray[3] || "",
+        digit5: otpArray[4] || "",
+        digit6: otpArray[5] || "",
       };
       setOtp(updatedOtp);
 
-      inputRefs.current[5]?.focus();
+      // Move focus to the last field
+      inputRefs.current[otpArray.length - 1]?.focus();
       return;
     }
 
@@ -103,27 +119,42 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
     try {
       setLoading(true);
 
-      if (fullOtp === userSignInInfo?.userOtp) {
-        // Constructing FormData
-        const formData = new FormData();
-        formData.append("email", userSignInInfo.email);
-        formData.append("password", userSignInInfo.password);
+      // Constructing FormData
+      const formData = new FormData();
+      formData.append("email", userSignInInfo?.email || " ");
+      formData.append("otp", fullOtp);
 
-        const response = await credentialLoginOtpCheck(formData);
+      const response = await credentialLoginOtpCheck(formData);
 
-        if (!response) {
-          setError("Invalid login OTP.");
-        } else {
-          router.push("/");
-        }
+      if (!response) {
+        setError("Invalid login OTP.");
       } else {
-        setError("Invalid OTP. Please try again.");
+        router.push("/");
       }
     } catch (e) {
       setError("An unexpected error occurred. Please try again later.");
       console.error("Error during login:", e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedValue = e.clipboardData.getData("Text");
+
+    if (pastedValue.length === 6) {
+      const otpArray = pastedValue.split("");
+
+      otpArray.forEach((digit, index) => {
+        handleInputChange(
+          {
+            target: {
+              value: digit,
+            },
+          } as unknown as React.ChangeEvent<HTMLInputElement>,
+          index
+        );
+      });
     }
   };
 
@@ -136,7 +167,9 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
       <p className="font-light text-lg text-gray-600">
         We have sent an OTP to this email
       </p>
-      <p className="font-normal text-lg text-black">s***78@gmail.com</p>
+      <p className="font-normal text-lg text-black">
+        {maskEmail(userSignInInfo?.email)}
+      </p>
 
       <h3 className="text-green-400 font-medium text-2xl my-3">
         {formatTime(timeLeft)}
@@ -154,6 +187,7 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
               value={otp[`digit${index + 1}` as keyof OtpType]}
               onChange={(e) => handleInputChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
+              onPaste={handlePaste}
               ref={(el: any) => (inputRefs.current[index] = el)}
             />
           ))}

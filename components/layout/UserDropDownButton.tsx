@@ -73,7 +73,7 @@ const UserDropDownButton = ({ user }: any) => {
             <div className="w-10 h-10 overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
               <div className="flex items-center justify-center w-[30px] h-[30px]">
                 <Image
-                  src={user?.image || "/default-user-image.png"}
+                  src={user?.logoUrl || "/default-user-image.png"}
                   alt="User Image"
                   width={100}
                   height={100}
@@ -83,8 +83,12 @@ const UserDropDownButton = ({ user }: any) => {
               </div>
             </div>
             <div className="text-left">
-              <h3 className="font-medium text-lg text-white">{user?.name}</h3>
-              <p className="font-normal text-sm text-white">{user?.email}</p>
+              <h3 className="font-medium text-lg text-white">
+                {user?.businessName}
+              </h3>
+              <p className="font-normal text-sm text-white">
+                {user?.businessWebsite}
+              </p>
             </div>
             <div className="w-6 h-6 flex items-center justify-center">
               <IoIosArrowDown className="text- size-5 text-white" />
