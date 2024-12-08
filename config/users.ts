@@ -22,7 +22,7 @@ const users = [
     email: "abu@gmail.com",
     password: "12345",
     company: "Abu Tech",
-    name: "Abu Kawsar",
+    name: "Abu Kawsar ",
     image:
       "https://i.ibb.co.com/3hRmXDJ/young-bearded-man-with-striped-shirt-273609-5677.jpg",
     domain: "abu.10xtax.com",
