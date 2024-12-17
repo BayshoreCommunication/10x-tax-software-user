@@ -3,7 +3,7 @@
 import { userForgetPasswordProcess } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LuUsers2 } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
 
 interface UserForgotPasswordInfo {
   email: string;
@@ -78,7 +78,7 @@ const ForgotPasswordForm: React.FC<UserForgotPasswordInfoProps> = ({
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <LuUsers2 className="text-primary text-lg" />
+              <LuUsers className="text-primary text-lg" />
             </div>
             <input
               autoComplete="off"

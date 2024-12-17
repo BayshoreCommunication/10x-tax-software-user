@@ -4,7 +4,7 @@ import { credentialLogin } from "@/app/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LuEye, LuEyeOff, LuLock, LuUsers2 } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuLock, LuUsers } from "react-icons/lu";
 
 interface SigninFormProps {
   setUserSignInOtpFlag: (flag: boolean) => void;
@@ -89,7 +89,7 @@ const SigninForm: React.FC<SigninFormProps> = ({
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <LuUsers2 className="text-primary text-lg" />
+              <LuUsers className="text-primary text-lg" />
             </div>
             <input
               autoComplete="off"
