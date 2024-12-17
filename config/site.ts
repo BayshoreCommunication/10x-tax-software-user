@@ -3,7 +3,7 @@ export const siteConfig = {
     title: " ",
     description: "",
   },
-  siteLogo: { url: "" },
+  siteLogo: { url: " " },
   sideBarItems: [
     { slug: "/", label: "Dashboard" },
     { slug: "/users", label: "Users" },
