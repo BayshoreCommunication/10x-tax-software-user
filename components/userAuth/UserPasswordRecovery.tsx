@@ -1,6 +1,5 @@
-import React from "react";
-import UserSideBar from "./UserSideBar";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
+import UserSideBar from "./UserSideBar";
 
 const UserPasswordRecovery = () => {
   return (
@@ -13,7 +12,7 @@ const UserPasswordRecovery = () => {
           {/* Right Section */}
           <div className="bg-white p-10 col-span-2 rounded-e-xl flex items-center justify-center">
             <div className="w-full">
-              <PasswordRecoveryForm />
+              <PasswordRecoveryForm userForgotPasswordInfo={null} />
             </div>
           </div>
         </div>

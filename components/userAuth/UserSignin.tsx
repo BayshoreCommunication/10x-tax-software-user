@@ -5,9 +5,7 @@ import OTPVerificationForm from "./OTPVerificationForm";
 import SigninForm from "./SigninForm";
 import UserSideBar from "./UserSideBar";
 
-// Define type for userSignInInfo (replace with your actual type if available)
 interface UserSignInInfo {
-  // Example fields; replace with actual data structure
   email: string | undefined;
   otp: string | undefined;
 }

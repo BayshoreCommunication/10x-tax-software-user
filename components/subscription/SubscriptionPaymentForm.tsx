@@ -1,17 +1,93 @@
-import React from "react";
-import { BsCreditCard } from "react-icons/bs";
-import { LiaStripe } from "react-icons/lia";
-import { BsBank } from "react-icons/bs";
-import { FaCcPaypal } from "react-icons/fa6";
-import { SlPaypal } from "react-icons/sl";
+"use client";
 
-const SubscriptionPaymentForm = () => {
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { BsBank, BsCreditCard } from "react-icons/bs";
+import { SlPaypal } from "react-icons/sl";
+import BankCheckoutForm from "./PaymentOption/BankCheckoutForm";
+import CardCheckoutForm from "./PaymentOption/CardCheckoutForm";
+import PaypalCheckoutForm from "./PaymentOption/PaypalCheckoutForm";
+
+interface PaymentInfo {
+  email: string;
+  name: string;
+  country: string;
+  address: string;
+  paymentId: string;
+}
+
+interface SubscriptionInfo {
+  subscriptionDate: Date | null;
+  subscriptionExpiredDate: Date | null;
+  type: string;
+}
+
+interface SubscriptionPaymentFormProps {
+  subscriptionType: string;
+  token: any;
+}
+
+const SubscriptionPaymentForm: React.FC<SubscriptionPaymentFormProps> = ({
+  subscriptionType,
+  token,
+}) => {
+  const [selectPaymentMethod, setSelectPaymentMethod] =
+    useState<string>("card");
+
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  const [amount, setAmount] = useState<number>(0);
+
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
+    email: "",
+    name: "",
+    country: "",
+    address: "",
+    paymentId: "2536974",
+  });
+
+  const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo>({
+    subscriptionDate: null,
+    subscriptionExpiredDate: null,
+    type: "",
+  });
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPaymentInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const currentDate = new Date();
+    let subscriptionExpiredDate: Date | null = null;
+
+    if (subscriptionType === "monthly") {
+      subscriptionExpiredDate = new Date(currentDate);
+      subscriptionExpiredDate.setDate(currentDate.getDate() + 30);
+    } else if (subscriptionType === "yearly") {
+      subscriptionExpiredDate = new Date(currentDate);
+      subscriptionExpiredDate.setDate(currentDate.getDate() + 365);
+    }
+
+    const calculatedAmount = subscriptionType === "monthly" ? 29 : 229;
+    setAmount(calculatedAmount);
+
+    setSubscriptionInfo({
+      subscriptionDate: currentDate,
+      subscriptionExpiredDate,
+      type: subscriptionType,
+    });
+  }, [subscriptionType]);
+
   return (
     <div className="py-10 flex items-center justify-center">
       <div className="bg-white  p-12 w-[65%]">
         <h2 className="text-3xl font-bold text-[#11142D] text-left py-4">
           Choose Your Payment Method
         </h2>
+
         <div className="p-14">
           <div className="mb-5">
             <h4 className="text-2xl font-medium text-[#11142D] text-left py-2">
@@ -30,6 +106,9 @@ const SubscriptionPaymentForm = () => {
                 autoComplete="off"
                 type="email"
                 id="email"
+                name="email"
+                value={paymentInfo.email}
+                onChange={handleInputChange}
                 className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                 placeholder="Enter email"
               />
@@ -53,6 +132,9 @@ const SubscriptionPaymentForm = () => {
                 autoComplete="off"
                 type="text"
                 id="name"
+                name="name"
+                value={paymentInfo.name}
+                onChange={handleInputChange}
                 className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                 placeholder="Enter name"
               />
@@ -69,7 +151,10 @@ const SubscriptionPaymentForm = () => {
               <input
                 autoComplete="off"
                 type="text"
-                id="name"
+                id="country"
+                name="country"
+                value={paymentInfo.country}
+                onChange={handleInputChange}
                 className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                 placeholder="United States"
               />
@@ -86,7 +171,10 @@ const SubscriptionPaymentForm = () => {
               <input
                 autoComplete="off"
                 type="text"
-                id="name"
+                id="address"
+                name="address"
+                value={paymentInfo.address}
+                onChange={handleInputChange}
                 className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                 placeholder="210 Tempo st."
               />
@@ -97,92 +185,55 @@ const SubscriptionPaymentForm = () => {
               Payment Method
             </h4>
             <div className="py-3 flex items-center justify-between space-x-8 w-full">
-              <div className="border  px-5 py-8 w-full rounded border-primary">
+              <button
+                onClick={() => setSelectPaymentMethod("card")}
+                className={`border  px-5 py-8 w-full rounded  ${selectPaymentMethod === "card" ? "border-primary bg-gray-50" : ""}`}
+              >
                 <div className="flex justify-center items-center">
                   <BsCreditCard className="text-primary size-10" />
                 </div>
                 <p className="text-xl font-medium text-gray-900 mt-3 text-center">
                   Card
                 </p>
-              </div>
-              <div className="border  px-5 py-8 w-full ">
+              </button>
+              <button
+                onClick={() => setSelectPaymentMethod("paypal")}
+                className={`border  px-5 py-8 w-full rounded  ${selectPaymentMethod === "paypal" ? "border-primary bg-gray-50" : ""}`}
+              >
                 <div className="flex justify-center items-center">
                   <SlPaypal className="text-primary size-10" />
                 </div>
                 <p className="text-xl font-medium text-gray-900 mt-3 text-center">
                   Paypal
                 </p>
-              </div>
-              <div className="border  px-5 py-8 w-full ">
+              </button>
+              <button
+                onClick={() => setSelectPaymentMethod("bank")}
+                className={`border  px-5 py-8 w-full rounded  ${selectPaymentMethod === "bank" ? "border-primary bg-gray-50" : ""}`}
+              >
                 <div className="flex justify-center items-center">
                   <BsBank className="text-primary size-9" />
                 </div>
                 <p className="text-xl font-medium text-gray-900 mt-3 text-center">
                   Bank
                 </p>
-              </div>
+              </button>
             </div>
 
-            <div className="flex items-center justify-between space-x-8 py-3">
-              <div className="w-[45%]">
-                <label
-                  htmlFor="name-icon"
-                  className="block mb-2 text-xl font-normal text-gray-900"
-                >
-                  Card Number
-                </label>
-
-                <input
-                  autoComplete="off"
-                  type="email"
-                  id="email"
-                  className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-                  placeholder="1264 1234 1234 1234"
-                />
-              </div>
-
-              <div className="w-[25%]">
-                <label
-                  htmlFor="name-icon"
-                  className="block mb-2 text-xl font-normal text-gray-900"
-                >
-                  CSV
-                </label>
-
-                <input
-                  autoComplete="off"
-                  type="email"
-                  id="email"
-                  className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-                  placeholder="1264"
-                />
-              </div>
-
-              <div className="w-[30%]">
-                <label
-                  htmlFor="name-icon"
-                  className="block mb-2 text-xl font-normal text-gray-900"
-                >
-                  Expire date
-                </label>
-
-                <input
-                  autoComplete="off"
-                  type="email"
-                  id="email"
-                  className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-                  placeholder="12 / 10 / 24"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="py-8 flex justify-center items-center mx-0">
-            <button
-              type="submit"
-              className="text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-[50%] "
-            >
-              Payment
-            </button>
+            {/* Check Payment Option */}
+            {selectPaymentMethod === "card" ? (
+              <CardCheckoutForm
+              // paymentInfo={paymentInfo}
+              // setPaymentInfo={setPaymentInfo}
+              // subscriptionInfo={subscriptionInfo}
+              // amount={amount}
+              // token={token}
+              />
+            ) : selectPaymentMethod === "paypal" ? (
+              <PaypalCheckoutForm />
+            ) : (
+              <BankCheckoutForm />
+            )}
           </div>
         </div>
       </div>

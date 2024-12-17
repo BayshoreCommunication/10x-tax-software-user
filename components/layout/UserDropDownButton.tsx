@@ -73,12 +73,11 @@ const UserDropDownButton = ({ user }: any) => {
             <div className="w-10 h-10 overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
               <div className="flex items-center justify-center w-[30px] h-[30px]">
                 <Image
-                  src={user?.logoUrl || "/default-user-image.png"}
-                  alt="User Image"
+                  src={user?.logoUrl || "/assets/user-image/user-image.png"}
+                  alt={user?.businessName || "User Image"}
                   width={100}
                   height={100}
                   className="w-[35px] h-[35px]"
-                  unoptimized
                 />
               </div>
             </div>

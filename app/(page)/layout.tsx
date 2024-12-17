@@ -4,6 +4,7 @@ import GlobalToast from "@/components/shared/ui/GlobalToast";
 import "@/styles/globals.css";
 import clsx from "clsx";
 import { Metadata } from "next";
+import ReduxProvider from "../../redux/reduxProvider";
 import { Providers } from "../providers";
 
 export const metadata: Metadata = {
@@ -18,16 +19,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={clsx("antialiased")}>
-        <Providers themeProps={{ attribute: "className" }}>
-          <div className="overflow-x-hidden">
-            <MainHeader />
-            {children}
-            <GlobalToast />
-            <MainFooter />
-          </div>
-        </Providers>
-      </body>
+      <ReduxProvider>
+        <body className={clsx("antialiased")}>
+          <Providers themeProps={{ attribute: "className" }}>
+            <div className="overflow-x-hidden">
+              <MainHeader />
+              {children}
+              <GlobalToast />
+              <MainFooter />
+            </div>
+          </Providers>
+        </body>
+      </ReduxProvider>
     </html>
   );
 }

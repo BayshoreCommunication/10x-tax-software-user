@@ -87,6 +87,15 @@ export async function credentialLoginOtpCheck(
     return { error: "Email and otp are required.", ok: false };
   }
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    console.error("API URL is not defined in environment variables.");
+    return {
+      error: "Internal server error. Please try again later.",
+      ok: false,
+    };
+  }
+
   try {
     // Call NextAuth signIn with credentials
     const response = await signIn("credentials", {
@@ -119,6 +128,250 @@ export async function credentialLoginOtpCheck(
     console.error("Error during credential login:", err);
     return {
       error: "An unexpected error occurred during login.",
+      ok: false,
+    };
+  }
+}
+
+export async function userSignUp(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean; url?: string }> {
+  const requiredFields = ["email", "password", "phone", "businessName"];
+  const data = Object.fromEntries(formData.entries());
+
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return { error: `${field} is required.`, ok: false };
+    }
+  }
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  try {
+    const response = await fetch(`${apiUrl}/api/user/register`, {
+      method: "Post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const { error } = await response.json().catch(() => ({}));
+      return {
+        error: error || "Failed to register. Please try again.",
+        ok: false,
+      };
+    }
+
+    return {
+      ok: true,
+      url: response.url,
+    };
+  } catch (err) {
+    console.error("Error during user sign-up:", err);
+    return {
+      error: "A network error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function userSignUpOtpCheck(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean; url?: string }> {
+  console.log("FormData Entries:", Object.fromEntries(formData.entries()));
+  const email = formData.get("email") as string | null;
+  const otp = formData.get("otp") as string | null;
+
+  if (!email || !otp) {
+    return { error: "Email and OTP are required.", ok: false };
+  }
+  
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  try {
+    const response = await fetch(`${apiUrl}/api/user/verify`, {
+      method: "Post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        error: errorData?.message || "Invalid OTP or server error.",
+        ok: false,
+      };
+    }
+
+    const responseData = await response.json();
+    return {
+      ok: true,
+      url: responseData?.url || "",
+    };
+  } catch (err) {
+    console.error("Error during OTP verification:", err);
+    return {
+      error: "An unexpected error occurred during OTP verification.",
+      ok: false,
+    };
+  }
+}
+
+export async function userForgetPasswordProcess(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean; url?: string }> {
+  const email = formData.get("email") as string | null;
+
+  if (!email) {
+    return {
+      error: "Email is required.",
+      ok: false,
+    };
+  }
+
+  // Check API URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    console.error("API URL is not defined in environment variables.");
+    return {
+      error: "Internal server error. Please try again later.",
+      ok: false,
+    };
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/api/user/forget-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const responseData = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        error:
+          responseData?.error ||
+          "Failed to process your request. Please try again.",
+        ok: false,
+      };
+    }
+    return {
+      ok: true,
+      url: responseData?.url || response.url,
+    };
+  } catch (err) {
+    console.error("Error during forget password process:", err);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function userForgetPasswordProcessOtpCheck(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean; url?: string }> {
+  console.log("FormData Entries:", Object.fromEntries(formData.entries()));
+  const email = formData.get("email") as string | null;
+  const otp = formData.get("otp") as string | null;
+
+  if (!email || !otp) {
+    return { error: "Email and OTP are required.", ok: false };
+  }
+
+  // Check API URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiUrl) {
+    console.error("API URL is not defined in environment variables.");
+    return {
+      error: "Internal server error. Please try again later.",
+      ok: false,
+    };
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/api/user/forget-password/verify`, {
+      method: "POST", // Corrected the HTTP method capitalization
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (!response.ok) {
+      // Attempt to parse error details from the response
+      const errorData = await response.json().catch(() => null);
+      return {
+        error:
+          errorData?.error ||
+          "Failed to process your request. Please try again.",
+        ok: false,
+      };
+    }
+
+    const responseData = await response.json();
+    return {
+      ok: true,
+      url: responseData?.url || "",
+    };
+  } catch (err) {
+    console.error("Error during OTP verification:", err);
+    return {
+      error: "An unexpected error occurred during OTP verification.",
+      ok: false,
+    };
+  }
+}
+
+export async function userForgetPasswordRecovery(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean; url?: string }> {
+  console.log("FormData Entries:", Object.fromEntries(formData.entries()));
+
+  const email = formData.get("email") as string | null;
+  const newPassword = formData.get("newPassword") as string | null;
+
+  if (!email || !newPassword) {
+    return { error: "Email and New Password are required.", ok: false };
+  }
+
+  // Check API URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    console.error("API URL is not defined in environment variables.");
+    return {
+      error: "Internal server error. Please try again later.",
+      ok: false,
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${apiUrl}/api/user/forget-password/recovery`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newPassword }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        error: errorData?.message || "Invalid New Password or server error.",
+        ok: false,
+      };
+    }
+
+    const responseData = await response.json();
+    return {
+      ok: true,
+      url: responseData?.url || "",
+    };
+  } catch (err) {
+    console.error("Error during New Password verification:", err);
+
+    return {
+      error: "An unexpected error occurred during New Password verification.",
       ok: false,
     };
   }

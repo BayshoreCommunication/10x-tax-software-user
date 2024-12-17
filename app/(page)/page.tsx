@@ -25,7 +25,9 @@ const page = async () => {
     redirect("/sign-in");
   }
 
-  console.log("Session", session);
+  if (!session?.user?.subscription) {
+    redirect("/subscription");
+  }
 
   return (
     <div className="bg-[#eeeeee]">

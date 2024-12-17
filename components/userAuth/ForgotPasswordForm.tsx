@@ -1,16 +1,73 @@
 "use client";
+
+import { userForgetPasswordProcess } from "@/app/actions";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuUsers2 } from "react-icons/lu";
 
-const ForgotPassword = () => {
-  const [loading, setLoading] = useState(false);
+interface UserForgotPasswordInfo {
+  email: string;
+}
+
+interface UserForgotPasswordInfoProps {
+  setUserForgotPasswordFlag: (flag: boolean) => void;
+  setUserForgotPasswordInfo: (info: UserForgotPasswordInfo) => void;
+}
+
+const ForgotPasswordForm: React.FC<UserForgotPasswordInfoProps> = ({
+  setUserForgotPasswordFlag,
+  setUserForgotPasswordInfo,
+}) => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Clear previous error
+    setError(null);
+
+    // Validate email
+    if (!userEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("email", userEmail);
+
+      const response = await userForgetPasswordProcess(formData);
+
+      if (response.ok) {
+        // Update parent state with email information
+        setUserForgotPasswordInfo({
+          email: userEmail,
+        });
+        setUserForgotPasswordFlag(true);
+      } else {
+        setError(response.error || "Failed to process your request.");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again later.");
+      console.error("Error during password recovery:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <h2 className="font-semibold text-3xl text-primary mb-6">
         Forget Password
       </h2>
 
-      <form className="">
+      <form onSubmit={handleSubmit}>
         {/* Email Input */}
         <div className="py-3">
           <label
@@ -25,18 +82,27 @@ const ForgotPassword = () => {
             </div>
             <input
               autoComplete="off"
-              type="text"
-              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400  active:border-primary outline-none"
+              type="email"
+              id="email-address-icon"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 active:border-primary outline-none"
               placeholder="carlosrosario@gmail.com"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
             />
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
         {/* Submit Button */}
         <div className="py-3">
           <button
             type="submit"
-            className="text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-full"
+            disabled={loading}
+            className={`text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-full ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">
@@ -70,4 +136,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordForm;

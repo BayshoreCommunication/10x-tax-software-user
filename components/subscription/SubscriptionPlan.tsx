@@ -1,4 +1,4 @@
-import React from "react";
+import Link from "next/link";
 
 const SubscriptionPlan = () => {
   return (
@@ -23,11 +23,14 @@ const SubscriptionPlan = () => {
                 Monthly
               </h3>
             </div>
-            <button className="w-full bg-primary py-3 px-4 rounded-large">
-              <h2 className="text-2xl font-normal text-white text-center">
+            <div className="w-full flex items-center">
+              <Link
+                href={`/subscription/monthly`}
+                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+              >
                 Choose Plan
-              </h2>
-            </button>
+              </Link>
+            </div>
           </div>
           <div className="shadow-medium rounded-xl px-6  pb-16 w-[50%] bg-secondary">
             <div className="flex justify-end py-4">
@@ -48,11 +51,14 @@ const SubscriptionPlan = () => {
                 Annually
               </h3>
             </div>
-            <button className="w-full bg-primary py-3 px-4 rounded-large">
-              <h2 className="text-2xl font-normal text-white text-center">
+            <div className="w-full flex items-center">
+              <Link
+                href={`/subscription/annually`}
+                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+              >
                 Choose Plan & Save16%
-              </h2>
-            </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
