@@ -24,7 +24,7 @@
 // // Specify which routes the middleware should run on
 // export const config = {
 //   matcher: [
-//     "/dashboard/:path*", // Apply to all dashboard routes
-//     "/protected/:path*", // Example protected routes
+//     "/dashboard/:path*", 
+//     "/protected/:path*", 
 //   ],
 // };
