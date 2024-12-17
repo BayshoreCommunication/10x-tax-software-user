@@ -1,7 +1,7 @@
 export const siteConfig = {
   siteMetadata: {
     title: " ",
-    description: " ",
+    description: "",
   },
   siteLogo: { url: "" },
   sideBarItems: [
