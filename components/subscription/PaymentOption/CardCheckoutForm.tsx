@@ -9,7 +9,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -35,7 +35,14 @@ const ELEMENT_OPTIONS = {
   },
 };
 
-const CheckoutForm = () => {
+const CheckoutForm = ({
+  token,
+  subscriptionInfo,
+  paymentInfo,
+  setPaymentInfo,
+  amount,
+}) => {
+  const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
@@ -45,54 +52,106 @@ const CheckoutForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) return;
+    if (!stripe || !elements) {
+      setError("Stripe has not loaded yet. Please try again later.");
+      return;
+    }
+
     setError(null);
     setProcessing(true);
 
-    const cardElement = elements.getElement(CardNumberElement);
-
     try {
-      const res = await fetch(
+      // Get the card details from Stripe Elements
+      const cardElement = elements.getElement(CardNumberElement);
+      if (!cardElement) {
+        setError("Unable to retrieve card details. Please try again.");
+        setProcessing(false);
+        return;
+      }
+
+      // Step 1: Create Payment Intent
+      const paymentIntentResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 5000, currency: "usd" }),
-        }
-      );
-      const clientSecret = await res.json();
-
-      const paymentResult = await stripe.confirmCardPayment(
-        clientSecret?.payload?.clientSecret,
-        {
-          payment_method: {
-            card: cardElement!,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
           },
+          body: JSON.stringify({ amount: 50, currency: "usd" }),
         }
       );
+
+      if (!paymentIntentResponse.ok) {
+        const { message } = await paymentIntentResponse.json();
+        throw new Error(message || "Failed to create payment intent.");
+      }
+
+      const { payload } = await paymentIntentResponse.json();
+      const clientSecret = payload?.clientSecret;
+
+      if (!clientSecret) {
+        throw new Error("Client secret not received. Please try again.");
+      }
+
+      // Step 2: Confirm Card Payment
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card: cardElement },
+      });
 
       if (paymentResult.error) {
-        toast.error("Payment Failed");
-        setError(paymentResult.error.message!);
-      } else if (paymentResult.paymentIntent.status === "succeeded") {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: 5000, currency: "usd" }),
-          }
-        );
-        const response = await res.json();
-        if (response) {
-          toast.success("Successfully Payment");
-        }
+        throw new Error(paymentResult.error.message || "Payment failed.");
       }
-    } catch (err: any) {
-      setError(err.message);
-    }
 
-    setProcessing(false);
+      const paymentIntent = paymentResult.paymentIntent;
+      if (!paymentIntent || paymentIntent.status !== "succeeded") {
+        throw new Error("Payment did not succeed. Please try again.");
+      }
+
+      // if (paymentResult) {
+      //   setPaymentInfo((prevState) => ({
+      //     ...prevState,
+      //     paymentId: paymentResult?.paymentIntent?.id,
+      //   }));
+      // }
+
+      // Step 3: Save Subscription Details
+      const subscriptionResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            paymentInfo: {
+              email: paymentInfo.email,
+              name: paymentInfo.name,
+              country: paymentInfo.country,
+              address: paymentInfo.address,
+              paymentId: paymentIntent.id,
+            },
+            subscriptionInfo,
+          }),
+        }
+      );
+
+      if (!subscriptionResponse.ok) {
+        const { message } = await subscriptionResponse.json();
+        throw new Error(message || "Failed to create subscription.");
+      }
+
+      // Success
+      toast.success("Payment successful!");
+      router.push("/update-business-infomation");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An unexpected error occurred.");
+      toast.error(err.message || "Payment or subscription failed.");
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -168,17 +227,13 @@ const CheckoutForm = () => {
           )}
         </button>
       </div>
-
-      {/* {success && (
-        <div className="text-green-500 mt-2">Payment Successful!</div>
-      )} */}
     </form>
   );
 };
 
-const CardCheckoutForm = () => (
+const CardCheckoutForm = (props) => (
   <Elements stripe={stripePromise}>
-    <CheckoutForm />
+    <CheckoutForm {...props} />
   </Elements>
 );
 

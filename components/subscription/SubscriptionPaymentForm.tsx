@@ -42,7 +42,7 @@ const SubscriptionPaymentForm: React.FC<SubscriptionPaymentFormProps> = ({
     name: "",
     country: "",
     address: "",
-    paymentId: "2536974",
+    paymentId: "",
   });
 
   const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo>({
@@ -71,7 +71,7 @@ const SubscriptionPaymentForm: React.FC<SubscriptionPaymentFormProps> = ({
       subscriptionExpiredDate.setDate(currentDate.getDate() + 365);
     }
 
-    const calculatedAmount = subscriptionType === "monthly" ? 29 : 229;
+    const calculatedAmount = subscriptionType === "monthly" ? 99 : 999;
     setAmount(calculatedAmount);
 
     setSubscriptionInfo({
@@ -223,11 +223,11 @@ const SubscriptionPaymentForm: React.FC<SubscriptionPaymentFormProps> = ({
             {/* Check Payment Option */}
             {selectPaymentMethod === "card" ? (
               <CardCheckoutForm
-              // paymentInfo={paymentInfo}
-              // setPaymentInfo={setPaymentInfo}
-              // subscriptionInfo={subscriptionInfo}
-              // amount={amount}
-              // token={token}
+                paymentInfo={paymentInfo}
+                setPaymentInfo={setPaymentInfo}
+                subscriptionInfo={subscriptionInfo}
+                amount={amount}
+                token={token}
               />
             ) : selectPaymentMethod === "paypal" ? (
               <PaypalCheckoutForm />

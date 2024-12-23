@@ -1,11 +1,12 @@
 import { getUserData } from "@/app/actions/user";
-import SubscriptionDetails from "@/components/subscription/SubscriptionDetails";
+import BusinessInformationForm from "@/components/subscription/BusinessInformationForm";
 
 const page = async () => {
   const userData = await getUserData();
+
   return (
     <div className="bg-[#eeeeee]">
-      <SubscriptionDetails userData={userData?.payload?.user} />
+      <BusinessInformationForm userData={userData?.payload?.user} />
     </div>
   );
 };

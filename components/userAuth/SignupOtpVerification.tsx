@@ -133,7 +133,7 @@ const SignupOtpVerification = ({
       if (!response) {
         setError("Invalid Sign up OTP.");
       } else {
-        router.push("/sign-in");
+        router.push("/confirm-subscription");
         toast.success("Successfully Sing up !", {
           position: "top-center",
         });

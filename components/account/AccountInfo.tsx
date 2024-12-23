@@ -1,7 +1,15 @@
 "use client";
+import { UserDataResponse } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
 import { TbEditCircle } from "react-icons/tb";
+import { formatDate } from "../shared/ui/DateFormat";
 
-const AccountInfo = () => {
+interface AccountInfoProps {
+  userData: UserDataResponse;
+}
+
+const AccountInfo: React.FC<AccountInfoProps> = ({ userData }) => {
   return (
     <div className="container py-10">
       <div className=" bg-white p-12">
@@ -13,18 +21,15 @@ const AccountInfo = () => {
         <div className="border p-6">
           <div className="flex items-center space-x-8">
             <div className="relative w-[150px] h-[150px] border-2 rounded-full">
-              {/* <Image
-                src="/assets/admin-image/user-image.png"
+              <Image
+                src={userData?.logoUrl || " "}
                 alt="User Picture"
                 width={150}
                 height={150}
                 className="absolute inset-0 rounded-full"
-              /> */}
-              <h2 className="text-xl font-medium text-[#666666] absolute inset-0 flex justify-center items-center text-center">
-                Company
-                <br /> Logo
-              </h2>
-              <div className=" bg-primary hover:bg-[#be9837] p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-6 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
+              />
+
+              <div className=" bg-primary hover:bg-[#be9837] p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
                 <TbEditCircle className="text-white text-xl" />
               </div>
             </div>
@@ -34,41 +39,49 @@ const AccountInfo = () => {
                 <tbody>
                   <tr className="bg-white">
                     <td className="px-6 py-3 text-[#666666]">Business Name:</td>
-                    <td className="px-6 py-3 text-[#11142D]">@jeremyrose</td>
+                    <td className="px-6 py-3 text-[#11142D]">
+                      {userData?.businessName}
+                    </td>
                   </tr>
                   <tr className="bg-white">
                     <td className="px-6 py-3 text-[#666666]">Email:</td>
                     <td className="px-6 py-3 text-[#11142D]">
-                      example@gmail.com
+                      {userData?.email}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div className="mt-10 max-w-[500px]">
+          <div className="mt-10 max-w-[650px]">
             <div className="relative overflow-x-auto">
               <table className="w-full text-left rtl:text-right text-xl font-medium ">
                 <tbody>
                   <tr className="bg-white">
                     <td className="px-6 py-3 text-[#666666]">Address:</td>
                     <td className="px-6 py-3 text-[#11142D]">
-                      1A,hdh United State
+                      {userData?.address}
                     </td>
                   </tr>
                   <tr className="bg-white">
-                    <td className="px-6 py-3 text-[#666666]">
+                    <td className="px-6 py-3 text-[#666666] ">
                       Subscription End Date:
                     </td>
-                    <td className="px-6 py-3 text-[#11142D]">1-1-2025 </td>
+                    <td className="px-6 py-3 text-[#11142D]">
+                      {formatDate(userData?.currentSubscriptionExpiredDate)}
+                    </td>
                   </tr>
                   <tr className="bg-white">
                     <td className="px-6 py-3 text-[#666666]">Website:</td>
-                    <td className="px-6 py-3 text-[#11142D]">10xtaxpro.com</td>
+                    <td className="px-6 py-3 text-[#11142D]">
+                      {userData?.businessWebsite}
+                    </td>
                   </tr>
                   <tr className="bg-white">
                     <td className="px-6 py-3 text-[#666666]">Phone Number:</td>
-                    <td className="px-6 py-3 text-[#11142D]">+1 345 6457</td>
+                    <td className="px-6 py-3 text-[#11142D]">
+                      {userData?.phone}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -82,18 +95,26 @@ const AccountInfo = () => {
                 <div className="border border-gray-300 flex items-center space-x-6 rounded p-2">
                   <input
                     type="text"
-                    value={"#E9A31C"}
+                    value={userData?.brandColor || "#E9A31C"}
                     className="focus:outline-none w-[100px] border-none"
                   />
-                  <div className="w-7 h-7 rounded mx-2 bg-[#E9A31C]" />
+                  <div
+                    className="w-7 h-7 rounded mx-2 "
+                    style={{ backgroundColor: userData?.brandColor }}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <button className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px] mt-10">
-          Edit Profile
-        </button>
+        <div className="mt-10">
+          <Link
+            href={"/settings"}
+            className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+          >
+            Edit Profile
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,33 +1,20 @@
 "use client";
 
 import React from "react";
-import { ColorResult, HuePicker } from "react-color";
+import { HuePicker } from "react-color";
 
-const ColorPicker: React.FC = ({
-  brandColor,
-  setBusinessInfoForm,
-}: {
-  brandColor: any;
-  setBrandColor: any;
-}) => {
-  const handleChange = (color: ColorResult): void => {
-    setBusinessInfoForm((prevState) => ({
-      ...prevState,
-      brandColor: color.hex,
-    }));
-  };
-
+const ColorPickerView: React.FC<{ brandColor: string }> = ({ brandColor }) => {
   return (
     <div className="flex items-center space-x-5">
       <div className="border border-gray-300 flex items-center space-x-6 rounded p-3.5">
-        <HuePicker color={brandColor} onChange={handleChange} />
+        <HuePicker color={brandColor} />
       </div>
 
       <div className="border border-gray-300 flex items-center space-x-6 rounded p-2">
         <input
           type="text"
           value={brandColor}
-          onChange={(e) => setBrandColor(e.target.value)}
+          readOnly
           className="focus:outline-none w-[100px] border-none"
         />
         <div
@@ -41,4 +28,4 @@ const ColorPicker: React.FC = ({
   );
 };
 
-export default ColorPicker;
+export default ColorPickerView;

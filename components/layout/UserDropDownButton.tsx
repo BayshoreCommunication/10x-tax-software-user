@@ -12,7 +12,7 @@ import { PiListPlusBold } from "react-icons/pi";
 import { RiSettings3Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 
-const UserDropDownButton = ({ user }: any) => {
+const UserDropDownButton = ({ userData }: any) => {
   const notify = () =>
     toast.success("Wow so easy!", {
       position: "top-center",
@@ -73,8 +73,8 @@ const UserDropDownButton = ({ user }: any) => {
             <div className="w-10 h-10 overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
               <div className="flex items-center justify-center w-[30px] h-[30px]">
                 <Image
-                  src={user?.logoUrl || "/assets/user-image/user-image.png"}
-                  alt={user?.businessName || "User Image"}
+                  src={userData?.logoUrl || "/assets/user-image/user-image.png"}
+                  alt={userData?.businessName || "User Image"}
                   width={100}
                   height={100}
                   className="w-[35px] h-[35px]"
@@ -83,10 +83,10 @@ const UserDropDownButton = ({ user }: any) => {
             </div>
             <div className="text-left">
               <h3 className="font-medium text-lg text-white">
-                {user?.businessName}
+                {userData?.businessName}
               </h3>
               <p className="font-normal text-sm text-white">
-                {user?.businessWebsite}
+                {userData?.businessWebsite}
               </p>
             </div>
             <div className="w-6 h-6 flex items-center justify-center">

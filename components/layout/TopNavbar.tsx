@@ -1,9 +1,9 @@
-import { auth } from "@/auth";
+import { getUserData } from "@/app/actions/user";
 import Image from "next/image";
 import Link from "next/link";
 import UserDropDownButton from "./UserDropDownButton";
 const TopNavbar = async () => {
-  const session = await auth();
+  const userData = await getUserData();
 
   return (
     <section className="bg-secondary">
@@ -22,7 +22,7 @@ const TopNavbar = async () => {
             />
           </Link>
           <div>
-            <UserDropDownButton user={session?.user} />
+            <UserDropDownButton userData={userData?.payload?.user} />
           </div>
         </div>
       </div>

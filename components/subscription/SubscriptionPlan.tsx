@@ -17,7 +17,7 @@ const SubscriptionPlan = () => {
             </div>
             <div className="my-12">
               <h2 className="text-6xl font-bold text-primary text-center">
-                $99
+                $29
               </h2>
               <h3 className="text-4xl font-normal text-[#11142D] text-center mt-5">
                 Monthly
@@ -25,7 +25,7 @@ const SubscriptionPlan = () => {
             </div>
             <div className="w-full flex items-center">
               <Link
-                href={`/subscription/monthly`}
+                href={`confirm-subscription/monthly`}
                 className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
               >
                 Choose Plan
@@ -45,15 +45,15 @@ const SubscriptionPlan = () => {
             </div>
             <div className="my-12">
               <h2 className="text-6xl font-bold text-primary text-center">
-                $999
+                $299
               </h2>
               <h3 className="text-4xl font-normal text-white text-center mt-5">
-                Annually
+                Yearly
               </h3>
             </div>
             <div className="w-full flex items-center">
               <Link
-                href={`/subscription/annually`}
+                href={`/confirm-subscription/yearly`}
                 className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
               >
                 Choose Plan & Save16%

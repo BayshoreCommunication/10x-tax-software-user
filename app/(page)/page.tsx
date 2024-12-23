@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import ClientListTable from "@/components/dashboard/ClientListTable";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import { redirect } from "next/navigation";
+import { getUserData } from "../actions/user";
 
 export const metadata = {
   title: "10x Tax Software",
@@ -20,13 +21,13 @@ export const metadata = {
 
 const page = async () => {
   const session = await auth();
-
+  const userData = await getUserData();
   if (!session) {
     redirect("/sign-in");
   }
 
-  if (!session?.user?.subscription) {
-    redirect("/subscription");
+  if (!userData?.payload?.user || !userData.payload.user.subscription) {
+    redirect("/confirm-subscription");
   }
 
   return (

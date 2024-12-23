@@ -3,7 +3,7 @@ import SubscriptionPaymentForm from "@/components/subscription/SubscriptionPayme
 
 const page = async ({ params }: any) => {
   const session = await auth();
-  const { slug } = params;
+  const { slug } = await params;
 
   return (
     <div className="bg-[#eeeeee]">
