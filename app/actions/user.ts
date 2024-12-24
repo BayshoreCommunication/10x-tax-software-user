@@ -34,7 +34,7 @@ export async function getUserData(): Promise<UserDataResponse> {
     const data = await response.json();
     return {
       ok: true,
-      ...data,
+      ...data?.payload?.user,
     };
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -47,18 +47,18 @@ export async function getUserData(): Promise<UserDataResponse> {
 
 export async function updateUserData(
   formData: FormData
-): Promise<{ message: string; status: number }> {
+): Promise<{ error: string; ok: boolean }> {
   const file = formData.get("image");
   // Retrieve the user session to check if authenticated
   const session = await auth();
 
-  // Check for authentication and access token
-  if (!session?.user?.accessToken) {
-    return {
-      error: "User is not authenticated.",
-      ok: false,
-    };
-  }
+  // // Check for authentication and access token
+  // if (!session?.user?.accessToken) {
+  //   return {
+  //     error: "User is not authenticated.",
+  //     ok: false,
+  //   };
+  // }
 
   // console.log("check this data value 63", session);
 
@@ -74,7 +74,7 @@ export async function updateUserData(
         method: "PUT",
         headers: {
           // "Content-Type": "application/json",
-          Authorization: ` ${session.user.accessToken}`,
+          Authorization: ` ${session?.user?.accessToken}`,
         },
         body: formData,
       }
@@ -113,12 +113,12 @@ export async function userImageUpload(
   const session = await auth();
 
   // Check for authentication and access token
-  if (!session?.user?.accessToken) {
-    return {
-      error: "User is not authenticated.",
-      ok: false,
-    };
-  }
+  // if (!session?.user?.accessToken) {
+  //   return {
+  //     error: "User is not authenticated.",
+  //     ok: false,
+  //   };
+  // }
 
   if (!file || typeof file === "string") {
     return { message: "Invalid file", status: 400 };

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { TbEditCircle } from "react-icons/tb";
 import { toast } from "react-toastify";
-import ColorPicker from "../shared/ui/ColorPicker";
 
 const BusinessInformationForm = ({ userData }: { userData: any }) => {
   const router = useRouter();
@@ -19,6 +18,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
     businessWebsite: "",
     phone: userData?.phone || "",
     address: "",
+    website: "",
     brandColor: brandColor,
   });
 
@@ -42,7 +42,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
           setLogoPreview(reader.result.toString());
         }
       };
-      setBusinessInfoForm((prevState) => ({
+      setBusinessInfoForm((prevState: any) => ({
         ...prevState,
         image: file,
       }));
@@ -61,6 +61,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
     formData.append("phone", businessInfoForm.phone);
     formData.append("address", businessInfoForm.address);
     formData.append("brandColor", businessInfoForm.brandColor);
+    formData.append("website", businessInfoForm.website);
 
     try {
       const result = await updateUserData(formData);
@@ -223,7 +224,8 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
                   id="website"
                   className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                   placeholder=""
-                  value={businessInfoForm.website}
+                  name="website"
+                  value={businessInfoForm?.website}
                   onChange={handleChange}
                 />
               </div>
@@ -256,10 +258,10 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
               >
                 Choose Your Brand Color
               </label>
-              <ColorPicker
+              {/* <ColorPicker
                 brandColor={brandColor}
                 setBrandColor={setBrandColor}
-              />
+              /> */}
             </div>
 
             <div className="pt-3 text-center">

@@ -2,7 +2,7 @@
 
 import { updateUserData } from "@/app/actions/user";
 import Image from "next/image";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { TbEditCircle } from "react-icons/tb";
 import { toast } from "react-toastify";
 import ColorPicker from "../shared/ui/ColorPicker";
@@ -23,9 +23,7 @@ const InformationUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [logoPreview, setLogoPreview] = useState<string | null>(
-    userData?.logoUrl
-  );
+  const [logoPreview, setLogoPreview] = useState<string>(userData?.logoUrl);
   const [businessInfoForm, setBusinessInfoForm] = useState({
     image: userData?.logoUrl,
     businessName: userData?.businessName || "",
@@ -157,7 +155,6 @@ const InformationUpdateForm = ({
                     <input
                       autoComplete="off"
                       type="text"
-                      id="email-address-icon"
                       className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                       id="businessName"
                       name="businessName"
@@ -182,7 +179,6 @@ const InformationUpdateForm = ({
                     <input
                       autoComplete="off"
                       type="text"
-                      id="email-address-icon"
                       className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                       id="businessWebsite"
                       name="businessWebsite"
@@ -215,7 +211,6 @@ const InformationUpdateForm = ({
                     <input
                       autoComplete="off"
                       type="text"
-                      id="address"
                       className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                       id="address"
                       name="address"
@@ -240,7 +235,6 @@ const InformationUpdateForm = ({
                     <input
                       autoComplete="off"
                       type="text"
-                      id="address"
                       className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                       id="website"
                       name="website"
@@ -265,7 +259,6 @@ const InformationUpdateForm = ({
                     <input
                       autoComplete="off"
                       type="text"
-                      id="address"
                       className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                       id="phone"
                       name="phone"

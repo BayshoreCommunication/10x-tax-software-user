@@ -5,7 +5,7 @@ const page = async () => {
   const userData = await getUserData();
   return (
     <div className="bg-[#eeeeee]">
-      <SubscriptionDetails userData={userData?.payload?.user} />
+      <SubscriptionDetails userData={userData} />
     </div>
   );
 };

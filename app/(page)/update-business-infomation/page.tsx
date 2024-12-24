@@ -6,7 +6,7 @@ const page = async () => {
 
   return (
     <div className="bg-[#eeeeee]">
-      <BusinessInformationForm userData={userData?.payload?.user} />
+      <BusinessInformationForm userData={userData} />
     </div>
   );
 };

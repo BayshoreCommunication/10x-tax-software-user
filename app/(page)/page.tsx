@@ -26,9 +26,9 @@ const page = async () => {
     redirect("/sign-in");
   }
 
-  if (!userData?.payload?.user || !userData.payload.user.subscription) {
-    redirect("/confirm-subscription");
-  }
+  // if (!userData.subscription) {
+  //   redirect("/confirm-subscription");
+  // }
 
   return (
     <div className="bg-[#eeeeee]">

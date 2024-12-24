@@ -1,15 +1,10 @@
 "use client";
-import { UserDataResponse } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { TbEditCircle } from "react-icons/tb";
 import { formatDate } from "../shared/ui/DateFormat";
 
-interface AccountInfoProps {
-  userData: UserDataResponse;
-}
-
-const AccountInfo: React.FC<AccountInfoProps> = ({ userData }) => {
+const AccountInfo = ({ userData }: { userData: any }) => {
   return (
     <div className="container py-10">
       <div className=" bg-white p-12">

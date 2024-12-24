@@ -18,7 +18,7 @@ export const calculateRemainingDays = (
   const diffInTime = expiry.getTime() - start.getTime();
 
   // Convert milliseconds to days
-  const remainingDays = Math.ceil(parseInt(diffInTime) / (1000 * 60 * 60 * 24));
+  const remainingDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)); // Removed parseInt
 
   return remainingDays;
 };

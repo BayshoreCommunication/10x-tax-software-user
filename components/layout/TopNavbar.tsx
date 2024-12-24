@@ -22,7 +22,7 @@ const TopNavbar = async () => {
             />
           </Link>
           <div>
-            <UserDropDownButton userData={userData?.payload?.user} />
+            <UserDropDownButton userData={userData} />
           </div>
         </div>
       </div>

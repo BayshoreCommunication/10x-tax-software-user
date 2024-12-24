@@ -41,7 +41,7 @@ const CheckoutForm = ({
   paymentInfo,
   setPaymentInfo,
   amount,
-}) => {
+}: any) => {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -231,7 +231,7 @@ const CheckoutForm = ({
   );
 };
 
-const CardCheckoutForm = (props) => (
+const CardCheckoutForm = (props: any) => (
   <Elements stripe={stripePromise}>
     <CheckoutForm {...props} />
   </Elements>

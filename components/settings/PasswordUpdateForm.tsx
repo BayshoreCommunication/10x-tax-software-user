@@ -40,7 +40,6 @@ const PasswordUpdateForm = ({
                   <input
                     autoComplete="off"
                     type="text"
-                    id="address"
                     className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                     id="email"
                     name="email"
@@ -67,7 +66,6 @@ const PasswordUpdateForm = ({
                   <input
                     autoComplete="off"
                     type="text"
-                    id="address"
                     className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-[400px] pl-4 py-2 placeholder-gray-400  active:border-primary outline-none "
                     id="email"
                     name="email"

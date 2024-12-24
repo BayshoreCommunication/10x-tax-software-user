@@ -1,14 +1,23 @@
 "use client";
 
-import React from "react";
 import { ColorResult, HuePicker } from "react-color";
 
-const ColorPicker: React.FC = ({
+const ColorPicker = ({
   brandColor,
   setBusinessInfoForm,
 }: {
-  brandColor: any;
-  setBrandColor: any;
+  brandColor: string; // Adjust type as needed
+  setBusinessInfoForm: React.Dispatch<
+    React.SetStateAction<{
+      image: any;
+      businessName: any;
+      businessWebsite: any;
+      website: any;
+      phone: any;
+      address: any;
+      brandColor: string; // Adjust type as needed
+    }>
+  >;
 }) => {
   const handleChange = (color: ColorResult): void => {
     setBusinessInfoForm((prevState) => ({
@@ -27,7 +36,12 @@ const ColorPicker: React.FC = ({
         <input
           type="text"
           value={brandColor}
-          onChange={(e) => setBrandColor(e.target.value)}
+          onChange={(e) =>
+            setBusinessInfoForm((prevState) => ({
+              ...prevState,
+              brandColor: e.target.value,
+            }))
+          }
           className="focus:outline-none w-[100px] border-none"
         />
         <div
