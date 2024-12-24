@@ -135,3 +135,84 @@ export async function userImageUpload(
 
   return { message: "Image uploaded successfully", status: 200 };
 }
+
+//  update user password
+
+export async function updateUserPassword(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean }> {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/reset-password-otpcheck`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `${session?.user?.accessToken || ""}`,
+        },
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to update user password.",
+        ok: false,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    console.error("Error updating user password:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function updateUserPasswordOtpVerify(
+  formData: FormData
+): Promise<{ error: string; ok: boolean }> {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/reset-password-verify`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` ${session?.user?.accessToken}`,
+        },
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to update user data.",
+        ok: false,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    console.error("Error updating user password:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
