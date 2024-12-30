@@ -195,14 +195,14 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
           <div className="mx-6 mt-6 space-x-4 flex items-center">
             <button
               onClick={handleCancel}
-              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSubmit}
-              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
               disabled={loading}
             >
               {loading ? (

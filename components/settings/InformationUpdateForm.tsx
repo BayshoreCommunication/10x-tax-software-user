@@ -123,7 +123,7 @@ const InformationUpdateForm = ({
             />
           </div>
           {userInfoUpdateFlag && (
-            <div className="bg-primary hover:bg-yellow-500 p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
+            <div className="bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
               <label
                 htmlFor="image"
                 className="cursor-pointer flex items-center justify-center w-full h-full"
@@ -304,14 +304,14 @@ const InformationUpdateForm = ({
             <div className=" mx-6 mt-6 space-x-4 flex items-center">
               <button
                 onClick={() => setUserInfoUpdateFlag(false)}
-                className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px] "
+                className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px] "
               >
                 Cancle
               </button>
               <button
                 type="submit"
                 onClick={handleSubmitUpdateFormData}
-                className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+                className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
                 disabled={loading}
               >
                 {loading ? (

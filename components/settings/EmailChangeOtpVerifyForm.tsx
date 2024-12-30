@@ -206,7 +206,7 @@ const EmailChangeOtpVerifyForm: React.FC<EmailChangeOtpVerifyFormProps> = ({
             <div className="flex justify-center mb-8">
               <button
                 type="submit"
-                className="w-[50%] py-2 text-white bg-primary hover:bg-primary-dark rounded-lg text-lg"
+                className="w-[50%] py-2 text-white bg-primary hover:bg-hoverColor rounded-lg text-lg"
                 disabled={loading}
               >
                 {loading ? "Loading..." : "Submit"}

@@ -18,8 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
-
       <ReduxProvider>
         <body className={clsx("antialiased")}>
           <Providers themeProps={{ attribute: "className" }}>

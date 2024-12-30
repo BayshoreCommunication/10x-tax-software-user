@@ -36,7 +36,7 @@ const ClientList = () => {
         <div className="w-[25%]  flex items-center  justify-end">
           <Link
             href={"/add-new-client"}
-            className="px-4 py-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white"
+            className="px-4 py-2  text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
           >
             Add New Client
           </Link>

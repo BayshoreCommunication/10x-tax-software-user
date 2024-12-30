@@ -7,10 +7,12 @@ const config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
+
   theme: {
     extend: {
       colors: {
-        primary: "#D5AD45",
+        primary: "var(--primary-color)", // Use CSS variable for primary
+        hoverColor: "var(--hover-color)", // Define hover color dynamically in CSS
         secondary: "#1F263E",
         black: "#000000",
         white: "#FFFFFF",

@@ -24,7 +24,7 @@ const AccountInfo = ({ userData }: { userData: any }) => {
                 className="absolute inset-0 rounded-full"
               />
 
-              <div className=" bg-primary hover:bg-[#be9837] p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
+              <div className=" bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
                 <TbEditCircle className="text-white text-xl" />
               </div>
             </div>
@@ -105,7 +105,7 @@ const AccountInfo = ({ userData }: { userData: any }) => {
         <div className="mt-10">
           <Link
             href={"/settings"}
-            className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+            className="px-4 py-2 border-2  text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
           >
             Edit Profile
           </Link>

@@ -59,7 +59,7 @@ const EmailUpdateForm = ({
           Change Your Email
         </h2>
         <button onClick={() => setUserEmailUpdateFlag(true)}>
-          <TbEditCircle className="text-edit text-2xl hover:text-primary cursor-pointer" />
+          <TbEditCircle className="text-edit text-2xl hover:text-hoverColor cursor-pointer" />
         </button>
       </div>
       <div className="relative overflow-x-auto max-w-[780px]">
@@ -102,14 +102,14 @@ const EmailUpdateForm = ({
               onClick={() => {
                 setUserEmailUpdateFlag(false);
               }}
-              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSubmit}
-              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white w-[140px]"
+              className="px-4 py-2 border-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white w-[140px]"
               disabled={loading}
             >
               {loading ? (

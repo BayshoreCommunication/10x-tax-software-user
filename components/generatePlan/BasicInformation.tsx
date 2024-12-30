@@ -259,7 +259,7 @@ const BasicInformation = () => {
           </Link>
           <Link
             href={"/"}
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-[#be9837] hover:text-white w-[120px] text-center"
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
           >
             Save
           </Link>

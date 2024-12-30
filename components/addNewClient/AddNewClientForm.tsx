@@ -259,7 +259,7 @@ const AddNewClientForm = () => {
             <div className="w-full flex items-center  justify-center mt-10 space-x-6">
               <Link
                 href={"/"}
-                className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-[#be9837] hover:text-white w-[220px] text-center"
+                className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[220px] text-center"
               >
                 Add Client
               </Link>
