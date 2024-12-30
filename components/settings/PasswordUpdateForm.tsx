@@ -44,32 +44,27 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
     }
 
     try {
-      setLoading(true); // Start loading state
-      setError(null); // Clear previous errors
+      setLoading(true);
+      setError(null);
 
-      // Prepare form data
-      const formData = new FormData();
-      formData.append("newPassword", newPassword.trim());
-      formData.append("oldPassword", oldPassword.trim());
+      const response = await updateUserPassword({
+        newPassword,
+        oldPassword,
+      } as any);
 
-      // Call API to update the password
-      const response = await updateUserPassword(formData);
-
-      // Handle API response
       if (!response.ok) {
         setError(response.error || "Invalid Old Password. Please try again.");
       } else {
-        setOtpVerifyFlag(true); // OTP flag for success
+        setOtpVerifyFlag(true);
+        setUserPasswordUpdateFlag(false);
       }
     } catch (err) {
       console.error("Error in handleSubmit:", err);
       setError("An unexpected error occurred. Please try again later.");
     } finally {
-      setLoading(false); // End loading state
+      setLoading(false);
     }
   };
-
-  console.log("check user passsword", newPassword, oldPassword);
 
   return (
     <div>
@@ -93,28 +88,50 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
                 Old Password:
               </td>
               <td className="px-6 py-3 text-[#11142D]">
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={oldPassword}
-                    onChange={(e: any) => setOldPassword(e.target.value)}
-                    className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
-                    placeholder="*********"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <LuEye className="text-primary" />
-                    ) : (
-                      <LuEyeOff className="text-primary" />
-                    )}
-                  </button>
-                </div>
+                {userPasswordUpdateFlag ? (
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={oldPassword}
+                      onChange={(e: any) => setOldPassword(e.target.value)}
+                      className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
+                      placeholder="*********"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? (
+                        <LuEye className="text-primary" />
+                      ) : (
+                        <LuEyeOff className="text-primary" />
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={12345678}
+                      className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    >
+                      {showPassword ? (
+                        <LuEye className="text-primary" />
+                      ) : (
+                        <LuEyeOff className="text-primary" />
+                      )}
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
             <tr className="bg-white">
@@ -122,28 +139,50 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
                 New Password:
               </td>
               <td className="px-6 py-3 text-[#11142D]">
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={newPassword}
-                    onChange={(e: any) => setNewPassword(e.target.value)}
-                    className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
-                    placeholder="*********"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <LuEye className="text-primary" />
-                    ) : (
-                      <LuEyeOff className="text-primary" />
-                    )}
-                  </button>
-                </div>
+                {userPasswordUpdateFlag ? (
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={newPassword}
+                      onChange={(e: any) => setNewPassword(e.target.value)}
+                      className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
+                      placeholder="*********"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      onClick={toggleConfirmPasswordVisibility}
+                    >
+                      {showPassword ? (
+                        <LuEye className="text-primary" />
+                      ) : (
+                        <LuEyeOff className="text-primary" />
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={12345678}
+                      className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    >
+                      {showConfirmPassword ? (
+                        <LuEye className="text-primary" />
+                      ) : (
+                        <LuEyeOff className="text-primary" />
+                      )}
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           </tbody>

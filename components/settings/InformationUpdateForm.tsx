@@ -94,6 +94,9 @@ const InformationUpdateForm = ({
       if (result.ok) {
         setError(null);
         toast.success("Info Update successfully!");
+        setUserInfoUpdateFlag(false);
+        setUserEmailUpdateFlag(false);
+        setUserPasswordUpdateFlag(false);
       } else {
         setError(result.error || "An unexpected error occurred.");
       }

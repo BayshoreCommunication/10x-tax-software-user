@@ -185,7 +185,7 @@ export async function userSignUpOtpCheck(
   if (!email || !otp) {
     return { error: "Email and OTP are required.", ok: false };
   }
-  
+
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   try {

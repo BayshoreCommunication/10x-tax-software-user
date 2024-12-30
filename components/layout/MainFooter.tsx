@@ -1,10 +1,7 @@
-import React, { useMemo } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import React, { useMemo } from "react";
 
 import { siteConfig } from "@/config/site";
-
-import { FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 
 // Define the type for quick links
 type QuickLink = {
@@ -31,7 +28,7 @@ const MainFooter = () => {
 
   return (
     <footer className="bg-[#eeeeee]">
-      <div className="container py-5 md:py-10">
+      <div className="container py-5 md:py-8">
         <div className="flex justify-center">
           <ul className="text-black font-normal list-none ml-0 flex flex-col md:flex-row items-center justify-center text-center space-x-12">
             {quickLinks.map((el, index) => (
@@ -47,7 +44,7 @@ const MainFooter = () => {
           </ul>
         </div>
 
-        <hr className="border-gray-300 sm:mx-auto lg:my-8 w-[70%]" />
+        <hr className="border-gray-300 sm:mx-auto lg:my-5 w-[70%]" />
         <div className="flex items-center justify-center">
           <p className="text-black font-normal text-md md:text-[18px] text-center mb-4 md:mb-0">
             All Rights Reserved By 10x Tax Pro

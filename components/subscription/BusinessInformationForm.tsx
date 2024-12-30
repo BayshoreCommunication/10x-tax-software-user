@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { TbEditCircle } from "react-icons/tb";
 import { toast } from "react-toastify";
+import ColorPicker from "../shared/ui/ColorPicker";
 
 const BusinessInformationForm = ({ userData }: { userData: any }) => {
   const router = useRouter();
@@ -262,6 +263,10 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
                 brandColor={brandColor}
                 setBrandColor={setBrandColor}
               /> */}
+              <ColorPicker
+                brandColor={businessInfoForm?.brandColor}
+                setBusinessInfoForm={setBusinessInfoForm}
+              />
             </div>
 
             <div className="pt-3 text-center">

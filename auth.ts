@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { setCookie } from "nookies";
 
 export const { auth, signIn, signOut } = NextAuth({
   session: {
@@ -74,12 +73,12 @@ export const { auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        setCookie(null, "auth_token", token.accessToken as string, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
-      }
+      // if (user) {
+      //   setCookie(null, "auth_token", token.accessToken as string, {
+      //     maxAge: 30 * 24 * 60 * 60,
+      //     path: "/",
+      //   });
+      // }
       return { ...token, ...user };
     },
     async session({ session, token, user }) {

@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
+import { revalidateTag } from "next/cache";
 
 interface UserDataResponse {
   error?: string;
@@ -20,6 +21,7 @@ export async function getUserData(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
+        next: { tags: ["userDataUpdate"] },
       }
     );
 
@@ -79,6 +81,8 @@ export async function updateUserData(
         body: formData,
       }
     );
+
+    revalidateTag("userDataUpdate");
 
     // Check if the response is successful
     if (!response.ok) {
@@ -147,11 +151,12 @@ export async function updateUserPassword(
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/user/reset-password-otpcheck`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
-        body: formData,
+        body: JSON.stringify(formData),
       }
     );
 
@@ -184,14 +189,14 @@ export async function updateUserPasswordOtpVerify(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/reset-password-verify`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/reset-password-verify`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: ` ${session?.user?.accessToken}`,
         },
-        body: formData,
+        body: JSON.stringify(formData),
       }
     );
 
@@ -210,6 +215,88 @@ export async function updateUserPasswordOtpVerify(
     };
   } catch (error) {
     console.error("Error updating user password:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+//  update user email
+
+export async function updateUserEmail(
+  formData: FormData
+): Promise<{ error?: string; ok: boolean }> {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/email-change-otpcheck`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${session?.user?.accessToken || ""}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to update user email.",
+        ok: false,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    console.error("Error updating user email", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function updateUserEmailOtpVerify(
+  formData: FormData
+): Promise<{ error: string; ok: boolean }> {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/email-change-verify`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to update user data.",
+        ok: false,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    console.error("Error updating user email:", error);
     return {
       error: "An unexpected error occurred. Please try again later.",
       ok: false,

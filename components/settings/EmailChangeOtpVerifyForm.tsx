@@ -1,6 +1,6 @@
 "use client";
 
-import { updateUserPasswordOtpVerify } from "@/app/actions/user";
+import { updateUserEmailOtpVerify } from "@/app/actions/user";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -14,16 +14,17 @@ interface OtpType {
   digit6: string;
 }
 
-interface PasswordChangeOtpVerifyModalProps {
+interface EmailChangeOtpVerifyFormProps {
   otpVerifyFlag: boolean;
   setOtpVerifyFlag: (value: boolean) => void;
-  newPassword: string;
-  oldPassword: string;
+  email: string;
 }
 
-const PasswordChangeOtpVerifyForm: React.FC<
-  PasswordChangeOtpVerifyModalProps
-> = ({ otpVerifyFlag, setOtpVerifyFlag, newPassword, oldPassword }) => {
+const EmailChangeOtpVerifyForm: React.FC<EmailChangeOtpVerifyFormProps> = ({
+  otpVerifyFlag,
+  setOtpVerifyFlag,
+  email,
+}) => {
   const [otp, setOtp] = useState<OtpType>({
     digit1: "",
     digit2: "",
@@ -107,21 +108,15 @@ const PasswordChangeOtpVerifyForm: React.FC<
       setLoading(true);
       setError(null);
 
-      const formData = new FormData();
-      formData.append("newPassword", newPassword);
-      formData.append("oldPassword", oldPassword);
-      formData.append("otp", fullOtp);
-
-      const response = await updateUserPasswordOtpVerify({
+      const response = await updateUserEmailOtpVerify({
         fullOtp,
-        newPassword,
-        oldPassword,
+        email,
       } as any);
 
       if (!response?.ok) {
         setError(response.error || "Invalid OTP. Please try again.");
       } else {
-        toast.success("Password successfully updated.");
+        toast.success("Email successfully updated.");
         setOtpVerifyFlag(false);
       }
     } catch (err) {
@@ -224,4 +219,4 @@ const PasswordChangeOtpVerifyForm: React.FC<
   );
 };
 
-export default PasswordChangeOtpVerifyForm;
+export default EmailChangeOtpVerifyForm;
