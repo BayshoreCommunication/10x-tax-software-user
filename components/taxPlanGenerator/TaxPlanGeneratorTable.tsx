@@ -70,7 +70,7 @@ const TaxPlanGeneratorTable = () => {
                 <td className="px-6 py-4 flex justify-center items-center space-x-3">
                   <Link
                     href={"/generate-plan"}
-                    className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white"
+                    className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
                   >
                     Generate Plan
                   </Link>
