@@ -48,12 +48,23 @@ import { auth } from "./auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Define the routes that do not require authentication
   const publicRoutes = [
     "/sign-in",
     "/sign-up",
     "/forget-password",
     "/confirm-subscription",
   ];
+
+  if (
+    pathname.startsWith("/_next/static") ||
+    pathname.startsWith("/_next/image") ||
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/assets/")
+  ) {
+    return NextResponse.next();
+  }
+
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next();
   }
