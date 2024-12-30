@@ -18,8 +18,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["cdn-icons-png.flaticon.com"],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn-icons-png.flaticon.com",
+        port: "",
+      },
       {
         protocol: "https",
         hostname: "picsum.photos",
@@ -45,10 +49,14 @@ const nextConfig = {
         hostname: "imgbb.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "10x-tax-software-user-theta.vercel.app",
+        port: "",
+      },
     ],
   },
 };
 
 module.exports = nextConfig;
-
 
