@@ -14,7 +14,7 @@ const TopNavbar = async () => {
             className="flex items-center justify-center w-[80px] h-[75px]"
           >
             <Image
-              src="/assets/site-logo/10x-tax-logo.png"
+              src="/assets/site-logo/10x-tax.png"
               alt="10x Tax Software"
               width={100}
               height={95}
