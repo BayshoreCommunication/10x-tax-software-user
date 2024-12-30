@@ -16,7 +16,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <style>{`:root { --primary-color: ${brandColor}; --hover-color: ${hoverColor}; }`}</style>
+        <style>{`:root { --primary-color: ${brandColor || "#D5AD45"}; --hover-color: ${hoverColor}; }`}</style>
       </head>
       <body>{children}</body>
     </html>
