@@ -35,7 +35,6 @@ export async function getUserData(): Promise<UserDataResponse> {
     }
 
     const data = await response.json();
-    console.log("Fetched user data:", data);
     return {
       ok: true,
       data: data?.payload?.user || null,

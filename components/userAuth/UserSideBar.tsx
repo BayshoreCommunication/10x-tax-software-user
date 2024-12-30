@@ -4,7 +4,7 @@ const UserSideBar = ({ title }: any) => {
   return (
     <div className="bg-secondary p-10 rounded-s-xl space-y-12">
       <Image
-        src="/assets/site-logo/10x-tax-logo.png"
+        src="/assets/site-logo/10x-tax.png"
         alt="10x Tax Software"
         width={500}
         height={500}
@@ -19,7 +19,7 @@ const UserSideBar = ({ title }: any) => {
       </div>
       <div className="flex justify-center">
         <Image
-          src="/assets/user-image/home-welcome-image.png"
+          src="/assets/user-image/welcome-image.png"
           alt="10x Tax Software"
           width={500}
           height={500}
