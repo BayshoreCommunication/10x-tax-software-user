@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import UserDropDownButton from "./UserDropDownButton";
 const TopNavbar = async () => {
-  const userData = await getUserData();
+  const { ok, data: userData, error } = await getUserData();
 
   return (
     <section className="bg-secondary">

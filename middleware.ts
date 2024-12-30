@@ -64,7 +64,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  const userData = await getUserData();
+  const { ok, data: userData, error } = await getUserData();
 
   if (!userData?.subscription) {
     return NextResponse.redirect(new URL("/confirm-subscription", request.url));

@@ -21,28 +21,31 @@ export async function getUserData(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
-        next: { tags: ["userDataUpdate"] },
       }
     );
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error("Failed to fetch user data:", errorData);
       return {
         error: errorData?.message || "Failed to fetch user data.",
         ok: false,
+        data: null,
       };
     }
 
     const data = await response.json();
+    console.log("Fetched user data:", data);
     return {
       ok: true,
-      ...data?.payload?.user,
+      data: data?.payload?.user || null,
     };
   } catch (error) {
     console.error("Error fetching user data:", error);
     return {
       error: "An unexpected error occurred. Please try again later.",
       ok: false,
+      data: null,
     };
   }
 }
