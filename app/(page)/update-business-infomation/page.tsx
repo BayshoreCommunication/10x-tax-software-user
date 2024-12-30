@@ -2,7 +2,7 @@ import { getUserData } from "@/app/actions/user";
 import BusinessInformationForm from "@/components/subscription/BusinessInformationForm";
 
 const page = async () => {
-  const userData = await getUserData();
+  const { ok, data: userData, error } = await getUserData();
 
   return (
     <div className="bg-[#eeeeee]">
