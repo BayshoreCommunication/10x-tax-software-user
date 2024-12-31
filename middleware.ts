@@ -48,44 +48,43 @@ import { auth } from "./auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Define the routes that do not require authentication
-  const publicRoutes = [
-    "/sign-in",
-    "/sign-up",
-    "/forget-password",
-    "/confirm-subscription",
-  ];
-
+  // Quickly allow static assets and public routes
   if (
-    pathname.startsWith("/_next/static") ||
-    pathname.startsWith("/_next/image") ||
-    pathname.startsWith("/favicon.ico") ||
-    pathname.startsWith("/assets/")
+    pathname.startsWith("/_next/") || // Covers /_next/static and /_next/image
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/assets/") ||
+    ["/sign-in", "/sign-up", "/forget-password", "/confirm-subscription"].some(
+      (route) => pathname.startsWith(route)
+    )
   ) {
     return NextResponse.next();
   }
 
-  if (publicRoutes.some((route) => pathname.startsWith(route))) {
-    return NextResponse.next();
-  }
+  try {
+    // Authenticate the user
+    const session = await auth();
+    if (!session) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
 
-  const session = await auth();
-
-  if (!session) {
+    // Fetch user data
+    const { data: userData } = await getUserData();
+    if (!userData?.subscription) {
+      return NextResponse.redirect(
+        new URL("/confirm-subscription", request.url)
+      );
+    }
+  } catch (error) {
+    console.error("Middleware error:", error);
+    // Redirect to sign-in if any error occurs during auth or user data retrieval
     return NextResponse.redirect(new URL("/sign-in", request.url));
-  }
-
-  const { ok, data: userData, error } = await getUserData();
-
-  if (!userData?.subscription) {
-    return NextResponse.redirect(new URL("/confirm-subscription", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/|favicon.ico|assets/).*)"], // Streamlined matcher
 };
 
 export default middleware;

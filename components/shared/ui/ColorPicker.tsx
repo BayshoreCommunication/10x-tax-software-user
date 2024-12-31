@@ -42,7 +42,7 @@ const ColorPicker = ({
               brandColor: e.target.value,
             }))
           }
-          className="focus:outline-none w-[100px] border-none"
+          className="focus:outline-none w-[100px] border-none bg-white text-black"
         />
         <div
           className="w-7 h-7 rounded mx-2"

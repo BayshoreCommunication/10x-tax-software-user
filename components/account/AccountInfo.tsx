@@ -91,7 +91,7 @@ const AccountInfo = ({ userData }: { userData: any }) => {
                   <input
                     type="text"
                     value={userData?.brandColor || "#E9A31C"}
-                    className="focus:outline-none w-[100px] border-none"
+                    className="focus:outline-none w-[100px] border-none bg-white text-black"
                   />
                   <div
                     className="w-7 h-7 rounded mx-2 "

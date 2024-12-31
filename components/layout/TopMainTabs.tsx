@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useMemo } from "react";
 
 type Tab = {
   slug: string;
@@ -14,21 +13,26 @@ const TopMainTabs: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [selectedTab, setSelectedTab] = useState<string>("/");
+  // Define tabs using useMemo to avoid re-creating the array on every render
+  const tabs: Tab[] = useMemo(
+    () => [
+      { slug: "/", label: "Dashboard" },
+      { slug: "/client", label: "Client" },
+      { slug: "/tax-plan-generator", label: "Tax Plan Generator" },
+    ],
+    []
+  );
 
-  const tabs: Tab[] = [
-    { slug: "/", label: "Dashboard" },
-    { slug: "/client", label: "Client" },
-    { slug: "/tax-plan-generator", label: "Tax Plan Generator" },
-  ];
-
-  // Explicitly typing the function parameters
-  const handleSelectTab = (slug: string): void => {
-    router.push(slug);
-  };
+  // Use callback for the tab click handler
+  const handleSelectTab = React.useCallback(
+    (slug: string) => {
+      router.push(slug);
+    },
+    [router]
+  );
 
   return (
-    <section className="bg-secondary border-t-1 border-gray-700">
+    <section className="bg-secondary border-t border-gray-700">
       <div className="container">
         <div className="relative flex justify-center items-center w-full py-5">
           <div className="grid grid-cols-3 divide-x divide-gray-500 bg-[#383E54] relative w-full">
@@ -36,14 +40,16 @@ const TopMainTabs: React.FC = () => {
               <button
                 key={tab.slug}
                 onClick={() => handleSelectTab(tab.slug)}
-                className="relative px-6 py-3 cursor-pointer text-center text-xl font-semibold transition"
+                className={`relative px-6 py-3 text-center text-xl font-semibold transition ${
+                  pathname === tab.slug ? "text-primary" : "text-white"
+                }`}
               >
                 <span className="relative z-10 text-white">{tab.label}</span>
 
                 {pathname === tab.slug && (
                   <motion.div
                     layoutId="activeTabIndicator"
-                    className="absolute inset-0 bg-primary z-0 border-none"
+                    className="absolute inset-0 bg-primary z-0"
                     initial={false}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
