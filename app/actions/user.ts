@@ -12,6 +12,14 @@ interface UserDataResponse {
 export async function getUserData(): Promise<UserDataResponse> {
   const session = await auth();
 
+  // Check for authentication and access token
+  if (!session?.user?.accessToken) {
+    return {
+      error: "User is not authenticated.",
+      ok: false,
+    };
+  }
+
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/user`,

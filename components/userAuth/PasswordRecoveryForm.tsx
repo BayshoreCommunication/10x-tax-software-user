@@ -154,7 +154,7 @@ const PasswordRecoveryForm = ({ userForgotPasswordInfo }: Props) => {
           <button
             type="submit"
             disabled={loading}
-            className={`text-white font-medium rounded-lg text-lg px-5 py-3 w-full bg-primary hover:bg-[#be9837]`}
+            className={`text-white font-medium rounded-lg text-lg px-5 py-3 w-full bg-primary hover:bg-hoverColor`}
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">

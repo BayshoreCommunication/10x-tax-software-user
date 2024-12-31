@@ -2,16 +2,9 @@
 
 import { credentialLoginOtpCheck } from "@/app/actions";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-type OtpType = {
-  digit1: string;
-  digit2: string;
-  digit3: string;
-  digit4: string;
-  digit5: string;
-  digit6: string;
-};
+// type OtpType = Record<number, string>;
 
 type UserSignInInfoType = {
   email: string | undefined;
@@ -27,165 +20,121 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(120);
+
+  const [otp, setOtp] = useState<any>(() => Array.from({ length: 6 }).fill(""));
+
   const router = useRouter();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const maskEmail = (email: any): any => {
+  // Mask email for display
+  const maskEmail = useCallback((email: string | undefined): string => {
+    if (!email) return "";
     const [localPart, domain] = email.split("@");
-    if (localPart.length <= 2) {
-      return email; // If the local part is too short, return the email as is
-    }
+    return `${localPart[0]}***${localPart.slice(-2)}@${domain}`;
+  }, []);
 
-    const maskedLocalPart =
-      localPart[0] +
-      "***" +
-      localPart[localPart.length - 2] +
-      localPart[localPart.length - 1];
-
-    return `${maskedLocalPart}@${domain}`;
-  };
-
+  // Timer countdown
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds: number): string => {
+  const formatTime = useCallback((seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
+  }, []);
 
-  const [otp, setOtp] = useState<OtpType>({
-    digit1: "",
-    digit2: "",
-    digit3: "",
-    digit4: "",
-    digit5: "",
-    digit6: "",
-  });
+  // Handle input change
+  const handleInputChange = useCallback((value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const value = e.target.value;
+    setOtp((prevOtp: any) => {
+      const newOtp = { ...prevOtp, [index]: value };
+      if (value && index < 5) inputRefs.current[index + 1]?.focus();
+      return newOtp;
+    });
+  }, []);
 
-    if (value.length > 1) {
-      // Handling paste operation
-      const otpArray = value.slice(0, 6).split(""); // Ensure only 6 digits
-      const updatedOtp: OtpType = {
-        digit1: otpArray[0] || "",
-        digit2: otpArray[1] || "",
-        digit3: otpArray[2] || "",
-        digit4: otpArray[3] || "",
-        digit5: otpArray[4] || "",
-        digit6: otpArray[5] || "",
-      };
-      setOtp(updatedOtp);
+  // Handle backspace
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+      if (e.key === "Backspace" && !otp[index] && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    },
+    [otp]
+  );
 
-      // Move focus to the last field
-      inputRefs.current[otpArray.length - 1]?.focus();
-      return;
-    }
-
-    setOtp((prevOtp) => ({
-      ...prevOtp,
-      [`digit${index + 1}`]: value,
-    }));
-
-    if (value.length === 1 && index < inputRefs.current.length - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.key === "Backspace" && !otp[`digit${index + 1}` as keyof OtpType]) {
-      inputRefs.current?.[index - 1]?.focus();
-    }
-  };
-
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const fullOtp = `${otp.digit1}${otp.digit2}${otp.digit3}${otp.digit4}${otp.digit5}${otp.digit6}`;
+    const fullOtp = Object.values(otp).join("");
 
     try {
+      setError(null);
       setLoading(true);
-
-      // Constructing FormData
       const formData = new FormData();
-      formData.append("email", userSignInInfo?.email || " ");
+      formData.append("email", userSignInInfo?.email || "");
       formData.append("otp", fullOtp);
 
       const response = await credentialLoginOtpCheck(formData);
 
-      if (!response) {
+      if (!response.ok) {
         setError("Invalid login OTP.");
       } else {
         router.push("/");
       }
-    } catch (e) {
+    } catch (error) {
+      console.error("Error during login:", error);
       setError("An unexpected error occurred. Please try again later.");
-      console.error("Error during login:", e);
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pastedValue = e.clipboardData.getData("Text");
-
-    if (pastedValue.length === 6) {
-      const otpArray = pastedValue.split("");
-
-      otpArray.forEach((digit, index) => {
-        handleInputChange(
-          {
-            target: {
-              value: digit,
-            },
-          } as unknown as React.ChangeEvent<HTMLInputElement>,
-          index
-        );
-      });
-    }
-  };
+  // Handle paste operation
+  const handlePaste = useCallback(
+    (e: React.ClipboardEvent<HTMLInputElement>) => {
+      const pastedValue = e.clipboardData.getData("Text").slice(0, 6);
+      setOtp(
+        pastedValue.split("").reduce((acc, digit, idx) => {
+          acc[idx] = digit;
+          return acc;
+        }, {} as any)
+      );
+    },
+    []
+  );
 
   return (
     <div>
       <h2 className="font-semibold text-3xl text-primary mb-6">
         OTP Verification
       </h2>
-
       <p className="font-light text-lg text-gray-600">
         We have sent an OTP to this email
       </p>
       <p className="font-normal text-lg text-black">
         {maskEmail(userSignInInfo?.email)}
       </p>
-
       <h3 className="text-green-400 font-medium text-2xl my-3">
         {formatTime(timeLeft)}
       </h3>
 
-      <form className="" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex space-x-6 my-5 text-black">
           {Array.from({ length: 6 }).map((_, index) => (
             <input
               key={index}
               type="text"
               className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-xl"
-              placeholder="*"
               maxLength={1}
-              value={otp[`digit${index + 1}` as keyof OtpType]}
-              onChange={(e) => handleInputChange(e, index)}
+              value={otp[index] || ""}
+              onChange={(e) => handleInputChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onPaste={handlePaste}
               ref={(el: any) => (inputRefs.current[index] = el)}
@@ -203,7 +152,7 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
         <div className="py-3">
           <button
             type="submit"
-            className="text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-[70%]"
+            className="text-white bg-primary hover:bg-hoverColor font-medium rounded-lg text-lg px-5 py-3 w-[70%]"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">

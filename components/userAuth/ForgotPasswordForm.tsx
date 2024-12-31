@@ -100,7 +100,7 @@ const ForgotPasswordForm: React.FC<UserForgotPasswordInfoProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className={`text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-full ${
+            className={`text-white bg-primary hover:bg-hoverColor font-medium rounded-lg text-lg px-5 py-3 w-full ${
               loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >

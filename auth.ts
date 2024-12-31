@@ -13,18 +13,11 @@ export const { auth, signIn, signOut } = NextAuth({
         otp: { label: "OTP", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials) {
-          throw new Error("Missing otp.");
-        }
-
-        const { email, otp } = credentials;
-
-        if (!email || !otp) {
+        if (!credentials?.email || !credentials.otp) {
           throw new Error("Both email and OTP are required.");
         }
 
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
         if (!apiUrl) {
           console.error("API URL is not defined in environment variables.");
           throw new Error("Internal server error. Please try again later.");
@@ -33,57 +26,50 @@ export const { auth, signIn, signOut } = NextAuth({
         try {
           const response = await fetch(`${apiUrl}/api/user/login-otp-verify`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, otp }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
           });
 
-          const userResponse = await response.json();
-
-          if (
-            !userResponse ||
-            !userResponse.payload ||
-            !userResponse.payload.user
-          ) {
-            throw new Error("Invalid user data returned from the server.");
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Invalid server response.");
           }
 
-          const { user, accessToken } = userResponse.payload;
-
-          if (!user || !accessToken) {
-            throw new Error("Missing required user information or token.");
+          const { payload } = await response.json();
+          if (!payload?.user || !payload.accessToken) {
+            throw new Error("Incomplete user data received from server.");
           }
 
-          return {
-            ...user,
-            accessToken,
-          };
+          return { ...payload.user, accessToken: payload.accessToken };
         } catch (error) {
-          if (error instanceof Error) {
-            throw new Error(
-              error.message || "An error occurred during authorization."
-            );
-          } else {
-            throw new Error("An unknown error occurred during authorization.");
-          }
+          console.error("Authorization error:", error);
+          throw new Error("An error occurred during authorization.");
         }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // if (user) {
-      //   setCookie(null, "auth_token", token.accessToken as string, {
-      //     maxAge: 30 * 24 * 60 * 60,
-      //     path: "/",
-      //   });
-      // }
-      return { ...token, ...user };
+      try {
+        if (user) {
+          return { ...token, ...user };
+        }
+        return token;
+      } catch (error) {
+        console.error("JWT callback error:", error);
+        return token;
+      }
     },
-    async session({ session, token, user }) {
-      session.user = token as any;
-      return session;
+    async session({ session, token }) {
+      try {
+        if (token) {
+          session.user = token as any;
+        }
+        return session;
+      } catch (error) {
+        console.error("Session callback error:", error);
+        return session;
+      }
     },
   },
 });

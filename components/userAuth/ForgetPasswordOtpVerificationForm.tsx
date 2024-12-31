@@ -211,7 +211,7 @@ const ForgetPasswordOtpVerificationForm = ({
         <div className="py-3">
           <button
             type="submit"
-            className="text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-[70%]"
+            className="text-white bg-primary hover:bg-hoverColor font-medium rounded-lg text-lg px-5 py-3 w-[70%]"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">

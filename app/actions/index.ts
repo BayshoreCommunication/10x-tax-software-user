@@ -87,15 +87,6 @@ export async function credentialLoginOtpCheck(
     return { error: "Email and otp are required.", ok: false };
   }
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (!apiUrl) {
-    console.error("API URL is not defined in environment variables.");
-    return {
-      error: "Internal server error. Please try again later.",
-      ok: false,
-    };
-  }
-
   try {
     // Call NextAuth signIn with credentials
     const response = await signIn("credentials", {
@@ -103,6 +94,8 @@ export async function credentialLoginOtpCheck(
       otp,
       redirect: false, // Prevent automatic redirection
     });
+
+    console.log("check this message 99", response);
 
     // Ensure a valid response is returned
     if (!response) {
@@ -112,7 +105,7 @@ export async function credentialLoginOtpCheck(
       };
     }
 
-    if (!response.ok) {
+    if (!response) {
       return {
         error: response.error || "Invalid login credentials.",
         ok: false,

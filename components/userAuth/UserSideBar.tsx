@@ -23,15 +23,17 @@ const UserSideBar = ({ title }: { title: string }) => {
         </p>
       </div>
 
-      {/* User Welcome Image with optimization */}
       <div className="flex justify-center">
         <Image
           src="/assets/user-image/welcome-image.png"
           alt="User Welcome"
-          width={354} // Specify the image width to maintain aspect ratio
-          height={354} // Specify the height accordingly
-          className="w-[354px] h-auto object-contain"
-          quality={100}
+          width={550}
+          height={500}
+          className="w-full xl:max-w-[354px] h-[280px] xl:h-[300px] 2xl:h-[320px]"
+          quality={85}
+          priority
+          // placeholder="blur"
+          // blurDataURL="/assets/user-image/welcome-image-blur.png"
         />
       </div>
     </div>
