@@ -84,7 +84,7 @@ const ForgotPasswordForm: React.FC<UserForgotPasswordInfoProps> = ({
               autoComplete="off"
               type="email"
               id="email-address-icon"
-              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 active:border-primary outline-none"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 active:border-primary outline-none bg-white"
               placeholder="carlosrosario@gmail.com"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}

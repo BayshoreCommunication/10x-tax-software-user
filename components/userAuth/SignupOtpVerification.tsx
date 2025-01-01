@@ -188,7 +188,7 @@ const SignupOtpVerification = ({
             <input
               key={index}
               type="text"
-              className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-xl"
+              className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-x bg-white"
               placeholder="*"
               maxLength={1}
               value={otp[`digit${index + 1}` as keyof OtpType]}

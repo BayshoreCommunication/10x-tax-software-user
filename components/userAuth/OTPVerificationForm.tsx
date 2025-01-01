@@ -131,7 +131,7 @@ const OTPVerificationForm = ({ userSignInOtpFlag, userSignInInfo }: Props) => {
             <input
               key={index}
               type="text"
-              className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-xl"
+              className="w-12 h-12 text-center border-b-2 border-gray-400 focus:outline-none focus:border-primary text-xl bg-white"
               maxLength={1}
               value={otp[index] || ""}
               onChange={(e) => handleInputChange(e.target.value, index)}
