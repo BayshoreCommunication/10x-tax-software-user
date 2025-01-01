@@ -8,7 +8,7 @@ const BasicInformation = () => {
   return (
     <div>
       <form className="">
-        <div className="flex items-center space-x-6 py-3">
+        <div className="flex items-center space-x-6 pb-3">
           <div className="w-full">
             <label
               htmlFor="name-icon"
@@ -253,13 +253,13 @@ const BasicInformation = () => {
         <div className="w-full flex items-center  justify-center mt-10 space-x-6">
           <Link
             href={"/"}
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center"
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
           >
             Next
           </Link>
           <Link
             href={"/"}
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center"
           >
             Save
           </Link>
