@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div className="w-full h-[100vh] flex items-center justify-center bg-[#eeeeee]">
       <Spinner
-        className="text-[#1B2639] "
+        className="text-[#1B2639]"
         label="Loading..."
         color="default"
         labelColor="foreground"

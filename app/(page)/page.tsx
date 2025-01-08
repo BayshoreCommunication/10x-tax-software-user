@@ -1,7 +1,5 @@
-// import { auth } from "@/auth";
 import ClientListTable from "@/components/dashboard/ClientListTable";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
-// import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "10x Tax Software",
@@ -18,17 +16,7 @@ export const metadata = {
   },
 };
 
-const page = async () => {
-  // const session = await auth();
-  // const userData = await getUserData();
-  // if (!session) {
-  //   redirect("/sign-in");
-  // }
-
-  // if (!userData.subscription) {
-  //   redirect("/confirm-subscription");
-  // }
-
+const page = () => {
   return (
     <div className="bg-[#eeeeee]">
       <DashboardOverview />
