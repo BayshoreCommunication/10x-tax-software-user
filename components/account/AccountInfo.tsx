@@ -16,13 +16,17 @@ const AccountInfo = ({ userData }: { userData: any }) => {
         <div className="border p-6">
           <div className="flex items-center space-x-8">
             <div className="relative w-[150px] h-[150px] border-2 rounded-full">
-              <Image
-                src={userData?.logoUrl || " "}
-                alt="User Picture"
-                width={150}
-                height={150}
-                className="absolute inset-0 rounded-full"
-              />
+              <div className="relative w-[150px] h-[150px] overflow-hidden rounded-full">
+                <Image
+                  src={userData?.logoUrl || "/assets/user-image/user-image.png"}
+                  alt="User Picture"
+                  layout="fill" // Ensures the image fills the container
+                  objectFit="cover" // Maintains aspect ratio while cropping
+                  quality={90} // Ensures good image quality
+                  priority // Optimizes loading for critical images
+                  className="bg-cover bg-center w-full h-full rounded-full"
+                />
+              </div>
 
               <div className=" bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
                 <TbEditCircle className="text-white text-xl" />

@@ -53,7 +53,7 @@ const DashboardOverview = () => {
         {dashboardData?.map((el: any, index: number) => (
           <div
             style={{ backgroundColor: el?.backgroundColor }}
-            className="p-7 space-y-14 rounded"
+            className="p-7 2xl:space-y-14 xl:space-y-10 space-y-8 rounded"
           >
             <h2 className="text-2xl font-medium text-[#11142D]">{el?.title}</h2>
             <div className="flex items-center justify-between">
@@ -65,10 +65,10 @@ const DashboardOverview = () => {
                 className="w-[60px] h-[60px]"
               />
               <div className="">
-                <h2 className="text-3xl font-bold text-[#11142D]">
+                <h2 className="2xl:text-3xl text-2xl font-bold  text-[#11142D]">
                   {el?.value}
                 </h2>
-                <p className="text-lg font-normal text-[#11142D] mt-1">
+                <p className="2xl:text-lg text-base font-normal text-[#11142D] mt-1">
                   {el?.description}
                 </p>
               </div>
@@ -76,7 +76,6 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-   
     </div>
   );
 };

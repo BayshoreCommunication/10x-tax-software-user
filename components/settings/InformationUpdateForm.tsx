@@ -113,13 +113,15 @@ const InformationUpdateForm = ({
     <div>
       <div className="flex items-center space-x-8">
         <div className="relative w-[150px] h-[150px] border-2  rounded-full">
-          <div>
+          <div className="relative w-[150px] h-[150px] overflow-hidden rounded-full">
             <Image
               src={logoPreview}
               alt="User Picture"
-              width={150}
-              height={150}
-              className="absolute inset-0 rounded-full"
+              layout="fill" // Ensures the image fills the container
+              objectFit="cover" // Maintains aspect ratio while cropping
+              quality={90} // Ensures good image quality
+              priority // Optimizes loading for critical images
+              className="bg-cover bg-center w-full h-full rounded-full"
             />
           </div>
           {userInfoUpdateFlag && (

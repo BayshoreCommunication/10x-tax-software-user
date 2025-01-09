@@ -70,15 +70,21 @@ const UserDropDownButton = ({ userData }: any) => {
             aria-haspopup="true"
             onClick={toggleDropdown}
           >
-            <div className="w-10 h-10 overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
-              <div className="flex items-center justify-center w-[30px] h-[30px]">
-                <Image
-                  src={userData?.logoUrl || "/assets/user-image/user-image.png"}
-                  alt={userData?.businessName || "User Image"}
-                  width={100}
-                  height={100}
-                  className="w-[35px] h-[35px]"
-                />
+            <div className="overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
+              <div className="flex items-center justify-center ">
+                <div className="relative overflow-hidden rounded-full w-10 h-10 border-2 border-white">
+                  <Image
+                    src={
+                      userData?.logoUrl || "/assets/user-image/user-image.png"
+                    }
+                    alt={userData?.businessName || "User Image"}
+                    layout="fill" // Ensures the image fills the container
+                    objectFit="cover" // Maintains aspect ratio while cropping
+                    quality={90} // Ensures good image quality
+                    priority // Optimizes loading for critical images
+                    className="bg-cover bg-center w-full h-full rounded-full"
+                  />
+                </div>
               </div>
             </div>
             <div className="text-left">
