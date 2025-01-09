@@ -3,6 +3,10 @@ import { ReactNode } from "react";
 import tinycolor from "tinycolor2";
 import { getUserData } from "./actions/user";
 
+export const metadata: Metadata = {
+  metadataBase: new URL("https://10x-tax-software-admin.vercel.app"),
+};
+
 export default async function RootLayout({
   children,
 }: {
