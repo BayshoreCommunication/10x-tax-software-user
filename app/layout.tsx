@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { Metadata } from "next";
 import { ReactNode } from "react";
 import tinycolor from "tinycolor2";
 import { getUserData } from "./actions/user";
