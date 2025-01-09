@@ -29,7 +29,7 @@ export async function getUserData(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
-        next: { revalidate: 360 },
+        next: { tags: ["userDataUpdate"], revalidate: 360 },
       }
     );
 
