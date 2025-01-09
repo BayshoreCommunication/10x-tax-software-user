@@ -67,9 +67,10 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
     try {
       const result = await updateUserData(formData);
       if (result.ok) {
+        router.push("https://10x-tax-software-user.vercel.app");
         toast.success("Successful update!");
         setError(null);
-        router.push("/");
+
         // toast.success("Info Update successfully!");
       } else {
         setError(result.error || "An unexpected error occurred.");
