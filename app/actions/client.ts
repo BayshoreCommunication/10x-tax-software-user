@@ -1,6 +1,6 @@
 "use server";
-
 import { auth } from "@/auth";
+import { revalidateTag } from "next/cache";
 
 interface UserDataResponse {
   error?: string;
@@ -26,7 +26,7 @@ export async function getAllClientData(
 
   try {
     const query = new URLSearchParams({
-      search,
+      search: search,
       page: page.toString(),
       limit: limit.toString(),
     }).toString();
@@ -39,7 +39,9 @@ export async function getAllClientData(
           "Content-Type": "application/json",
           Authorization: `${session.user.accessToken}`,
         },
-        // next: { tags: ["clientDataCreate"], revalidate: 360 },
+        next: {
+          tags: ["clientDataCreate", "clientDataDelete", "clientDataUpdate"],
+        },
       }
     );
 
@@ -76,8 +78,6 @@ export async function createClientData(
 ): Promise<{ error: string; ok: boolean }> {
   const session = await auth();
 
-
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/client-details`,
@@ -91,7 +91,7 @@ export async function createClientData(
       }
     );
 
-    // revalidateTag("clientDataCreate");
+    revalidateTag("clientDataCreate");
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -111,6 +111,98 @@ export async function createClientData(
     return {
       error: "An unexpected error occurred. Please try again later.",
       ok: false,
+    };
+  }
+}
+
+export async function updateClientData(
+  id: string,
+  formData: FormData
+): Promise<{ error: string; ok: boolean }> {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/client-details${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    revalidateTag("clientDataUpdate");
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to create client data.",
+        ok: false,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    console.error("Error create client data.", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function clientDeletedById(id: string): Promise<UserDataResponse> {
+  const session = await auth();
+
+  if (!session?.user?.accessToken) {
+    return {
+      error: "User is not authenticated.",
+      ok: false,
+      data: null,
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/client-details/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${session.user.accessToken}`,
+        },
+      }
+    );
+    revalidateTag("clientDataDelete");
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Failed to delete client:", errorData);
+      return {
+        error: errorData?.message || "Failed to delete client.",
+        ok: false,
+        data: null,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      data: data?.payload || null,
+    };
+  } catch (error) {
+    console.error("Error deleting client:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+      data: null,
     };
   }
 }

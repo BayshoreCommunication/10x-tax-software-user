@@ -1,12 +1,13 @@
 import ViewTaxPlan from "@/components/generatePlan/ViewTaxPlan";
 import ViewTaxProposal from "@/components/generatePlan/ViewTaxProposal";
 
-const page = ({ params }: any) => {
+const page = async ({ params }: any) => {
+  const { slug } = await params;
   return (
     <div className="p-7  bg-[#eeeeee]">
       <div className="container py-10">
         <div className="bg-white p-14">
-          {params?.slug === "tax-plan" ? <ViewTaxPlan /> : <ViewTaxProposal />}
+          {slug === "tax-plan" ? <ViewTaxPlan /> : <ViewTaxProposal />}
         </div>
       </div>
     </div>

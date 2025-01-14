@@ -1,9 +1,10 @@
 import TaxProposalPlanView from "@/components/generatePlan/TaxProposalPlanView";
 
-const page = () => {
+const page = async ({ params }: any) => {
+  const { id } = await params;
   return (
     <div className="p-7  bg-[#eeeeee]">
-      <TaxProposalPlanView />
+      <TaxProposalPlanView taxId={id} />
     </div>
   );
 };

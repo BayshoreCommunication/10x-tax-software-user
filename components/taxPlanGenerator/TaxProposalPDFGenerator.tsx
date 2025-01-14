@@ -7,11 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiEdit } from "react-icons/fi";
 import { GoSearch } from "react-icons/go";
-import { RiDeleteBin6Fill } from "react-icons/ri";
-import { formatDate } from "../shared/ui/DateFormat";
-
 import ClientDeletedModal from "../shared/ui/Modal/ClientDeletedModal";
 
 interface Pagination {
@@ -21,7 +17,7 @@ interface Pagination {
   nextPage: number | null;
 }
 
-const ClientList = () => {
+const TaxProposalPDFGenerator = () => {
   const [clientDeletedModal, setClientDeletedModal] = useState(false);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -141,24 +137,24 @@ const ClientList = () => {
   return (
     <div className="container py-10">
       <div className="flex items-center justify-between bg-secondary px-12 py-4">
-        <h2 className="text-2xl font-bold text-white">Clients List</h2>
-        <form className="flex items-center w-[50%] relative">
+        <h2 className="w-[25%] text-2xl font-bold text-white text-left py-4">
+          Tax Plan Generator
+        </h2>
+        <form className="w-[40%] flex justify-center items-center mx-0 relative">
           <input
             autoComplete="off"
             type="text"
-            className="bg-[#282E44] border-2 border-[#383E54] text-lg pl-12 py-2 placeholder-gray-400 text-white rounded-full w-full outline-none"
+            id="email-address-icon"
+            className="bg-[#282E44] border-2 border-[#383E54] text-lg focus:ring-[#383E54] focus:border-[#383E54] block pl-12 py-2 placeholder-[#383E54] active:border-[#383E54] outline-none rounded-full placeholder:text-lg text-white w-full placeholder:text-gray-400"
             placeholder="Search for something..."
             value={search}
             onChange={handleSearchChange}
           />
-          <GoSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          {/* Search Icon */}
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <GoSearch className="size-5" />
+          </div>
         </form>
-        <Link
-          href="/add-new-client"
-          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-hoverColor"
-        >
-          Add New Client
-        </Link>
       </div>
 
       <div className="relative overflow-x-auto bg-white pb-10 w-full min-h-[50vh]">
@@ -170,21 +166,16 @@ const ClientList = () => {
           <table className="w-full text-left rtl:text-right text-gray-500 ">
             <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
               <tr>
-                {[
-                  "User Name",
-                  "Number",
-                  "Email",
-                  "Address",
-                  "Reg. Date",
-                  "Action",
-                ].map((header, idx) => (
-                  <th
-                    key={idx}
-                    className={`px-6 py-3  border-gray-500 border-r-1 `}
-                  >
-                    {header}
-                  </th>
-                ))}
+                {["User Name", "Number", "Email", "Action"].map(
+                  (header, idx) => (
+                    <th
+                      key={idx}
+                      className={`px-6 py-3  border-gray-500 border-r-1 `}
+                    >
+                      {header}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody>
@@ -204,21 +195,13 @@ const ClientList = () => {
                   </td>
                   <td className="px-6 py-4">{el.basicInformation.phone}</td>
                   <td className="px-6 py-4">{el.basicInformation.email}</td>
-                  <td className="px-6 py-4">{el.basicInformation.address}</td>
-                  <td className="px-6 py-4">{formatDate(el.createdAt)}</td>
-                  <td className="px-6 py-4 flex justify-center space-x-3">
-                    <button
-                      className="bg-yellow-100 hover:bg-yellow-200 p-1.5 rounded-lg"
-                      onClick={() => router.push(`/client-edit/${el._id}`)}
+                  <td className="px-6 py-4 flex justify-center items-center space-x-3">
+                    <Link
+                      href={`/generate-plan/${el?._id}`}
+                      className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
                     >
-                      <FiEdit className="text-[#D5AD45]" />
-                    </button>
-                    <button
-                      className="bg-red-100 hover:bg-red-200 p-1.5 rounded-lg"
-                      onClick={() => handleUserDelete(el._id)}
-                    >
-                      <RiDeleteBin6Fill className="text-red-500" />
-                    </button>
+                      Generate Plan
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -241,4 +224,4 @@ const ClientList = () => {
   );
 };
 
-export default ClientList;
+export default TaxProposalPDFGenerator;

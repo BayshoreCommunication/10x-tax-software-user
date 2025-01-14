@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 // Define the types for the form
 interface SpouseDetails {
   fullName: string;
@@ -49,6 +49,7 @@ interface ClientInfoForm {
 }
 
 const AddNewClientForm = ({ session }: any) => {
+  const router = useRouter();
   const [marriedStatusDropdown, setIsMarriedStatusDropdown] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -171,6 +172,7 @@ const AddNewClientForm = ({ session }: any) => {
       if (response.ok) {
         setError(null);
         toast.success("Client created successfully!");
+        router.push("/");
       } else {
         const errorMessage = result?.error || "Failed to create client data.";
         toast.error(errorMessage);
@@ -209,7 +211,7 @@ const AddNewClientForm = ({ session }: any) => {
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 active:border-primary outline-none"
                   placeholder="Carlos Rosario"
                   name="basicInformation.fullName"
-                  value={clientInfoForm.basicInformation.fullName}
+                  value={clientInfoForm.basicInformation.fullName || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -228,7 +230,7 @@ const AddNewClientForm = ({ session }: any) => {
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                   placeholder="(555) 555-1234"
                   name="basicInformation.phone"
-                  value={clientInfoForm.basicInformation.phone}
+                  value={clientInfoForm.basicInformation.phone || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -249,7 +251,7 @@ const AddNewClientForm = ({ session }: any) => {
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                   placeholder="example@gmail.com"
                   name="basicInformation.email"
-                  value={clientInfoForm.basicInformation.email}
+                  value={clientInfoForm.basicInformation.email || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -268,7 +270,7 @@ const AddNewClientForm = ({ session }: any) => {
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                   placeholder="Software Engineer"
                   name="basicInformation.profession"
-                  value={clientInfoForm.basicInformation.profession}
+                  value={clientInfoForm.basicInformation.profession || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -322,7 +324,7 @@ const AddNewClientForm = ({ session }: any) => {
                     className="ps-10 p-2.5 bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                     placeholder="Select date"
                     name="basicInformation.dateOfBirth"
-                    value={clientInfoForm.basicInformation.dateOfBirth}
+                    value={clientInfoForm.basicInformation.dateOfBirth || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -408,7 +410,7 @@ const AddNewClientForm = ({ session }: any) => {
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                   placeholder="Concrete, Washington"
                   name="basicInformation.address"
-                  value={clientInfoForm.basicInformation.address}
+                  value={clientInfoForm.basicInformation.address || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -434,7 +436,7 @@ const AddNewClientForm = ({ session }: any) => {
                         name="basicInformation.spouseDetails.fullName"
                         value={
                           clientInfoForm.basicInformation?.spouseDetails
-                            .fullName
+                            .fullName || ""
                         }
                         onChange={handleChange}
                       />
@@ -449,7 +451,7 @@ const AddNewClientForm = ({ session }: any) => {
                         name="basicInformation.spouseDetails.profession"
                         value={
                           clientInfoForm?.basicInformation?.spouseDetails
-                            ?.profession
+                            ?.profession || ""
                         }
                         onChange={handleChange}
                       />
@@ -492,7 +494,7 @@ const AddNewClientForm = ({ session }: any) => {
                         name="basicInformation.spouseDetails.dateOfBirth"
                         value={
                           clientInfoForm?.basicInformation?.spouseDetails
-                            ?.dateOfBirth
+                            ?.dateOfBirth || ""
                         }
                         onChange={handleChange}
                       />
