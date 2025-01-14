@@ -1,4 +1,4 @@
-import ViewTaxPlan from "@/components/generatePlan/ViewTaxPlan";
+import ViewTaxPlanAndEdit from "@/components/generatePlan/ViewTaxPlanAndEdit";
 import ViewTaxProposal from "@/components/generatePlan/ViewTaxProposal";
 
 const page = async ({ params }: any) => {
@@ -7,7 +7,7 @@ const page = async ({ params }: any) => {
     <div className="p-7  bg-[#eeeeee]">
       <div className="container py-10">
         <div className="bg-white p-14">
-          {slug === "tax-plan" ? <ViewTaxPlan /> : <ViewTaxProposal />}
+          {slug === "tax-plan" ? <ViewTaxPlanAndEdit /> : <ViewTaxProposal />}
         </div>
       </div>
     </div>

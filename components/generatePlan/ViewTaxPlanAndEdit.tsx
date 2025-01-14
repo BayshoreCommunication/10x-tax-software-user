@@ -1,6 +1,13 @@
 "use client";
+import { useRouter } from "next/navigation";
 
-const ViewTaxPlan = () => {
+const ViewTaxPlanAndEdit = () => {
+  const router = useRouter();
+
+  const goBackTwoSteps = () => {
+    window.history.go(-2);
+  };
+
   return (
     <div className="w-full">
       <div className="p-5 2xl:p-8 max-w-5xl mx-auto bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)]">
@@ -112,10 +119,18 @@ const ViewTaxPlan = () => {
               </li>
             </ul>
           </div>
+          <div className="w-full flex items-center  justify-start space-x-6  ">
+            <button
+              onClick={goBackTwoSteps}
+              className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[200px] w-full"
+            >
+              Edit
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ViewTaxPlan;
+export default ViewTaxPlanAndEdit;

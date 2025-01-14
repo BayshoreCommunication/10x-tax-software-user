@@ -23,6 +23,12 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/shared/pdfGenerator/TaxProposalPDFGenerator.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "components/shared/pdfGenerator/PDFGeneratorWithDownload.tsx"
+  ],
   "exclude": ["node_modules"]
 }

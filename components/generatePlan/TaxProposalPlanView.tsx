@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { FaRegEye } from "react-icons/fa";
-import { IoSend } from "react-icons/io5";
 import { SiAdobeacrobatreader } from "react-icons/si";
-import TaxProposalPDFGenerator from "../shared/pdfGenerator/TaxProposalPDFGenerator";
+import PDFGeneratorWithDownload from "../shared/pdfGenerator/PDFGeneratorWithDownload";
+import TaxProposalSend from "../shared/pdfGenerator/TaxProposalSend";
 import ViewTaxPlan from "./ViewTaxPlan";
 import ViewTaxProposal from "./ViewTaxProposal";
 
@@ -39,7 +39,10 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                 </Link>
               </div>
               <div className="">
-                <TaxProposalPDFGenerator RenderComponent={ViewTaxPlan} />
+                <PDFGeneratorWithDownload
+                  RenderComponent={ViewTaxPlan}
+                  title={"tax-plan"}
+                />
               </div>
             </div>
           </div>
@@ -62,13 +65,16 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                   </div>
                 </div>
                 <div className="flex items-center  gap-5">
-                  <Link
+                  {/* <Link
                     href="#"
                     className="flex items-center space-x-2 mt-3 text-lg  hover:text-primary duration-300 font-medium"
                   >
                     <IoSend />
                     <span>Send</span>
-                  </Link>
+                  </Link> */}
+                  <div className="">
+                    <TaxProposalSend RenderComponent={ViewTaxProposal} />
+                  </div>
                   <Link
                     href={`/view-proposal/${taxId}/tax-proposal`}
                     className="flex items-center space-x-2 mt-3 text-lg  hover:text-primary duration-300 font-medium"
@@ -79,7 +85,10 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                 </div>
               </div>
               <div className="">
-                <TaxProposalPDFGenerator RenderComponent={ViewTaxProposal} />
+                <PDFGeneratorWithDownload
+                  RenderComponent={ViewTaxProposal}
+                  title={"tax-proposal"}
+                />
               </div>
             </div>
           </div>

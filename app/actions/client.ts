@@ -206,3 +206,57 @@ export async function clientDeletedById(id: string): Promise<UserDataResponse> {
     };
   }
 }
+
+export async function taxProposalSend(
+  formData: FormData
+): Promise<{ error: string; ok: boolean }> {
+  const file = formData.get("image");
+  // Retrieve the user session to check if authenticated
+  const session = await auth();
+
+  // Check for authentication and access token
+
+  // if (!file || typeof file === "string") {
+  //   return { message: "Invalid file", status: 400 };
+  // }
+
+  try {
+    // Make the API request to update user data
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tax-proposal`,
+      {
+        method: "POST",
+        headers: {
+          // "Content-Type": "application/json",
+          Authorization: ` ${session?.user?.accessToken}`,
+        },
+        body: formData,
+      }
+    );
+
+    revalidateTag("userDataUpdate");
+
+    // Check if the response is successful
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to update user data.",
+        ok: false,
+      };
+    }
+
+    // Parse the response data if the update is successful
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data,
+    };
+  } catch (error) {
+    // Log unexpected errors
+    console.error("Error updating user data:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
