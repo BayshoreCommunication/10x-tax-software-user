@@ -3,6 +3,7 @@
 import { userLogOut } from "@/app/actions";
 import { siteConfig } from "@/config/site";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
@@ -51,10 +52,15 @@ const UserDropDownButton = ({ userData }: any) => {
     (el: any, index: number) => el?.slug === pathname
   )?.label;
 
-  const handleMenuClick = (slug: any) => {
-    router.push(slug);
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    if (
+      pathname === "/account" ||
+      pathname === "/subscription" ||
+      pathname === "/settings"
+    ) {
+      setIsOpen(false);
+    }
+  }, [pathname]);
 
   return (
     <div>
@@ -103,29 +109,29 @@ const UserDropDownButton = ({ userData }: any) => {
             aria-labelledby="menu-button"
           >
             <div className="py-1" role="none">
-              <button
-                onClick={() => handleMenuClick("/account")}
+              <Link
+                href={"/account"}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <FaRegUser className="size-4" />
                 <p>Account</p>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => handleMenuClick("/subscription")}
+              <Link
+                href={"/subscription"}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <PiListPlusBold className="size-4" />
                 <p>Subscription</p>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => handleMenuClick("/settings")}
+              <Link
+                href={"/settings"}
                 className="w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-primary hover:text-white flex items-center space-x-2"
               >
                 <RiSettings3Line className="size-4" />
                 <p>Settings</p>
-              </button>
+              </Link>
               <form action={userLogOut}>
                 <button
                   type="submit"
