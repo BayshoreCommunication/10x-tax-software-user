@@ -1,14 +1,25 @@
 "use client";
 
+import {
+  calculateAge,
+  calculateDateOfBirth,
+} from "@/components/shared/ageCalculater/ageToDateAndDateToAge";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoQuestion } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 
 const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
+  const [clientAge, setClientAge] = useState<Number | String | null>(
+    calculateAge(clientInfoForm?.basicInformation?.dateOfBirth) || ""
+  );
+
   const [marriedStatusDropdown, setIsMarriedStatusDropdown] = useState(false);
 
-  const [standardDeductionFlag, setStandardDeductionFlag] = useState(false);
+  const [standardDeductionFlag, setStandardDeductionFlag] = useState(
+    clientInfoForm?.deduction || false
+  );
+
   const [showAdvancedFlag, setShowAdvancedFlag] = useState(false);
 
   // Handler for marital status
@@ -21,6 +32,25 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
       fillingStatus: value,
     }));
   };
+
+  // Handler for deduction
+
+  useEffect(() => {
+    setClientInfoForm((prevState: any) => ({
+      ...prevState,
+      deduction: standardDeductionFlag,
+    }));
+  }, [standardDeductionFlag]);
+
+  useEffect(() => {
+    setClientInfoForm((prevState: any) => ({
+      ...prevState,
+      basicInformation: {
+        ...prevState.basicInformation,
+        dateOfBirth: calculateDateOfBirth(Number(clientAge)),
+      },
+    }));
+  }, [clientAge]);
 
   // Input onChange handler
 
@@ -146,6 +176,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Depreciation */}
         <div className="w-full">
           <label
@@ -166,6 +197,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Travel */}
         <div className="w-full">
           <label
@@ -186,6 +218,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Hiring Children */}
         <div className="w-full">
           <label
@@ -206,6 +239,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Meals */}
         <div className="w-full">
           <label
@@ -226,6 +260,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Annual gross income */}
         <div className="w-full">
           <div className=" mb-2 flex items-center space-x-2 ">
@@ -250,26 +285,27 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             onChange={handleChange}
           />
         </div>
+
         {/* Age (as of Jan 1, 2024)*/}
         <div className="w-full">
           <label
             htmlFor="name-icon"
             className="block mb-2 text-lg font-normal text-white"
           >
-            Age (as of Jan 1, 2025)
+            Age (current)
           </label>
 
           <input
             autoComplete="off"
-            type="text"
-            id="email-address-icon"
             className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
             placeholder="35"
-            name="basicInformation.dateOfBirth"
-            value={clientInfoForm.basicInformation.dateOfBirth || ""}
-            onChange={handleChange}
+            type="text"
+            id="age"
+            value={Number(clientAge) ?? ""}
+            onChange={(e) => setClientAge(Number(e.target.value))}
           />
         </div>
+
         {/* You standard deduction: $13,850  */}
         <div className="w-full">
           <label
@@ -305,7 +341,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                 type="radio"
                 name="bordered-radio"
                 className="w-5 h-5 bg-[#383E54] border border-white border-opacity-10 rounded-md text-white focus:ring-primary focus:border-primary  !cursor-pointer"
-                checked={standardDeductionFlag} // Checked if standard deduction is selected
+                checked={standardDeductionFlag}
                 onChange={() => setStandardDeductionFlag(true)}
               />
               <label
@@ -349,6 +385,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                 id="email-address-icon"
                 className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                 placeholder="$"
+                name="standardDeduction.itemizedDeduction"
+                value={clientInfoForm.standardDeduction.itemizedDeduction || ""}
+                onChange={handleChange}
               />
             </div>
 
@@ -371,6 +410,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                 id="email-address-icon"
                 className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                 placeholder="$"
+                name="standardDeduction.taxesWithheld"
+                value={clientInfoForm.standardDeduction.taxesWithheld || ""}
+                onChange={handleChange}
               />
             </div>
           </motion.div>
@@ -429,6 +471,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                     id="email-address-icon"
                     className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                     placeholder="$"
+                    name="advanced.contributations"
+                    value={clientInfoForm.advanced.contributations || ""}
+                    onChange={handleChange}
                   />
                 </div>
                 {/* IRA contributations  */}
@@ -450,6 +495,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                     id="email-address-icon"
                     className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                     placeholder="$"
+                    name="advanced.iRAContributations"
+                    value={clientInfoForm.advanced.iRAContributations || ""}
+                    onChange={handleChange}
                   />
                 </div>
                 {/* Other deductions  */}
@@ -471,6 +519,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                     id="email-address-icon"
                     className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                     placeholder="$"
+                    name="advanced.otherDeductions"
+                    value={clientInfoForm.advanced.otherDeductions || ""}
+                    onChange={handleChange}
                   />
                 </div>
                 {/* Tax credits */}
@@ -492,6 +543,9 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                     id="email-address-icon"
                     className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
                     placeholder="$"
+                    name="advanced.taxCredits"
+                    value={clientInfoForm.advanced.taxCredits || ""}
+                    onChange={handleChange}
                   />
                 </div>
               </motion.div>

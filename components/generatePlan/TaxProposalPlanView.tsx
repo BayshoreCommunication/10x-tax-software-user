@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaDownload, FaRegEye } from "react-icons/fa";
 import { SiAdobeacrobatreader } from "react-icons/si";
+
 import PDFGeneratorWithDownload from "../shared/pdfGenerator/PDFGeneratorWithDownload";
 import TaxProposalSend from "../shared/pdfGenerator/TaxProposalSend";
 import ViewTaxPlan from "./ViewTaxPlan";
@@ -12,24 +13,6 @@ import ViewTaxProposal from "./ViewTaxProposal";
 const TaxProposalPlanView = ({ taxId }: any) => {
   const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
   const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
-
-  const pdfDownloadHandler = (value: string) => {
-    if (value === "taxplan") {
-      return (
-        <PDFGeneratorWithDownload
-          RenderComponent={ViewTaxPlan}
-          title={"tax-plan"}
-        />
-      );
-    } else if (value === "taxproposal") {
-      return (
-        <PDFGeneratorWithDownload
-          RenderComponent={ViewTaxProposal}
-          title={"tax-proposal"}
-        />
-      );
-    }
-  };
 
   return (
     <div className="container py-10 overflow-hidden">
@@ -105,13 +88,6 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                   </div>
                 </div>
                 <div className="flex items-center  gap-5">
-                  {/* <Link
-                    href="#"
-                    className="flex items-center space-x-2 mt-3 text-lg  hover:text-primary duration-300 font-medium"
-                  >
-                    <IoSend />
-                    <span>Send</span>
-                  </Link> */}
                   <div className="">
                     <TaxProposalSend RenderComponent={ViewTaxProposal} />
                   </div>

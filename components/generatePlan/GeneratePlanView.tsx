@@ -44,11 +44,25 @@ interface Dependents {
   totalNumberOfDependents: string;
 }
 
+standardDeduction: interface StandardDeduction {
+  itemizedDeduction: string;
+  taxesWithheld: string;
+}
+interface Advanced {
+  contributations: string;
+  iRAContributations: string;
+  otherDeductions: string;
+  taxCredits: string;
+}
+
 interface ClientInfoForm {
   fillingStatus: string;
+  deduction: boolean;
   basicInformation: BasicInformation;
   strategy: Strategy;
   dependents: Dependents;
+  standardDeduction: StandardDeduction;
+  advanced: Advanced;
 }
 
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
@@ -60,6 +74,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
 
   const [clientInfoForm, setClientInfoForm] = useState<ClientInfoForm>({
     fillingStatus: clientDetails?.fillingStatus || "",
+
     basicInformation: {
       fullName: clientDetails?.basicInformation?.fullName || "",
       phone: clientDetails?.basicInformation?.phone || "",
@@ -80,6 +95,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
           clientDetails?.basicInformation?.spouseDetails?.dateOfBirth || "",
       },
     },
+
     strategy: {
       homeOffice: clientDetails?.strategy?.homeOffice || "",
       depreciation: clientDetails?.strategy?.depreciation || "",
@@ -91,6 +107,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       rentHomeToCorporation:
         clientDetails?.strategy?.rentHomeToCorporation || "",
     },
+
     dependents: {
       underAge17: clientDetails?.dependents?.underAge17 || "",
       fullTimeStudentsAge17To23:
@@ -98,6 +115,20 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       otherDependents: clientDetails?.dependents?.otherDependents || "",
       totalNumberOfDependents:
         clientDetails?.dependents?.totalNumberOfDependents || "",
+    },
+
+    deduction: clientDetails?.deduction || "",
+    standardDeduction: {
+      itemizedDeduction:
+        clientDetails?.standardDeduction?.itemizedDeduction || "",
+      taxesWithheld: clientDetails?.standardDeduction?.taxesWithheld || "",
+    },
+
+    advanced: {
+      contributations: clientDetails?.advanced?.contributations || "",
+      iRAContributations: clientDetails?.advanced?.iRAContributations || "",
+      otherDeductions: clientDetails?.advanced?.otherDeductions || "",
+      taxCredits: clientDetails?.advanced?.taxCredits || "",
     },
   });
 
