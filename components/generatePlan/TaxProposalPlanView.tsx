@@ -1,6 +1,8 @@
 "use client";
+
 import Link from "next/link";
-import { FaRegEye } from "react-icons/fa";
+import { useState } from "react";
+import { FaDownload, FaRegEye } from "react-icons/fa";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import PDFGeneratorWithDownload from "../shared/pdfGenerator/PDFGeneratorWithDownload";
 import TaxProposalSend from "../shared/pdfGenerator/TaxProposalSend";
@@ -8,6 +10,27 @@ import ViewTaxPlan from "./ViewTaxPlan";
 import ViewTaxProposal from "./ViewTaxProposal";
 
 const TaxProposalPlanView = ({ taxId }: any) => {
+  const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
+  const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
+
+  const pdfDownloadHandler = (value: string) => {
+    if (value === "taxplan") {
+      return (
+        <PDFGeneratorWithDownload
+          RenderComponent={ViewTaxPlan}
+          title={"tax-plan"}
+        />
+      );
+    } else if (value === "taxproposal") {
+      return (
+        <PDFGeneratorWithDownload
+          RenderComponent={ViewTaxProposal}
+          title={"tax-proposal"}
+        />
+      );
+    }
+  };
+
   return (
     <div className="container py-10 overflow-hidden">
       <div className="bg-white p-14">
@@ -15,7 +38,11 @@ const TaxProposalPlanView = ({ taxId }: any) => {
           {/* Plan */}
           <div>
             <h2 className="text-4xl font-bold border-b pb-5 mb-6"> Plan</h2>
-            <div className="p-5 2xl:p-8 bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)] flex justify-between items-center space-x-4">
+            <button
+              onMouseEnter={() => setPdfDownloadPlan(true)}
+              onMouseLeave={() => setPdfDownloadPlan(false)}
+              className="p-5 2xl:p-8 bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)] flex justify-between items-center space-x-4 w-full"
+            >
               <div>
                 <div className="flex items-center space-x-3">
                   <div className="p-3 bg-primary text-white rounded-lg ">
@@ -39,17 +66,30 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                 </Link>
               </div>
               <div className="">
-                <PDFGeneratorWithDownload
-                  RenderComponent={ViewTaxPlan}
-                  title={"tax-plan"}
-                />
+                {pdfDownloadPlan ? (
+                  <PDFGeneratorWithDownload
+                    RenderComponent={ViewTaxPlan}
+                    title={"tax-plan"}
+                  />
+                ) : (
+                  <button
+                    className={`flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium`}
+                  >
+                    <p>Download PDF</p>
+                    <FaDownload />
+                  </button>
+                )}
               </div>
-            </div>
+            </button>
           </div>
           {/* Proposal */}
           <div>
             <h2 className="text-4xl font-bold border-b pb-5 mb-6"> Proposal</h2>
-            <div className="p-5 2xl:p-8 bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)] flex justify-between items-center ">
+            <button
+              onMouseEnter={() => setPdfDownloadProposa(true)}
+              onMouseLeave={() => setPdfDownloadProposa(false)}
+              className="p-5 2xl:p-8 bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)] flex justify-between items-center w-full"
+            >
               <div>
                 <div className="flex items-center space-x-3">
                   <div className="p-3 bg-primary text-white rounded-lg ">
@@ -85,12 +125,21 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                 </div>
               </div>
               <div className="">
-                <PDFGeneratorWithDownload
-                  RenderComponent={ViewTaxProposal}
-                  title={"tax-proposal"}
-                />
+                {pdfDownloadProposal ? (
+                  <PDFGeneratorWithDownload
+                    RenderComponent={ViewTaxProposal}
+                    title={"tax-proposal"}
+                  />
+                ) : (
+                  <button
+                    className={`flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium`}
+                  >
+                    <p>Download PDF</p>
+                    <FaDownload />
+                  </button>
+                )}
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
