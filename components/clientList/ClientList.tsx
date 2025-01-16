@@ -119,65 +119,67 @@ const ClientList = () => {
     const pageNumbers = generatePageNumbers();
 
     return (
-      <nav aria-label="Page navigation" className="flex justify-end mt-8">
-        <ul className="inline-flex -space-x-px text-base items-center">
-          {/* Previous button */}
-          <li>
-            <button
-              onClick={() => handlePaginationClick((currentPage ?? 1) - 1)}
-              disabled={pagination?.previousPage === null || currentPage <= 1}
-              className="bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
-            >
-              <span>Previous</span>
-            </button>
-          </li>
-
-          {/* Ellipsis before page numbers */}
-          {pagination?.previousPage && pagination.previousPage > 1 && (
-            <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
-              <BsThreeDots />
-            </li>
-          )}
-
-          {/* Page number buttons */}
-          {pageNumbers.map((page) => (
-            <li key={page}>
+      pageNumbers.length > 0 && (
+        <nav aria-label="Page navigation" className="flex justify-end mt-8">
+          <ul className="inline-flex -space-x-px text-base items-center">
+            {/* Previous button */}
+            <li>
               <button
-                onClick={() => handlePaginationClick(page)}
-                className={`px-4 py-2 border h-[42px] w-[45px] ${
-                  page === currentPage
-                    ? "bg-primary text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
-                }`}
+                onClick={() => handlePaginationClick((currentPage ?? 1) - 1)}
+                disabled={pagination?.previousPage === null || currentPage <= 1}
+                className="bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
               >
-                {page}
+                <span>Previous</span>
               </button>
             </li>
-          ))}
 
-          {/* Ellipsis after page numbers */}
-          {pagination?.currentPage &&
-            pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+            {/* Ellipsis before page numbers */}
+            {pagination?.previousPage && pagination.previousPage > 1 && (
               <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
                 <BsThreeDots />
               </li>
             )}
 
-          {/* Next button */}
-          <li>
-            <button
-              onClick={() => handlePaginationClick((currentPage ?? 1) + 1)}
-              disabled={
-                pagination?.nextPage === null ||
-                currentPage >= (pagination?.totalPages ?? 1)
-              }
-              className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
-            >
-              <span>Next</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
+            {/* Page number buttons */}
+            {pageNumbers.map((page) => (
+              <li key={page}>
+                <button
+                  onClick={() => handlePaginationClick(page)}
+                  className={`px-4 py-2 border h-[42px] w-[45px] ${
+                    page === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              </li>
+            ))}
+
+            {/* Ellipsis after page numbers */}
+            {pagination?.currentPage &&
+              pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+                <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                  <BsThreeDots />
+                </li>
+              )}
+
+            {/* Next button */}
+            <li>
+              <button
+                onClick={() => handlePaginationClick((currentPage ?? 1) + 1)}
+                disabled={
+                  pagination?.nextPage === null ||
+                  currentPage >= (pagination?.totalPages ?? 1)
+                }
+                className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
+              >
+                <span>Next</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )
     );
   }, [pagination, currentPage, handlePaginationClick]);
 
