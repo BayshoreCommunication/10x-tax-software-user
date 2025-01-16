@@ -29,7 +29,7 @@ export async function getUserData(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
-        next: { tags: ["userDataUpdate"] },
+        next: { tags: ["userDataUpdate", "createSubscription"] },
       }
     );
 
@@ -62,31 +62,15 @@ export async function updateUserData(
   formData: FormData
 ): Promise<{ error: string; ok: boolean }> {
   const file = formData.get("image");
-  // Retrieve the user session to check if authenticated
+
   const session = await auth();
 
-  // // Check for authentication and access token
-  // if (!session?.user?.accessToken) {
-  //   return {
-  //     error: "User is not authenticated.",
-  //     ok: false,
-  //   };
-  // }
-
-  // console.log("check this data value 63", session);
-
-  // if (!file || typeof file === "string") {
-  //   return { message: "Invalid file", status: 400 };
-  // }
-
   try {
-    // Make the API request to update user data
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/update-user`,
       {
         method: "PUT",
         headers: {
-          // "Content-Type": "application/json",
           Authorization: ` ${session?.user?.accessToken}`,
         },
         body: formData,
@@ -95,7 +79,6 @@ export async function updateUserData(
 
     revalidateTag("userDataUpdate");
 
-    // Check if the response is successful
     if (!response.ok) {
       const errorData = await response.json();
       return {
@@ -104,15 +87,67 @@ export async function updateUserData(
       };
     }
 
-    // Parse the response data if the update is successful
     const data = await response.json();
     return {
       ok: true,
       ...data,
     };
   } catch (error) {
-    // Log unexpected errors
     console.error("Error updating user data:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+    };
+  }
+}
+
+export async function createSubscription(
+  paymentInfos: {
+    email: string;
+    name: string;
+    country: string;
+    address: string;
+    paymentId: string;
+  },
+  subscriptionInfo: Record<string, any>
+): Promise<{ error?: string; ok: boolean }> {
+  try {
+    const session = await auth();
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify({
+          paymentInfo: paymentInfos,
+          subscriptionInfo,
+        }),
+      }
+    );
+
+    revalidateTag("createSubscription");
+
+    // Check if the response is not okay
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Failed to create subscription.",
+        ok: false,
+      };
+    }
+
+    // On success, parse and return the response
+    const data = await response.json();
+    return {
+      ok: true,
+      ...data, // Include any extra data from the API response
+    };
+  } catch (error) {
+    console.error("Error creating subscription:", error);
     return {
       error: "An unexpected error occurred. Please try again later.",
       ok: false,
@@ -126,14 +161,6 @@ export async function userImageUpload(
   const file = formData.get("image");
 
   const session = await auth();
-
-  // Check for authentication and access token
-  // if (!session?.user?.accessToken) {
-  //   return {
-  //     error: "User is not authenticated.",
-  //     ok: false,
-  //   };
-  // }
 
   if (!file || typeof file === "string") {
     return { message: "Invalid file", status: 400 };

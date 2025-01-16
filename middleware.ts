@@ -49,9 +49,8 @@ import { auth } from "./auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-
   if (
-    pathname.startsWith("/_next/") || 
+    pathname.startsWith("/_next/") ||
     pathname === "/favicon.ico" ||
     pathname.startsWith("/assets/") ||
     ["/sign-in", "/sign-up", "/forget-password", "/confirm-subscription"].some(
@@ -62,12 +61,10 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
- 
     const session = await auth();
     if (!session) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
-
 
     const { data: userData } = await getUserData();
     if (!userData?.subscription) {
@@ -84,7 +81,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.ico|assets/).*)"], 
+  matcher: ["/((?!_next/|favicon.ico|assets/).*)"],
 };
 
 export default middleware;

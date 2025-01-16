@@ -1,5 +1,6 @@
 "use client";
 
+import { createSubscription } from "@/app/actions/user";
 import {
   CardCvcElement,
   CardExpiryElement,
@@ -12,6 +13,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+
+interface PaymentInfo {
+  email: string;
+  name: string;
+  country: string;
+  address: string;
+  paymentId: string;
+}
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -116,35 +125,48 @@ const CheckoutForm = ({
       // }
 
       // Step 3: Save Subscription Details
-      const subscriptionResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-          body: JSON.stringify({
-            paymentInfo: {
-              email: paymentInfo.email,
-              name: paymentInfo.name,
-              country: paymentInfo.country,
-              address: paymentInfo.address,
-              paymentId: paymentIntent.id,
-            },
-            subscriptionInfo,
-          }),
-        }
+      // const subscriptionResponse = await fetch(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `${token}`,
+      //     },
+      //     body: JSON.stringify({
+      //       paymentInfo: {
+      //         email: paymentInfo.email,
+      //         name: paymentInfo.name,
+      //         country: paymentInfo.country,
+      //         address: paymentInfo.address,
+      //         paymentId: paymentIntent.id,
+      //       },
+      //       subscriptionInfo,
+      //     }),
+      //   }
+      // );
+
+      const paymentInfos: PaymentInfo = {
+        email: paymentInfo.email,
+        name: paymentInfo.name,
+        country: paymentInfo.country,
+        address: paymentInfo.address,
+        paymentId: paymentIntent.id,
+      };
+
+      const subscriptionResponse = await createSubscription(
+        paymentInfos,
+        subscriptionInfo
       );
 
       if (!subscriptionResponse.ok) {
-        const { message } = await subscriptionResponse.json();
-        throw new Error(message || "Failed to create subscription.");
+        // const { message } = await subscriptionResponse.json();
+        throw new Error("Failed to create subscription.");
       }
 
       // Success
       toast.success("Payment successful!");
-      router.push("/");
+      router.push("/update-business-infomation");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "An unexpected error occurred.");
