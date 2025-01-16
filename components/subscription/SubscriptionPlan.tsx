@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { FaBolt } from "react-icons/fa";
+import { PiFireFill } from "react-icons/pi";
+import { SlCalender } from "react-icons/sl";
 
 const SubscriptionPlan = () => {
   return (
@@ -8,55 +11,186 @@ const SubscriptionPlan = () => {
           Choose Your Monthly Or Yearly Plan
         </h2>
 
-        <div className="max-w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
-          <div className="shadow-medium rounded-xl px-6 py-16 w-[50%]">
-            <div className="w-full bg-[#EBEBEB] py-3 px-4 rounded-large mb-6">
-              <h2 className="text-2xl font-normal text-[#11142D] text-center">
-                Basic
-              </h2>
-            </div>
-            <div className="my-12">
-              <h2 className="text-6xl font-bold text-primary text-center">
-                $29
-              </h2>
-              <h3 className="text-4xl font-normal text-[#11142D] text-center mt-5">
-                Monthly
-              </h3>
-            </div>
-            <div className="w-full flex items-center">
-              <Link
-                href={`confirm-subscription/monthly`}
-                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
-              >
-                Choose Plan
-              </Link>
-            </div>
-          </div>
-          <div className="shadow-medium rounded-xl px-6  pb-16 w-[50%] bg-secondary">
-            <div className="flex justify-end py-4">
-              <div className="border p-1 border-primary rounded-lg w-[70%]  lg:w-[40%]  2xl:w-[30%]">
-                <p className=" text-center text-primary">Recommended</p>
+        <div className="max-w-[60%] flex items-stretch justify-between space-x-8 mx-auto pt-20 pb-40">
+          {/* ****************** */}
+          <div className="shadow-small rounded-[30px] px-10 py-12 w-[50%] border border-[#eeeeee] bg-white">
+            <div className=" h-full flex flex-col justify-between">
+              <div>
+                <div className="w-full bg-[#F0F0F0] py-5 xl:py-8 px-4 rounded-large mb-6 flex flex-col gap-2 justify-center items-center h-[150px]">
+                  <FaBolt className="text-4xl 2xl:text-5xl text-primary" />
+                  <h2 className="text-2xl font-semibold text-[#11142D] text-center uppercase">
+                    Basic
+                  </h2>
+                </div>
+                <div className="my-12">
+                  <h2 className="text-6xl font-bold text-primary text-center">
+                    $29
+                    <span className="text-lg font-medium text-[#909192]">
+                      /Monthly
+                    </span>
+                  </h2>
+                </div>
+              </div>
+              <div className="w-full flex items-center mt-2">
+                <Link
+                  href={`/confirm-subscription/yearly`}
+                  className=" bg-primary py-3 px-4 rounded-large text-xl font-medium text-white text-center w-full"
+                >
+                  Choose Plan & Save16%
+                </Link>
               </div>
             </div>
-            <div className="w-full bg-[#DEDEDE1A] py-3 px-4 rounded-large mb-6">
-              <h2 className="text-2xl font-normal text-white text-center">
-                Best Offer - Save 16%
-              </h2>
-            </div>
-            <div className="my-12">
+          </div>
+          {/* ****************** */}
+          {/* <div className="shadow-small rounded-[30px] px-10 py-12 w-[50%] border border-[#eeeeee] bg-white">
+            <div className="w-full bg-[#F0F0F0] py-5 xl:py-8 px-4 rounded-large flex flex-col gap-2 justify-center items-center h-[150px]">
               <h2 className="text-6xl font-bold text-primary text-center">
-                $299
+                $29
+                <span className="text-lg font-medium text-[#909192]">
+                  /Monthly
+                </span>
               </h2>
-              <h3 className="text-4xl font-normal text-white text-center mt-5">
-                Yearly
-              </h3>
             </div>
-            <div className="w-full flex items-center">
+            <div className="">
+              <div className="border-b-1 border-[#E5E5E5] py-4 ">
+                <h4 className="text-black text-xl xl:text-2xl font-bold">
+                  Your Current Plan
+                </h4>
+                <p className="text-sm xl:text-base mt-2">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 py-6">
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Duration:
+                  </span>
+                  <span className="text-[#656768] font-medium">30 Days</span>
+                </div>
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Start:
+                  </span>
+                  <span className="text-[#656768] font-medium">
+                    7 January 2025
+                  </span>
+                </div>
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Next Payment Date:
+                  </span>
+                  <span className="text-[#656768] font-medium">
+                    7 February 2025
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex items-center mt-2">
               <Link
-                href={`/confirm-subscription/yearly`}
-                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+                href={`confirm-subscription/monthly`}
+                className=" bg-gray-400  py-3 px-4 rounded-large text-xl font-medium text-white text-center w-full"
               >
-                Choose Plan & Save16%
+                Unsubscribe
+              </Link>
+            </div>
+          </div> */}
+          {/* ****************** */}
+          {/* <div className="relative shadow-small rounded-[30px] px-10 py-12 w-[50%] border border-[#eeeeee] bg-secondary ">
+            <div className="absolute -top-3 right-10">
+              <p className="border border-primary bg-primary px-5 w-full py-1 rounded-full text-center text-white">
+                Recommended
+              </p>
+            </div>
+            <div className=" h-full flex flex-col justify-between">
+              <div>
+                <div className="w-full bg-[#292F46] py-5 xl:py-8 px-4 rounded-large mb-6 flex flex-col gap-2 justify-center items-center h-[150px]">
+                  <PiFireFill className="text-4xl 2xl:text-5xl text-primary" />
+                  <h2 className="text-2xl font-semibold text-white text-center uppercase">
+                    Best Offer - Save 16%
+                  </h2>
+                </div>
+                <div className="my-12">
+                  <h2 className="text-6xl font-bold text-primary text-center">
+                    $299
+                    <span className="text-lg font-medium text-[#909192]">
+                      /Annually
+                    </span>
+                  </h2>
+                </div>
+              </div>
+              <div className="w-full flex items-center mt-2">
+                <Link
+                  href={`/confirm-subscription/yearly`}
+                  className=" bg-primary py-3 px-4 rounded-large text-xl font-medium text-white text-center w-full"
+                >
+                  Choose Plan & Save16%
+                </Link>
+              </div>
+            </div>
+          </div> */}
+          {/* ****************** */}
+          <div className="relative shadow-small rounded-[30px] px-10 py-12 w-[50%] border border-[#eeeeee] bg-secondary ">
+            <div className="absolute -top-3 right-10">
+              <p className="border border-primary bg-primary px-5 w-full py-1 rounded-full text-center text-white">
+                Recommended
+              </p>
+            </div>
+            <div className="w-full bg-[#292F46] py-5 xl:py-8 px-4 rounded-large flex flex-col gap-2 justify-center items-center h-[150px]">
+              <h2 className="text-6xl font-bold text-primary text-center">
+                $29
+                <span className="text-lg font-medium text-[#909192]">
+                  /Monthly
+                </span>
+              </h2>
+            </div>
+            <div className="">
+              <div className="border-b-1 border-[#E5E5E5] py-4 ">
+                <h4 className="text-white text-xl xl:text-2xl font-bold">
+                  Your Current Plan
+                </h4>
+                <p className="text-sm xl:text-base mt-2 text-[#dce0e2]">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 py-6">
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Duration:
+                  </span>
+                  <span className="text-[#dce0e2] font-medium">30 Days</span>
+                </div>
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Start:
+                  </span>
+                  <span className="text-[#dce0e2] font-medium">
+                    7 January 2025
+                  </span>
+                </div>
+                <div className=" flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D5AD45]/10 text-primary font-medium">
+                    <SlCalender />
+                    Next Payment Date:
+                  </span>
+                  <span className="text-[#dce0e2] font-medium">
+                    7 February 2025
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex items-center mt-2">
+              <Link
+                href={`confirm-subscription/monthly`}
+                className=" bg-gray-400  py-3 px-4 rounded-large text-xl font-medium text-white text-center w-full"
+              >
+                Unsubscribe
               </Link>
             </div>
           </div>
