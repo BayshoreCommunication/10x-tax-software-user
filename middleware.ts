@@ -49,9 +49,9 @@ import { auth } from "./auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow static assets and public routes
+
   if (
-    pathname.startsWith("/_next/") || // Covers /_next/static and /_next/image
+    pathname.startsWith("/_next/") || 
     pathname === "/favicon.ico" ||
     pathname.startsWith("/assets/") ||
     ["/sign-in", "/sign-up", "/forget-password", "/confirm-subscription"].some(
@@ -62,33 +62,21 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Authenticate the user
+ 
     const session = await auth();
     if (!session) {
-      // If not authenticated, redirect to sign-in
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-    // Fetch user data
-    const { data: userData } = await getUserData();
 
-    // If the user has no subscription, enforce `/confirm-subscription` route
+    const { data: userData } = await getUserData();
     if (!userData?.subscription) {
-      if (pathname !== "/confirm-subscription") {
-        // Redirect to `/confirm-subscription` if the user is not already there
-        return NextResponse.redirect(
-          new URL("/confirm-subscription", request.url)
-        );
-      }
-    } else {
-      // If the user has a subscription and is trying to access `/confirm-subscription`, redirect away
-      if (pathname === "/confirm-subscription") {
-        return NextResponse.redirect(new URL("/", request.url)); // Redirect to home or dashboard
-      }
+      return NextResponse.redirect(
+        new URL("/confirm-subscription", request.url)
+      );
     }
   } catch (error) {
     console.error("Middleware error:", error);
-    // Redirect to sign-in if any error occurs during auth or user data retrieval
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -96,7 +84,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.ico|assets/).*)"], // Streamlined matcher
+  matcher: ["/((?!_next/|favicon.ico|assets/).*)"], 
 };
 
 export default middleware;

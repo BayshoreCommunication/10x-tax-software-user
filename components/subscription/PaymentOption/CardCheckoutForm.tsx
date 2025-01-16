@@ -144,7 +144,7 @@ const CheckoutForm = ({
 
       // Success
       toast.success("Payment successful!");
-      router.push("/update-business-infomation");
+      router.push("/");
     } catch (err: any) {
       console.error(err);
       setError(err.message || "An unexpected error occurred.");
