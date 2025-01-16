@@ -176,7 +176,7 @@ const ClientListTable = () => {
 
   return (
     <div className="container pb-10">
-      <div className="flex items-center justify-between bg-secondary px-12 py-4">
+      <div className="flex items-center justify-between bg-secondary px-12 py-6">
         <h2 className="text-2xl font-bold text-white">Clients List</h2>
 
         <Link

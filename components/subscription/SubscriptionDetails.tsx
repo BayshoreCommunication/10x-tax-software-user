@@ -34,7 +34,6 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                   <p>
                     <strong>Duration</strong>:{" "}
                     {calculateRemainingDays(
-                      userData?.currentSubscriptionPayDate,
                       userData?.currentSubscriptionExpiredDate
                     )}{" "}
                     Days
@@ -140,7 +139,6 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                   <p>
                     <strong>Duration</strong>:{" "}
                     {calculateRemainingDays(
-                      userData?.currentSubscriptionPayDate,
                       userData?.currentSubscriptionExpiredDate
                     )}{" "}
                     Days

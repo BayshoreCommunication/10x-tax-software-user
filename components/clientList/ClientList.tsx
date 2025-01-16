@@ -177,12 +177,12 @@ const ClientList = () => {
 
   return (
     <div className="container py-10">
-      <div className="flex items-center justify-between bg-secondary px-12 py-4">
+      <div className="flex items-center justify-between bg-secondary px-12 py-6">
         <h2 className="text-2xl font-bold text-white">Clients List</h2>
         <form className="flex items-center w-[50%] relative">
           <input
             type="text"
-            className="bg-[#282E44] border-2 border-[#383E54] text-lg pl-12 py-2 text-white rounded-full w-full"
+            className="bg-[#282E44] border-2 border-[#383E54] text-lg focus:ring-[#383E54] focus:border-[#383E54] block pl-12 py-2 placeholder-[#383E54] active:border-[#383E54] outline-none rounded-full placeholder:text-lg text-white w-full placeholder:text-gray-400"
             placeholder="Search for clients..."
             value={search}
             onChange={handleSearchChange}

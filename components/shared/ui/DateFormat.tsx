@@ -1,24 +1,19 @@
 export const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate); // Parse the ISO string
-  const day = date.getUTCDate(); // Get the day of the month
-  const month = date.getUTCMonth() + 1; // Months are zero-based
-  const year = date.getUTCFullYear(); // Get the full year
+  const date = new Date(isoDate);
+  const day = date.getUTCDate();
+  const month = date.getUTCMonth() + 1;
+  const year = date.getUTCFullYear();
 
-  return `${day}-${month}-${year}`; // Format the date
+  return `${day}-${month}-${year}`;
 };
 
-export const calculateRemainingDays = (
-  startDate: string,
-  expiryDate: string
-): number => {
-  const start = new Date(startDate);
+export const calculateRemainingDays = (expiryDate: string): number => {
+  const currentTime = new Date();
   const expiry = new Date(expiryDate);
 
-  // Calculate the difference in time (milliseconds)
-  const diffInTime = expiry.getTime() - start.getTime();
+  const diffInTime = expiry.getTime() - currentTime.getTime();
 
-  // Convert milliseconds to days
-  const remainingDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24)); // Removed parseInt
+  const remainingDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
 
   return remainingDays;
 };
