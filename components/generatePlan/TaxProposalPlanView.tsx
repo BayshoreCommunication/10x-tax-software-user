@@ -10,9 +10,11 @@ import TaxProposalSend from "../shared/pdfGenerator/TaxProposalSend";
 import ViewTaxPlan from "./ViewTaxPlan";
 import ViewTaxProposal from "./ViewTaxProposal";
 
-const TaxProposalPlanView = ({ taxId }: any) => {
+const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
   const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
   const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
+
+  console.log("check client deitla s", clientDetails?.basicInformation?.email);
 
   return (
     <div className="container py-10 overflow-hidden">
@@ -89,7 +91,11 @@ const TaxProposalPlanView = ({ taxId }: any) => {
                 </div>
                 <div className="flex items-center  gap-5">
                   <div className="">
-                    <TaxProposalSend RenderComponent={ViewTaxProposal} />
+                    <TaxProposalSend
+                      RenderComponent={ViewTaxProposal}
+                      email={clientDetails?.basicInformation?.email}
+                      clientName={clientDetails?.basicInformation?.fullName}
+                    />
                   </div>
                   <Link
                     href={`/view-proposal/${taxId}/tax-proposal`}

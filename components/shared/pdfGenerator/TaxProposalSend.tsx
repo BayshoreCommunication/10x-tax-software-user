@@ -1,3 +1,4 @@
+"use client";
 import { taxProposalSend } from "@/app/actions/client";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
@@ -7,8 +8,12 @@ import { toast } from "react-toastify";
 
 const TaxProposalSend = ({
   RenderComponent,
+  clientName,
+  email,
 }: {
   RenderComponent: React.FC;
+  clientName: string;
+  email: string;
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +32,8 @@ const TaxProposalSend = ({
 
       const pdf = new jsPDF("p", "mm", "a4");
 
-      const pdfWidth = 210; // A4 width in mm
-      const pdfHeight = 297; // A4 height in mm
+      const pdfWidth = 210;
+      const pdfHeight = 297;
       const padding = 6;
       const contentWidth = pdfWidth - padding * 2;
       const contentHeight = pdfHeight - padding * 2;
@@ -102,15 +107,17 @@ const TaxProposalSend = ({
       // Prepare form data to send
       const formData = new FormData();
       formData.append("file", pdfBlob, "tax-proposal.pdf");
-      formData.append("email", "arsahak.bayshore@gmail.com");
-      formData.append("clientName", "Abu Kawsar");
+      formData.append("email", email);
+      formData.append("clientName", clientName);
 
       const result = await taxProposalSend(formData);
 
-      if (result.ok) {
+      if (result?.ok ) {
         toast.success("Proposal successfully sent!");
       } else {
-        toast.error("Failed to send PDF.");
+        const errorMessage = result?.error || "Failed to send PDF.";
+        toast.error(errorMessage);
+        console.log("check error", errorMessage);
       }
     } catch (error) {
       console.error("Error generating PDF:", error);

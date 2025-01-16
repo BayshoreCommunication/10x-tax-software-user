@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { GoSearch } from "react-icons/go";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -98,82 +99,87 @@ const ClientList = () => {
   };
 
   const renderPagination = useMemo(() => {
-    if (!pagination || !pagination.totalPages || pagination.totalPages <= 1) {
-      return null;
-    }
+    const generatePageNumbers = () => {
+      const pageNumbers: number[] = [];
 
-    const pages = Array.from(
-      { length: pagination.totalPages ?? 0 },
-      (_, i) => i + 1
-    );
+      // Use default values to prevent issues with null or undefined
+      const safeCurrentPage = currentPage ?? 1;
+      const safeTotalPages = pagination?.totalPages ?? 1;
 
-    const renderPageNumbers = () => {
-      let pageNumbers: (string | number)[] = [];
+      const startPage = Math.max(1, safeCurrentPage - 1);
+      const endPage = Math.min(safeTotalPages, safeCurrentPage + 1);
 
-      if ((pagination.totalPages ?? 0) <= 2) {
-        pageNumbers = pages;
-      } else {
-        pageNumbers = [1, 2];
-
-        if (currentPage > 3) {
-          pageNumbers.push("...");
-        }
-
-        if ((pagination.totalPages ?? 0) - currentPage >= 2) {
-          pageNumbers.push(pagination.totalPages ?? 0);
-        }
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
       }
 
       return pageNumbers;
     };
 
-    const pageNumbers = renderPageNumbers();
+    const pageNumbers = generatePageNumbers();
 
     return (
       <nav aria-label="Page navigation" className="flex justify-end mt-8">
-        <ul className="inline-flex -space-x-px text-base h-10">
+        <ul className="inline-flex -space-x-px text-base items-center">
+          {/* Previous button */}
           <li>
             <button
-              onClick={() => handlePaginationClick(currentPage - 1)}
-              disabled={pagination.previousPage === null}
-              className="px-4 py-2 bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100"
+              onClick={() => handlePaginationClick((currentPage ?? 1) - 1)}
+              disabled={pagination?.previousPage === null || currentPage <= 1}
+              className="bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
             >
-              Previous
+              <span>Previous</span>
             </button>
           </li>
-          {pageNumbers.map((page, index) =>
-            page === "..." ? (
-              <li key={index} className="px-4 py-2 text-gray-600">
-                ...
-              </li>
-            ) : (
-              <li key={page}>
-                <button
-                  onClick={() => handlePaginationClick(Number(page))}
-                  className={`px-4 py-2 border ${
-                    page === currentPage
-                      ? "bg-primary text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  {page}
-                </button>
-              </li>
-            )
+
+          {/* Ellipsis before page numbers */}
+          {pagination?.previousPage && pagination.previousPage > 1 && (
+            <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+              <BsThreeDots />
+            </li>
           )}
+
+          {/* Page number buttons */}
+          {pageNumbers.map((page) => (
+            <li key={page}>
+              <button
+                onClick={() => handlePaginationClick(page)}
+                className={`px-4 py-2 border h-[42px] w-[45px] ${
+                  page === currentPage
+                    ? "bg-primary text-white"
+                    : "bg-white text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                {page}
+              </button>
+            </li>
+          ))}
+
+          {/* Ellipsis after page numbers */}
+          {pagination?.currentPage &&
+            pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+              <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                <BsThreeDots />
+              </li>
+            )}
+
+          {/* Next button */}
           <li>
             <button
-              onClick={() => handlePaginationClick(currentPage + 1)}
-              disabled={pagination.nextPage === null}
-              className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100"
+              onClick={() => handlePaginationClick((currentPage ?? 1) + 1)}
+              disabled={
+                pagination?.nextPage === null ||
+                currentPage >= (pagination?.totalPages ?? 1)
+              }
+              className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
             >
-              Next
+              <span>Next</span>
             </button>
           </li>
         </ul>
       </nav>
     );
-  }, [pagination, currentPage, clientDeletedValue]);
+  }, [pagination, currentPage, handlePaginationClick]);
 
   return (
     <div className="container py-10">
