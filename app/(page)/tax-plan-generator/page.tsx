@@ -1,5 +1,4 @@
-import TaxPlanGeneratorTable from "@/components/taxPlanGenerator/TaxProposalPDFGenerator";
-import React from "react";
+import TaxPlanGeneratorTable from "@/components/taxPlanGenerator/TaxPlanGeneratorTable";
 
 const page = () => {
   return (

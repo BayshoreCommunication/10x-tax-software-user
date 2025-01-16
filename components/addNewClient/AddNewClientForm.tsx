@@ -172,7 +172,7 @@ const AddNewClientForm = ({ session }: any) => {
       if (response.ok) {
         setError(null);
         toast.success("Client created successfully!");
-        router.push("/");
+        window.history.go(-1);
       } else {
         const errorMessage = result?.error || "Failed to create client data.";
         toast.error(errorMessage);

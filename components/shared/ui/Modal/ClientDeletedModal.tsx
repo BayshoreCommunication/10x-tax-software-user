@@ -8,19 +8,20 @@ interface ClientDeletedModalProps {
   clientDeletedModal: boolean;
   setClientDeletedModal: (value: boolean) => void;
   clientId: string | null;
+  clientDeletedValue: boolean;
+  setClientDeletedValue: (value: boolean) => void;
 }
-
 const ClientDeletedModal: React.FC<ClientDeletedModalProps> = ({
   clientDeletedModal,
   setClientDeletedModal,
   clientId,
+  setClientDeletedValue,
+  clientDeletedValue,
 }) => {
   const toggleModal = () => setClientDeletedModal(!clientDeletedModal);
   const closeModal = () => setClientDeletedModal(false);
 
   const [loading, setLoading] = useState<boolean>(false);
-
-  console.log("check data 24", clientId);
 
   const userDeletedHandler = async () => {
     if (clientId === null) {
@@ -36,6 +37,7 @@ const ClientDeletedModal: React.FC<ClientDeletedModalProps> = ({
       if (response.ok) {
         toast.success("Successfully deleted client");
         setClientDeletedModal(false);
+        setClientDeletedValue(!clientDeletedValue);
       } else {
         toast.error(response.error || "Failed to delete client.");
       }

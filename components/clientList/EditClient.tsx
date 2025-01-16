@@ -176,7 +176,7 @@ const EditClient = ({ session, id, clientDetails }: any) => {
       if (response.ok) {
         setError(null);
         toast.success("Client update successfully!");
-        router.push("/");
+        window.history.go(-1);
       } else {
         const errorMessage = result?.error || "Failed to update client data.";
         toast.error(errorMessage);

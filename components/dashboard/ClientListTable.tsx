@@ -2,10 +2,11 @@
 
 import { getAllClientData } from "@/app/actions/client";
 import { Spinner } from "@nextui-org/react";
+import debounce from "lodash.debounce";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { formatDate } from "../shared/ui/DateFormat";
@@ -17,213 +18,249 @@ interface Pagination {
   currentPage: number | null;
   nextPage: number | null;
 }
+interface Client {
+  _id: string;
+  basicInformation: {
+    fullName: string;
+    phone: string;
+    email: string;
+    address: string;
+  };
+  createdAt: string;
+}
 
 const ClientListTable = () => {
-  const [clientDeletedModal, setClientDeletedModal] = useState(false);
-  const router = useRouter();
-
+  const [clientDeletedModal, setClientDeletedModal] = useState<boolean>(false);
+  const [clientDeletedValue, setClientDeletedValue] = useState<boolean>(false);
   const [search, setSearch] = useState("");
-  const [limit, setLimit] = useState(10);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [limit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [clientData, setClientData] = useState([]);
+  const [clientData, setClientData] = useState<Client[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [userDeletedModalFlag, setUserDeletedModalFlag] = useState(false);
   const [clientId, setClientId] = useState<string | null>(null);
 
-  const fetchUsers = async () => {
+  const router = useRouter();
+
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await getAllClientData(search, currentPage, limit);
-
+      const result = await getAllClientData(
+        debouncedSearch,
+        currentPage,
+        limit
+      );
       if (result.ok && result.data) {
         setClientData(result.data.clients);
         setPagination(result.data.pagination);
+
+        if (result.data.pagination.totalPages < currentPage) {
+          setCurrentPage(result.data.pagination.totalPages || 1);
+        }
       } else {
-        console.error(result.error);
+        console.error(result.error || "Failed to fetch client data.");
       }
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
       setIsLoading(false);
     }
+  }, [debouncedSearch, currentPage, limit, clientDeletedValue]);
+
+  const debounceSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setDebouncedSearch(value);
+      }, 300),
+    []
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    debounceSearch(e.target.value);
   };
 
   useEffect(() => {
     fetchUsers();
-  }, [search, currentPage, clientDeletedModal]);
+  }, [fetchUsers]);
 
-  const handleUserDelete = (id: string) => {
+  const handleUserDelete = async (id: string) => {
     setClientId(id);
-    setClientDeletedModal(!clientDeletedModal);
+    setClientDeletedModal(true);
   };
 
+  const handlePaginationClick = (page: number) => {
+    if (page > 0 && page !== currentPage) {
+      setCurrentPage(page);
+    }
+  };
+
+  const renderPagination = useMemo(() => {
+    if (!pagination || !pagination.totalPages || pagination.totalPages <= 1) {
+      return null;
+    }
+
+    const pages = Array.from(
+      { length: pagination.totalPages ?? 0 },
+      (_, i) => i + 1
+    );
+
+    const renderPageNumbers = () => {
+      let pageNumbers: (string | number)[] = [];
+
+      if ((pagination.totalPages ?? 0) <= 2) {
+        pageNumbers = pages;
+      } else {
+        pageNumbers = [1, 2];
+
+        if (currentPage > 3) {
+          pageNumbers.push("...");
+        }
+
+        if ((pagination.totalPages ?? 0) - currentPage >= 2) {
+          pageNumbers.push(pagination.totalPages ?? 0);
+        }
+      }
+
+      return pageNumbers;
+    };
+
+    const pageNumbers = renderPageNumbers();
+
+    return (
+      <nav aria-label="Page navigation" className="flex justify-end mt-8">
+        <ul className="inline-flex -space-x-px text-base h-10">
+          <li>
+            <button
+              onClick={() => handlePaginationClick(currentPage - 1)}
+              disabled={pagination.previousPage === null}
+              className="px-4 py-2 bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100"
+            >
+              Previous
+            </button>
+          </li>
+          {pageNumbers.map((page, index) =>
+            page === "..." ? (
+              <li key={index} className="px-4 py-2 text-gray-600">
+                ...
+              </li>
+            ) : (
+              <li key={page}>
+                <button
+                  onClick={() => handlePaginationClick(Number(page))}
+                  className={`px-4 py-2 border ${
+                    page === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              </li>
+            )
+          )}
+          <li>
+            <button
+              onClick={() => handlePaginationClick(currentPage + 1)}
+              disabled={pagination.nextPage === null}
+              className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100"
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  }, [pagination, currentPage, clientDeletedValue]);
+
   return (
-    <div className="container ">
+    <div className="container pb-10">
       <div className="flex items-center justify-between bg-secondary px-12 py-4">
-        <h2 className="text-2xl font-bold text-white text-center py-4">
-          Clients List
-        </h2>
+        <h2 className="text-2xl font-bold text-white">Clients List</h2>
+
         <Link
-          href={"/add-new-client"}
-          className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white flex items-center "
+          href="/add-new-client"
+          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-hoverColor"
         >
           Add New Client
         </Link>
       </div>
 
-      <div className="relative overflow-x-auto bg-white pb-10">
+      <div className="relative overflow-x-auto bg-white pb-10 min-h-[50vh]">
         {isLoading ? (
-          <div className="w-full h-[50vh] flex items-center justify-center">
-            <Spinner
-              className="text-[#1B2639] "
-              color="default"
-              label="Loading..."
-              labelColor="foreground"
-              size="lg"
-            />
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <Spinner size="lg" label="Loading..." />
           </div>
-        ) : (
+        ) : clientData.length > 0 ? (
           <table className="w-full text-left rtl:text-right text-gray-500 ">
             <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
               <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 border-r-1 border-gray-500"
-                >
-                  User Name
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 border-r-1 border-gray-500"
-                >
-                  Number
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 border-r-1 border-gray-500"
-                >
-                  Email
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 border-r-1 border-gray-500"
-                >
-                  Address
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 border-r-1 border-gray-500"
-                >
-                  Reg. Date
-                </th>
-                <th scope="col" className="px-6 py-3 ">
-                  Action
-                </th>
+                {[
+                  "User Name",
+                  "Number",
+                  "Email",
+                  "Address",
+                  "Reg. Date",
+                  "Action",
+                ].map((header, idx) => (
+                  <th key={idx} className="px-6 py-3 text-center">
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {clientData?.map((el: any, index: number) => (
+              {clientData.map((client) => (
                 <tr
-                  key={index}
+                  key={client?._id}
                   className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
                 >
-                  <td className="px-6 py-4 flex items-center  space-x-2">
+                  <td className="px-6 py-4 flex items-center space-x-2">
                     <Image
                       src="/assets/user-image/user-image.png"
                       alt="User Picture"
-                      width={100}
-                      height={100}
-                      className="w-[35px] h-[35px]"
+                      width={35}
+                      height={35}
                     />
-                    <p> {el?.basicInformation?.fullName}</p>
+                    <span>{client.basicInformation.fullName}</span>
                   </td>
-                  <td className="px-6 py-4">{el?.basicInformation?.phone}</td>
-                  <td className="px-6 py-4">{el?.basicInformation?.email}</td>
-                  <td className="px-6 py-4">{el?.basicInformation?.address}</td>
-                  <td className="px-6 py-4">{formatDate(el?.createdAt)}</td>
-                  <td className="px-6 py-4 flex justify-center items-center space-x-3">
+                  <td>{client.basicInformation.phone}</td>
+                  <td>{client.basicInformation.email}</td>
+                  <td>{client.basicInformation.address}</td>
+                  <td>{formatDate(client.createdAt)}</td>
+                  <td className="flex justify-center space-x-3">
                     <button
-                      className="bg-yellow-100 hover:bg-yellow-200 p-1.5 rounded-lg"
-                      onClick={() => router.push(`/client-edit/${el?._id}`)}
+                      onClick={() => router.push(`/client-edit/${client._id}`)}
+                      className="bg-yellow-100 p-1.5 rounded hover:bg-yellow-200"
                     >
-                      <FiEdit className="text-[#D5AD45] size-4" />
+                      <FiEdit className="text-yellow-600" />
                     </button>
                     <button
-                      className="bg-red-100 hover:bg-red-200 p-1.5 rounded-lg"
-                      // onClick={() => setClientDeletedModal(!clientDeletedModal)}
-                      onClick={() => handleUserDelete(el?._id)}
+                      onClick={() => handleUserDelete(client._id)}
+                      className="bg-red-100 p-1.5 rounded hover:bg-red-200"
                     >
-                      <RiDeleteBin6Fill className="text-red-500 size-4" />
+                      <RiDeleteBin6Fill className="text-red-500" />
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-
-        {/* No Data Message */}
-        {clientData.length === 0 && (
-          <p className="text-center text-gray-600 text-lg mt-16">
-            User data not available!
+        ) : (
+          <p className="text-center py-10 text-gray-600">
+            No client data available.
           </p>
         )}
-
-        {/* Pagination */}
-        <nav
-          aria-label="Page navigation"
-          className="flex justify-end mt-8 mr-10"
-        >
-          <ul className="inline-flex -space-x-px text-base h-10">
-            <li>
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={pagination?.previousPage === null}
-                className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-800`}
-              >
-                Previous
-              </button>
-            </li>
-
-            {Array.from(
-              { length: pagination?.totalPages || 0 },
-              (_, i) => i + 1
-            ).map((page) => (
-              <li key={page}>
-                <button
-                  onClick={() => setCurrentPage(page)}
-                  className={`flex items-center justify-center px-4 h-10 leading-tight   border   hover:text-gray-700 text-gray-700 ${
-                    page === currentPage
-                      ? "bg-primary hover:bg-gray-100"
-                      : "bg-white hover:bg-primary"
-                  }`}
-                >
-                  {page}
-                </button>
-              </li>
-            ))}
-
-            <li>
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    Math.min(prev + 1, pagination?.totalPages || 1)
-                  )
-                }
-                disabled={pagination?.nextPage === null}
-                className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-80`}
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+        <div className="mr-5"> {renderPagination}</div>
       </div>
+
       <ClientDeletedModal
         clientDeletedModal={clientDeletedModal}
         setClientDeletedModal={setClientDeletedModal}
         clientId={clientId}
+        setClientDeletedValue={setClientDeletedValue}
+        clientDeletedValue={clientDeletedValue}
       />
     </div>
   );
