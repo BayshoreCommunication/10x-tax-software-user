@@ -40,6 +40,7 @@
 // export default middleware;
 
 // import { auth } from "@/auth";
+
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getUserData } from "./app/actions/user";

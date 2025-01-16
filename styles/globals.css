@@ -19,7 +19,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d5ad45;
+  background: var(--primary-color);
   -webkit-border-radius: 1ex;
 }
 

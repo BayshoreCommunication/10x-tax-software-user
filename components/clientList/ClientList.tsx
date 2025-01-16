@@ -258,7 +258,7 @@ const ClientList = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-center py-10 text-gray-600">
+          <p className="text-center  text-gray-600 flex items-center justify-center min-h-[50vh]">
             No client data available.
           </p>
         )}
