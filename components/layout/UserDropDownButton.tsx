@@ -77,16 +77,17 @@ const UserDropDownButton = ({ userData }: any) => {
             onClick={toggleDropdown}
           >
             <div className="w-10 h-10 overflow-hidden bg-gray-200 rounded-full flex items-center justify-center">
-              <div className="flex items-center justify-center w-[30px] h-[30px]">
+              <div className="w-[32px] h-[32px]">
                 <Image
                   src={userData?.logoUrl || "/assets/user-image/user-image.png"}
                   alt={userData?.businessName || "User Image"}
                   width={100}
                   height={100}
-                  className="w-[35px] h-[35px]"
+                  className="w-full h-full object-cover object-center rounded-full"
                 />
               </div>
             </div>
+
             <div className="text-left">
               <h3 className="font-medium text-lg text-white">
                 {userData?.businessName}

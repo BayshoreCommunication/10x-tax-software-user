@@ -2,7 +2,7 @@
 import { userForgetPasswordRecovery } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LuEye, LuEyeOff, LuLock } from "react-icons/lu";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { toast } from "react-toastify";
 
 type UserForgotPasswordInfo = {
@@ -87,13 +87,10 @@ const PasswordRecoveryForm = ({ userForgotPasswordInfo }: Props) => {
             New Password<span className="text-primary">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <LuLock className="text-primary text-lg" />
-            </div>
             <input
               type={passwordVisibility ? "text" : "password"}
               id="new-password-input"
-              className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-3 placeholder-gray-400 outline-none"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
               placeholder="*********"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -121,13 +118,10 @@ const PasswordRecoveryForm = ({ userForgotPasswordInfo }: Props) => {
             Confirm Password<span className="text-primary">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <LuLock className="text-primary text-lg" />
-            </div>
             <input
               type={confirmPasswordVisibility ? "text" : "password"}
               id="confirm-password-input"
-              className="bg-white border border-gray-300 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-3 placeholder-gray-400 outline-none"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
               placeholder="*********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

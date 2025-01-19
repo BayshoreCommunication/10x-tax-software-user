@@ -201,66 +201,71 @@ const ClientListTable = () => {
             <Spinner size="lg" label="Loading..." />
           </div>
         ) : clientData.length > 0 ? (
-          <table className="w-full text-left rtl:text-right text-gray-500 ">
-            <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
-              <tr>
-                {[
-                  "User Name",
-                  "Number",
-                  "Email",
-                  "Address",
-                  "Reg. Date",
-                  "Action",
-                ].map((header, idx) => (
-                  <th key={idx} className="px-6 py-3 text-center">
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {clientData.map((client) => (
-                <tr
-                  key={client?._id}
-                  className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
-                >
-                  <td className="px-6 py-4 flex items-center space-x-2">
-                    <Image
-                      src="/assets/user-image/user-image.png"
-                      alt="User Picture"
-                      width={35}
-                      height={35}
-                    />
-                    <span>{client.basicInformation.fullName}</span>
-                  </td>
-                  <td>{client.basicInformation.phone}</td>
-                  <td>{client.basicInformation.email}</td>
-                  <td>{client.basicInformation.address}</td>
-                  <td>{formatDate(client.createdAt)}</td>
-                  <td className="flex justify-center space-x-3">
-                    <button
-                      onClick={() => router.push(`/client-edit/${client._id}`)}
-                      className="bg-yellow-100 p-1.5 rounded hover:bg-yellow-200"
-                    >
-                      <FiEdit className="text-yellow-600" />
-                    </button>
-                    <button
-                      onClick={() => handleUserDelete(client._id)}
-                      className="bg-red-100 p-1.5 rounded hover:bg-red-200"
-                    >
-                      <RiDeleteBin6Fill className="text-red-500" />
-                    </button>
-                  </td>
+          <div>
+            {" "}
+            <table className="w-full text-left rtl:text-right text-gray-500 ">
+              <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
+                <tr>
+                  {[
+                    "User Name",
+                    "Number",
+                    "Email",
+                    "Address",
+                    "Reg. Date",
+                    "Action",
+                  ].map((header, idx) => (
+                    <th key={idx} className="px-6 py-3 text-center">
+                      {header}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {clientData.map((client) => (
+                  <tr
+                    key={client?._id}
+                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
+                  >
+                    <td className="px-6 py-4 flex items-center space-x-2">
+                      <Image
+                        src="/assets/user-image/user-image.png"
+                        alt="User Picture"
+                        width={35}
+                        height={35}
+                      />
+                      <span>{client.basicInformation.fullName}</span>
+                    </td>
+                    <td>{client.basicInformation.phone}</td>
+                    <td>{client.basicInformation.email}</td>
+                    <td>{client.basicInformation.address}</td>
+                    <td>{formatDate(client.createdAt)}</td>
+                    <td className="flex justify-center space-x-3">
+                      <button
+                        onClick={() =>
+                          router.push(`/client-edit/${client._id}`)
+                        }
+                        className="bg-yellow-100 p-1.5 rounded hover:bg-yellow-200"
+                      >
+                        <FiEdit className="text-yellow-600" />
+                      </button>
+                      <button
+                        onClick={() => handleUserDelete(client._id)}
+                        className="bg-red-100 p-1.5 rounded hover:bg-red-200"
+                      >
+                        <RiDeleteBin6Fill className="text-red-500" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="mr-5"> {renderPagination}</div>
+          </div>
         ) : (
           <p className="text-center py-10 text-gray-600 flex items-center justify-center min-h-[50vh]">
             No client data available.
           </p>
         )}
-        <div className="mr-5"> {renderPagination}</div>
       </div>
 
       <ClientDeletedModal

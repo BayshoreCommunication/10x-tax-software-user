@@ -202,56 +202,58 @@ const TaxPlanGeneratorTable = () => {
             <Spinner size="lg" label="Loading..." />
           </div>
         ) : clientData.length > 0 ? (
-          <table className="w-full text-left rtl:text-right text-gray-500 ">
-            <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
-              <tr>
-                {["User Name", "Number", "Email", "Action"].map(
-                  (header, idx) => (
-                    <th
-                      key={idx}
-                      className={`px-6 py-3  border-gray-500 border-r-1 `}
-                    >
-                      {header}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {clientData.map((el: any) => (
-                <tr
-                  key={el._id}
-                  className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
-                >
-                  <td className="px-6 py-4 flex items-center space-x-2">
-                    <Image
-                      src="/assets/user-image/user-image.png"
-                      alt="User Picture"
-                      width={35}
-                      height={35}
-                    />
-                    <span>{el.basicInformation.fullName}</span>
-                  </td>
-                  <td className="px-6 py-4">{el.basicInformation.phone}</td>
-                  <td className="px-6 py-4">{el.basicInformation.email}</td>
-                  <td className="px-6 py-4 flex justify-center items-center space-x-3">
-                    <Link
-                      href={`/generate-plan/${el?._id}`}
-                      className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
-                    >
-                      Generate Plan
-                    </Link>
-                  </td>
+          <div className="">
+            <table className="w-full text-left rtl:text-right text-gray-500 ">
+              <thead className="text-[16px] font-medium text-white text-center bg-[#383E54]">
+                <tr>
+                  {["User Name", "Number", "Email", "Action"].map(
+                    (header, idx) => (
+                      <th
+                        key={idx}
+                        className={`px-6 py-3  border-gray-500 border-r-1 `}
+                      >
+                        {header}
+                      </th>
+                    )
+                  )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {clientData.map((el: any) => (
+                  <tr
+                    key={el._id}
+                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
+                  >
+                    <td className="px-6 py-4 flex items-center space-x-2">
+                      <Image
+                        src="/assets/user-image/user-image.png"
+                        alt="User Picture"
+                        width={35}
+                        height={35}
+                      />
+                      <span>{el.basicInformation.fullName}</span>
+                    </td>
+                    <td className="px-6 py-4">{el.basicInformation.phone}</td>
+                    <td className="px-6 py-4">{el.basicInformation.email}</td>
+                    <td className="px-6 py-4 flex justify-center items-center space-x-3">
+                      <Link
+                        href={`/generate-plan/${el?._id}`}
+                        className="px-4 py-2 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
+                      >
+                        Generate Plan
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="mr-5"> {renderPagination}</div>
+          </div>
         ) : (
           <p className="text-center py-10 text-gray-600 flex items-center justify-center min-h-[50vh]">
             No client data available.
           </p>
         )}
-        <div className="mr-5"> {renderPagination}</div>
       </div>
     </div>
   );

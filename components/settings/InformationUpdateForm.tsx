@@ -31,7 +31,7 @@ const InformationUpdateForm = ({
     website: userData?.website || "",
     phone: userData?.phone || "",
     address: userData?.address || "",
-    brandColor: userData?.brandColor || "#ff0000",
+    brandColor: userData?.brandColor || "#D5AD45",
   });
 
   const [businessEmailForm, setBusinessEmailForm] = useState("");
@@ -113,7 +113,23 @@ const InformationUpdateForm = ({
     <div>
       <div className="flex items-center space-x-8">
         <div className="relative w-[150px] h-[150px] border-2  rounded-full">
-          <div>
+          <div className="relative w-[150px] h-[150px] border-2 rounded-full ">
+            {/* Profile Image */}
+
+            <Image
+              src={logoPreview || "/assets/user-image/user-image.png"}
+              alt="User Picture"
+              width={150}
+              height={150}
+              className="w-full h-full object-cover object-center rounded-full  overflow-hidden"
+            />
+
+            {/* Edit Icon */}
+            {/* <div className="bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-1 right-3 cursor-pointer">
+                          <TbEditCircle className="text-white text-xl" />
+                        </div> */}
+          </div>
+          {/* <div>
             <Image
               src={logoPreview}
               alt="User Picture"
@@ -121,7 +137,7 @@ const InformationUpdateForm = ({
               height={150}
               className="absolute inset-0 rounded-full"
             />
-          </div>
+          </div> */}
           {userInfoUpdateFlag && (
             <div className="bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
               <label

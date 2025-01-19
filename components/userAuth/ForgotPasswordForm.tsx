@@ -3,7 +3,6 @@
 import { userForgetPasswordProcess } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LuUsers } from "react-icons/lu";
 
 interface UserForgotPasswordInfo {
   email: string;
@@ -76,15 +75,12 @@ const ForgotPasswordForm: React.FC<UserForgotPasswordInfoProps> = ({
           >
             Email<span className="text-primary">*</span>
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <LuUsers className="text-primary text-lg" />
-            </div>
+          <div className="">
             <input
               autoComplete="off"
               type="email"
               id="email-address-icon"
-              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 py-2 placeholder-gray-400 active:border-primary outline-none bg-white"
+              className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
               placeholder="carlosrosario@gmail.com"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}

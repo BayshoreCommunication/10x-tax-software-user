@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { TbEditCircle } from "react-icons/tb";
 import { formatDate } from "../shared/ui/DateFormat";
 
 const AccountInfo = ({ userData }: { userData: any }) => {
@@ -15,18 +14,20 @@ const AccountInfo = ({ userData }: { userData: any }) => {
         </div>
         <div className="border p-6">
           <div className="flex items-center space-x-8">
-            <div className="relative w-[150px] h-[150px] border-2 rounded-full">
+            <div className="relative w-[150px] h-[150px] border-2 rounded-full ">
+              {/* Profile Image */}
               <Image
-                src={userData?.logoUrl || " "}
+                src={userData?.logoUrl || "/assets/user-image/user-image.png"}
                 alt="User Picture"
                 width={150}
                 height={150}
-                className="absolute inset-0 rounded-full"
+                className="w-full h-full object-cover object-center rounded-full  overflow-hidden"
               />
 
-              <div className=" bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
+              {/* Edit Icon */}
+              {/* <div className="bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-1 right-3 cursor-pointer">
                 <TbEditCircle className="text-white text-xl" />
-              </div>
+              </div> */}
             </div>
 
             <div className="relative overflow-x-auto">

@@ -37,7 +37,7 @@ const ForgetPasswordOtpVerificationForm = ({
   const maskEmail = (email: any): any => {
     const [localPart, domain] = email?.split("@");
     if (localPart?.length <= 2) {
-      return email; // If the local part is too short, return the email as is
+      return email;
     }
 
     const maskedLocalPart =
@@ -48,6 +48,7 @@ const ForgetPasswordOtpVerificationForm = ({
 
     return `${maskedLocalPart}@${domain}`;
   };
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
@@ -137,6 +138,7 @@ const ForgetPasswordOtpVerificationForm = ({
       } else {
         setUserForgotPasswordRecovery(true);
         setUserForgotPasswordFlag(false);
+        // toast.success("Successfully Password Reset!");
       }
     } catch (e) {
       setError("An unexpected error occurred. Please try again later.");
@@ -175,8 +177,7 @@ const ForgetPasswordOtpVerificationForm = ({
         We have sent an OTP to this email
       </p>
       <p className="font-normal text-lg text-black">
-        {/* {maskEmail(userForgotPasswordInfo?.email)} */}
-        {userForgotPasswordInfo?.email}
+        {maskEmail(userForgotPasswordInfo?.email)}
       </p>
 
       <h3 className="text-green-400 font-medium text-2xl my-3">

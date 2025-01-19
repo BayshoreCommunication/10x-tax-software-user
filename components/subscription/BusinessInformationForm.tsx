@@ -12,7 +12,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [brandColor, setBrandColor] = useState<string>("#ff0000");
+  const [brandColor, setBrandColor] = useState<string>("#D5AD45");
   const [businessInfoForm, setBusinessInfoForm] = useState({
     image: "",
     businessName: userData?.businessName || "",
@@ -147,7 +147,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
                   value={businessInfoForm.businessWebsite}
                   onChange={handleChange}
                   className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-                  placeholder="https://www.exampleurl.com"
+                  placeholder="www.example.com"
                 />
               </div>
             </div>

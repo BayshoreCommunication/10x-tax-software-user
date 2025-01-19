@@ -87,7 +87,11 @@ const CheckoutForm = ({
             "Content-Type": "application/json",
             Authorization: `${token}`,
           },
-          body: JSON.stringify({ amount: 50, currency: "usd" }),
+          body: JSON.stringify({
+            amount: 50,
+            currency: "usd",
+            customerDetails,
+          }),
         }
       );
 
@@ -105,7 +109,7 @@ const CheckoutForm = ({
 
       // Step 2: Confirm Card Payment
       const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: { card: cardElement },
+        payment_method: { card: cardElement, billing_details: customerDetails },
       });
 
       if (paymentResult.error) {
@@ -116,35 +120,6 @@ const CheckoutForm = ({
       if (!paymentIntent || paymentIntent.status !== "succeeded") {
         throw new Error("Payment did not succeed. Please try again.");
       }
-
-      // if (paymentResult) {
-      //   setPaymentInfo((prevState) => ({
-      //     ...prevState,
-      //     paymentId: paymentResult?.paymentIntent?.id,
-      //   }));
-      // }
-
-      // Step 3: Save Subscription Details
-      // const subscriptionResponse = await fetch(
-      //   `${process.env.NEXT_PUBLIC_API_URL}/api/subscription`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `${token}`,
-      //     },
-      //     body: JSON.stringify({
-      //       paymentInfo: {
-      //         email: paymentInfo.email,
-      //         name: paymentInfo.name,
-      //         country: paymentInfo.country,
-      //         address: paymentInfo.address,
-      //         paymentId: paymentIntent.id,
-      //       },
-      //       subscriptionInfo,
-      //     }),
-      //   }
-      // );
 
       const paymentInfos: PaymentInfo = {
         email: paymentInfo.email,
@@ -160,7 +135,6 @@ const CheckoutForm = ({
       );
 
       if (!subscriptionResponse.ok) {
-        // const { message } = await subscriptionResponse.json();
         throw new Error("Failed to create subscription.");
       }
 
@@ -174,6 +148,19 @@ const CheckoutForm = ({
     } finally {
       setProcessing(false);
     }
+  };
+
+  const customerDetails = {
+    name: paymentInfo.name || "",
+    email: paymentInfo?.email || "",
+    phone: "",
+    address: {
+      // line1: "",
+      city: paymentInfo?.address || "",
+      // state: "NY",
+      // postal_code: "10001",
+      country: "US",
+    },
   };
 
   return (

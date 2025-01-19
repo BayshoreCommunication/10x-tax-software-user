@@ -37,7 +37,7 @@ const SignupOtpVerification = ({
   const maskEmail = (email: any): any => {
     const [localPart, domain] = email?.split("@");
     if (localPart?.length <= 2) {
-      return email; // If the local part is too short, return the email as is
+      return email;
     }
 
     const maskedLocalPart =
@@ -134,9 +134,7 @@ const SignupOtpVerification = ({
         setError("Invalid Sign up OTP.");
       } else {
         router.push("/sign-in");
-        toast.success("Successfully Sign up!", {
-          position: "top-center",
-        });
+        toast.success("Successfully Sign up!");
       }
     } catch (e) {
       setError("An unexpected error occurred. Please try again later.");
