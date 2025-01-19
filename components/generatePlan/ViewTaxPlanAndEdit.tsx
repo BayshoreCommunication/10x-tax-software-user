@@ -1,8 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+
 const ViewTaxPlanAndEdit = () => {
   const router = useRouter();
+
+  const taxInfo = useSelector((state: RootState) => state.taxInfo);
 
   const goBackTwoSteps = () => {
     window.history.go(-2);

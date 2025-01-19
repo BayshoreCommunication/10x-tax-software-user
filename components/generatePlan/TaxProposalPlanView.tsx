@@ -10,11 +10,16 @@ import TaxProposalSend from "../shared/pdfGenerator/TaxProposalSend";
 import ViewTaxPlan from "./ViewTaxPlan";
 import ViewTaxProposal from "./ViewTaxProposal";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+
 const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
+  const taxInfo = useSelector((state: RootState) => state.taxInfo);
+
   const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
   const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
 
-  console.log("check client deitla s", clientDetails?.basicInformation?.email);
+  console.log("check client deitla", taxInfo?.data);
 
   return (
     <div className="container py-10 overflow-hidden">

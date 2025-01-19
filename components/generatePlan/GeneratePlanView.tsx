@@ -3,7 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useDispatch } from "react-redux";
 import Loader from "../shared/ui/Loader";
+
+import { removeData, setData } from "@/redux/features/taxInfoSlice";
 import CalculateValueLeftSide from "./TaxCalculate/CalculateValueLeftSide";
 import ShowCalculateValueRightSide from "./TaxCalculate/ShowCalculateValueRightSide";
 
@@ -66,6 +69,7 @@ interface ClientInfoForm {
 }
 
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -132,7 +136,61 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     },
   });
 
-  // Data save handler
+  // Test Data
+
+  const taxPlanData = {
+    clientId: id,
+    taxableIncome: {
+      grossIncome: 100000,
+      standardDeduction: 13850,
+      retirementContributions: 0,
+      otherDeductions: 0,
+      taxableIncome: 86150,
+    },
+
+    estimatedFederalTaxes: {
+      estimatedTaxesBeforeAdjustments: 14260,
+      federalTaxesWithheld: 0,
+      taxCredits: 0,
+      taxesOwed: 14260.38,
+      marginalTaxRate: 22,
+      effectiveTaxRate: 16.55,
+    },
+  };
+
+  const createTaxPlanByClient = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tax-plan`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${session}`,
+          },
+          body: JSON.stringify(taxPlanData),
+        }
+      );
+
+      const result = await response.json();
+
+      // console.log("check this value 173", result?.payload?.newTaxPlan?._id);
+
+      if (response.ok) {
+        dispatch(removeData());
+        router.push(`/view-proposal/${id}`);
+        dispatch(setData(result?.payload?.newTaxPlan));
+      } else {
+        const errorMessage = result?.error || "Failed to create tax plan.";
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      console.error("Error creating tax plan:", error);
+      setError(
+        error.message || "Something went wrong while creating the tax plan."
+      );
+    }
+  };
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,7 +198,8 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch(
+      // Update client data
+      const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/client-details/${id}`,
         {
           method: "PUT",
@@ -152,18 +211,19 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
         }
       );
 
-      const result = await response.json();
+      const updateResult = await updateResponse.json();
 
-      if (response.ok) {
-        setError(null);
-        router.push(`/view-proposal/${id}`);
+      if (updateResponse.ok) {
+        // Successfully updated, proceed to create tax plan
+        await createTaxPlanByClient();
       } else {
-        const errorMessage = result?.error || "Failed to update client data.";
-        setError(errorMessage);
+        const errorMessage =
+          updateResult?.error || "Failed to update client data.";
+        throw new Error(errorMessage);
       }
-    } catch (error) {
-      console.error("Error update client data:", error);
-      setError("Something went wrong. Please try again.");
+    } catch (error: any) {
+      console.error("Error updating client data:", error);
+      setError(error || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

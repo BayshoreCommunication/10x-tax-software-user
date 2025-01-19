@@ -1,6 +1,11 @@
 "use client";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const ViewTaxPlan = () => {
+
+  const taxInfo = useSelector((state: RootState) => state.taxInfo);
+  
   return (
     <div className="w-full">
       <div className="p-5 2xl:p-8 max-w-5xl mx-auto bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)]">

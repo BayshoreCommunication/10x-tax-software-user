@@ -1,6 +1,11 @@
+"use client";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const ViewTaxProposal = () => {
+  const taxInfo = useSelector((state: RootState) => state.taxInfo);
+
   return (
     <div className="flex flex-col gap-6 2xl:gap-10">
       <div

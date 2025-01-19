@@ -2,40 +2,6 @@ import { FaDownload } from "react-icons/fa";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import { formatDate } from "../shared/ui/DateFormat";
 
-const DownloadSection = ({ title, items }) => (
-  <div className="flex-1">
-    <h4 className="w-full border-b text-2xl font-bold text-secondary text-left pb-2">
-      {title}
-    </h4>
-    <div className="mt-4">
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
-        >
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-primary text-white rounded-lg">
-              <SiAdobeacrobatreader className="text-2xl" />
-            </div>
-            <div>
-              <h6 className="text-xl font-medium text-secondary mb-1">
-                {item.label}
-              </h6>
-              <p className="text-base font-normal text-secondary opacity-70">
-                {item.date}
-              </p>
-            </div>
-          </div>
-          <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
-            <p>Download PDF</p>
-            <FaDownload />
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
 const ClientDetails = ({ clientDetails }: any) => {
   const taxPlans = [
     { label: "Tax Plan", date: "19-06-24" },
@@ -48,8 +14,6 @@ const ClientDetails = ({ clientDetails }: any) => {
     { label: "Tax Proposal", date: "20-06-24" },
     { label: "Tax Proposal", date: "21-06-24" },
   ];
-
-  console.log("check value data 51", clientDetails?.basicInformation);
 
   return (
     <div className="container py-10">
@@ -193,8 +157,68 @@ const ClientDetails = ({ clientDetails }: any) => {
         {/* Tax Plans and Proposals */}
         <div className="mt-6 p-5 2xl:p-10 border">
           <div className="flex items-start gap-10 2xl:gap-20">
-            <DownloadSection title="Tax Plans" items={taxPlans} />
-            <DownloadSection title="Tax Proposals" items={taxProposals} />
+            <div className="flex-1">
+              <h4 className="w-full border-b text-2xl font-bold text-secondary text-left pb-2">
+                Tax Plans
+              </h4>
+              <div className="mt-4">
+                {taxPlans?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="p-3 bg-primary text-white rounded-lg">
+                        <SiAdobeacrobatreader className="text-2xl" />
+                      </div>
+                      <div>
+                        <h6 className="text-xl font-medium text-secondary mb-1">
+                          {item.label}
+                        </h6>
+                        <p className="text-base font-normal text-secondary opacity-70">
+                          {item.date}
+                        </p>
+                      </div>
+                    </div>
+                    <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                      <p>Download PDF</p>
+                      <FaDownload />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1">
+              <h4 className="w-full border-b text-2xl font-bold text-secondary text-left pb-2">
+                Tax Proposals
+              </h4>
+              <div className="mt-4">
+                {taxProposals?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="p-3 bg-primary text-white rounded-lg">
+                        <SiAdobeacrobatreader className="text-2xl" />
+                      </div>
+                      <div>
+                        <h6 className="text-xl font-medium text-secondary mb-1">
+                          {item.label}
+                        </h6>
+                        <p className="text-base font-normal text-secondary opacity-70">
+                          {item.date}
+                        </p>
+                      </div>
+                    </div>
+                    <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                      <p>Download PDF</p>
+                      <FaDownload />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

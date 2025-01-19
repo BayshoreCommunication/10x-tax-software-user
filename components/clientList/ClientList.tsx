@@ -254,15 +254,13 @@ const ClientList = () => {
                     <td>{client.basicInformation.email}</td>
                     <td>{client.basicInformation.address}</td>
                     <td>{formatDate(client.createdAt)}</td>
-                    <td className="flex justify-center space-x-3">
-                      <button
-                        onClick={() =>
-                          router.push(`/client-edit/${client._id}`)
-                        }
+                    <td className="flex justify-center space-x-3 mt-5">
+                      <Link
+                        href={`/client-edit/${client._id}`}
                         className="bg-yellow-100 p-1.5 rounded hover:bg-yellow-200"
                       >
                         <FiEdit className="text-yellow-600" />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleUserDelete(client._id)}
                         className="bg-red-100 p-1.5 rounded hover:bg-red-200"
