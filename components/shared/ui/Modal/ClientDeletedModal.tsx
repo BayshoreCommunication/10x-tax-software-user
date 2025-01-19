@@ -102,7 +102,7 @@ const ClientDeletedModal: React.FC<ClientDeletedModalProps> = ({
                 </button>
                 <button
                   onClick={closeModal}
-                  className="px-6 py-2.5 text-white rounded-md font-medium text-base bg-primary hover:bg-[#be9837] hover:text-white"
+                  className="px-6 py-2.5 text-white rounded-md font-medium text-base bg-primary hover:bg-hoverColor hover:text-white"
                 >
                   Cancel
                 </button>

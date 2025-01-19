@@ -1,19 +1,15 @@
+import { getClientTaxList } from "@/app/actions/taxplan";
 import { FaDownload } from "react-icons/fa";
 import { SiAdobeacrobatreader } from "react-icons/si";
 import { formatDate } from "../shared/ui/DateFormat";
 
-const ClientDetails = ({ clientDetails }: any) => {
-  const taxPlans = [
-    { label: "Tax Plan", date: "19-06-24" },
-    { label: "Tax Plan", date: "20-06-24" },
-    { label: "Tax Plan", date: "21-06-24" },
-  ];
+interface TaxPlanData {
+  id: string;
+  name: string;
+}
 
-  const taxProposals = [
-    { label: "Tax Proposal", date: "19-06-24" },
-    { label: "Tax Proposal", date: "20-06-24" },
-    { label: "Tax Proposal", date: "21-06-24" },
-  ];
+const ClientDetails = async ({ clientDetails }: any) => {
+  const taxPlanList = await getClientTaxList(clientDetails?._id);
 
   return (
     <div className="container py-10">
@@ -156,69 +152,80 @@ const ClientDetails = ({ clientDetails }: any) => {
 
         {/* Tax Plans and Proposals */}
         <div className="mt-6 p-5 2xl:p-10 border">
-          <div className="flex items-start gap-10 2xl:gap-20">
-            <div className="flex-1">
+          <div className="">
+            <div className="flex items-start space-x-36">
               <h4 className="w-full border-b text-2xl font-bold text-secondary text-left pb-2">
                 Tax Plans
               </h4>
-              <div className="mt-4">
-                {taxPlans?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="p-3 bg-primary text-white rounded-lg">
-                        <SiAdobeacrobatreader className="text-2xl" />
-                      </div>
-                      <div>
-                        <h6 className="text-xl font-medium text-secondary mb-1">
-                          {item.label}
-                        </h6>
-                        <p className="text-base font-normal text-secondary opacity-70">
-                          {item.date}
-                        </p>
-                      </div>
-                    </div>
-                    <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
-                      <p>Download PDF</p>
-                      <FaDownload />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex-1">
               <h4 className="w-full border-b text-2xl font-bold text-secondary text-left pb-2">
-                Tax Proposals
+                Tax Proposal
               </h4>
-              <div className="mt-4">
-                {taxProposals?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="p-3 bg-primary text-white rounded-lg">
-                        <SiAdobeacrobatreader className="text-2xl" />
-                      </div>
-                      <div>
-                        <h6 className="text-xl font-medium text-secondary mb-1">
-                          {item.label}
-                        </h6>
-                        <p className="text-base font-normal text-secondary opacity-70">
-                          {item.date}
-                        </p>
+            </div>
+            {taxPlanList?.data?.taxPlan?.lenght === 0 ? (
+              <div className="">
+                {" "}
+                {taxPlanList?.data?.taxPlan?.map((el: any, index: number) => (
+                  <div className="flex items-start gap-10 2xl:gap-20">
+                    <div className="flex-1">
+                      <div className="mt-4">
+                        <div
+                          key={index}
+                          className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="p-3 bg-primary text-white rounded-lg">
+                              <SiAdobeacrobatreader className="text-2xl" />
+                            </div>
+                            <div>
+                              <h6 className="text-xl font-medium text-secondary mb-1">
+                                Tax Plan
+                              </h6>
+                              <p className="text-base font-normal text-secondary opacity-70">
+                                {formatDate(el?.createdAt)}
+                              </p>
+                            </div>
+                          </div>
+                          <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                            <p>Download PDF</p>
+                            <FaDownload />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
-                      <p>Download PDF</p>
-                      <FaDownload />
-                    </button>
+                    <div className="flex-1">
+                      <div className="mt-4">
+                        <div
+                          key={index}
+                          className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="p-3 bg-primary text-white rounded-lg">
+                              <SiAdobeacrobatreader className="text-2xl" />
+                            </div>
+                            <div>
+                              <h6 className="text-xl font-medium text-secondary mb-1">
+                                Tax Proposal
+                              </h6>
+                              <p className="text-base font-normal text-secondary opacity-70">
+                                {formatDate(el?.createdAt)}
+                              </p>
+                            </div>
+                          </div>
+                          <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                            <p>Download PDF</p>
+                            <FaDownload />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
+            ) : (
+              <p className="text-center text-base  text-gray-600 flex items-center justify-center min-h-[15vh]">
+                No tax data available.
+              </p>
+            )}
           </div>
         </div>
       </div>
