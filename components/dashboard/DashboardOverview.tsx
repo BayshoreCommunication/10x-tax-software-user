@@ -1,47 +1,51 @@
-import Image from "next/image";
 import React from "react";
+import { HiUsers } from "react-icons/hi";
+import { CgNotes } from "react-icons/cg";
+import { MdOutlinePaid } from "react-icons/md";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaRegCalendarTimes, FaRegFileAlt } from "react-icons/fa";
 
 const dashboardData = [
   {
     title: "Total Client",
     value: 550,
     description: "All Client Report",
-    icon: "/assets/assetsadmin-image/total-client.png",
+    icon: <HiUsers className="text-5xl  text-primary" />,
     backgroundColor: "#F8ECCF",
   },
   {
     title: "Total Plans",
     value: 150,
     description: "Plans Report",
-    icon: "/assets/assetsadmin-image/total-plans.png",
+    icon: <CgNotes className="text-5xl  text-primary" />,
     backgroundColor: "#FDD9D4",
   },
   {
     title: "Total Proposal Sent",
     value: 120,
     description: "All Proposal Sent",
-    icon: "/assets/assetsadmin-image/total-proposal-sent.png",
+    icon: <FaRegFileAlt className="text-5xl  text-primary" />,
     backgroundColor: "#C5D4FD",
   },
   {
     title: "Subscription Plan",
     value: "$99",
     description: "Monthly Plan",
-    icon: "/assets/assetsadmin-image/subscription-plan.png",
+    icon: <MdOutlinePaid className="text-5xl  text-primary" />,
     backgroundColor: "#D3EED1",
   },
   {
     title: "Payment Status",
     value: "Paid",
     description: "$99.00",
-    icon: "/assets/assetsadmin-image/payment-status.png",
+    icon: <FaMoneyBillTransfer className="text-5xl  text-primary" />,
     backgroundColor: "#EBCBFE",
   },
   {
     title: "Subscription End Date",
     value: "12/08/2025",
     description: "End Date",
-    icon: "/assets/assetsadmin-image/subscription-plan.png",
+    icon: <FaRegCalendarTimes className="text-5xl  text-primary" />,
     backgroundColor: "#B9EFF6",
   },
 ];
@@ -57,13 +61,7 @@ const DashboardOverview = () => {
           >
             <h2 className="text-2xl font-medium text-[#11142D]">{el?.title}</h2>
             <div className="flex items-center justify-between">
-              <Image
-                src={el?.icon}
-                alt={el?.title}
-                width={150}
-                height={150}
-                className="w-[60px] h-[60px]"
-              />
+              <div>{el?.icon}</div>
               <div className="">
                 <h2 className="2xl:text-3xl text-2xl font-bold  text-[#11142D]">
                   {el?.value}
