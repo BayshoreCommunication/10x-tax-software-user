@@ -226,14 +226,19 @@ const ClientListTable = () => {
                     key={client?._id}
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
                   >
-                    <td className="px-6 py-4 flex items-center space-x-2">
-                      <Image
-                        src="/assets/user-image/user-image.png"
-                        alt="User Picture"
-                        width={35}
-                        height={35}
-                      />
-                      <span>{client.basicInformation.fullName}</span>
+                    <td className="px-6 py-4">
+                      <Link
+                        href={`/client/${client?._id}`}
+                        className=" flex items-center space-x-2"
+                      >
+                        <Image
+                          src="/assets/user-image/user-image.png"
+                          alt="User Picture"
+                          width={35}
+                          height={35}
+                        />
+                        <span>{client.basicInformation.fullName}</span>
+                      </Link>
                     </td>
                     <td>{client.basicInformation.phone}</td>
                     <td>{client.basicInformation.email}</td>

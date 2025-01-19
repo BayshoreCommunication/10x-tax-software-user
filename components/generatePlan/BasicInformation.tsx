@@ -435,7 +435,7 @@ const BasicInformation = ({
             )}
           </button>
           <button
-            name="next"
+            name="save"
             className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center h-[45px]"
           >
             {saveLoading ? (

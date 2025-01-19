@@ -1,5 +1,5 @@
 import { getAllClientData } from "@/app/actions/client";
-import ClientDetials from "@/components/clientList/ClientDetials";
+import ClientDetails from "@/components/clientList/ClientDetails";
 
 const page = async ({ params }: any) => {
   const clientDataList = await getAllClientData();
@@ -10,8 +10,8 @@ const page = async ({ params }: any) => {
   );
 
   return (
-    <div>
-      <ClientDetials />
+    <div className="bg-[#eeeeee]">
+      <ClientDetails clientDetails={clientDetails} />
     </div>
   );
 };

@@ -225,13 +225,18 @@ const TaxPlanGeneratorTable = () => {
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center "
                   >
                     <td className="px-6 py-4 flex items-center space-x-2">
-                      <Image
-                        src="/assets/user-image/user-image.png"
-                        alt="User Picture"
-                        width={35}
-                        height={35}
-                      />
-                      <span>{el.basicInformation.fullName}</span>
+                      <Link
+                        href={`/client/${el?._id}`}
+                        className=" flex items-center space-x-2"
+                      >
+                        <Image
+                          src="/assets/user-image/user-image.png"
+                          alt="User Picture"
+                          width={35}
+                          height={35}
+                        />
+                        <span>{el.basicInformation.fullName}</span>
+                      </Link>
                     </td>
                     <td className="px-6 py-4">{el.basicInformation.phone}</td>
                     <td className="px-6 py-4">{el.basicInformation.email}</td>
