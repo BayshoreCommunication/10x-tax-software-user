@@ -172,16 +172,16 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
         }
       );
 
-      const result = await response.json();
+      const response = await response.json();
 
       // console.log("check this value 173", result?.payload?.newTaxPlan?._id);
 
       if (response.ok) {
         dispatch(removeData());
         router.push(`/view-proposal/${id}`);
-        dispatch(setData(result?.payload?.newTaxPlan));
+        dispatch(setData(response?.payload?.newTaxPlan));
       } else {
-        const errorMessage = result?.error || "Failed to create tax plan.";
+        const errorMessage = response?.error || "Failed to create tax plan.";
         throw new Error(errorMessage);
       }
     } catch (error: any) {
