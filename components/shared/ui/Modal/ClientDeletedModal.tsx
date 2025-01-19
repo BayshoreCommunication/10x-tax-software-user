@@ -1,23 +1,52 @@
 "use client";
 
-import React from "react";
+import { clientDeletedById } from "@/app/actions/client";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 interface ClientDeletedModalProps {
   clientDeletedModal: boolean;
   setClientDeletedModal: (value: boolean) => void;
+  clientId: string | null;
+  clientDeletedValue: boolean;
+  setClientDeletedValue: (value: boolean) => void;
 }
-
 const ClientDeletedModal: React.FC<ClientDeletedModalProps> = ({
   clientDeletedModal,
   setClientDeletedModal,
+  clientId,
+  setClientDeletedValue,
+  clientDeletedValue,
 }) => {
   const toggleModal = () => setClientDeletedModal(!clientDeletedModal);
   const closeModal = () => setClientDeletedModal(false);
 
-  const clientDeletedHandler = () => {
-    toast.success("Successfully deleted client");
-    setClientDeletedModal(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const userDeletedHandler = async () => {
+    if (clientId === null) {
+      toast.error("Invalid user ID");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await clientDeletedById(clientId);
+
+      if (response.ok) {
+        toast.success("Successfully deleted client");
+        setClientDeletedModal(false);
+        setClientDeletedValue(!clientDeletedValue);
+      } else {
+        toast.error(response.error || "Failed to delete client.");
+      }
+    } catch (error) {
+      console.error("Error in userDeletedHandler:", error);
+      toast.error("An unexpected error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,7 +95,7 @@ const ClientDeletedModal: React.FC<ClientDeletedModalProps> = ({
               {/* Modal footer */}
               <div className="flex items-center justify-center space-x-4 p-4 md:p-5 border-t border-gray-200 rounded-b">
                 <button
-                  onClick={clientDeletedHandler}
+                  onClick={userDeletedHandler}
                   className="px-6 py-2 text-primary rounded-md font-medium text-base hover:bg-primary border-2 border-primary hover:text-white"
                 >
                   Delete

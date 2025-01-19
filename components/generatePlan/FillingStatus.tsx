@@ -1,32 +1,137 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import Loader from "../shared/ui/Loader";
 
-const FillingStatus = () => {
+const FillingStatus = ({
+  clientInfoForm,
+  setClientInfoForm,
+  setActiveTab,
+  id,
+  session,
+}: any) => {
   const [marriedStatusDropdown, setIsMarriedStatusDropdown] = useState(false);
+
+  const [error, setError] = useState<string | null>(null);
+  const [saveLoading, setSaveLoading] = useState<boolean>(false);
+  const [nextLoading, setNextLoading] = useState<boolean>(false);
+
+  // Handler for marital status
+
+  const onMarriedStatusHandler = (value: string) => {
+    setIsMarriedStatusDropdown(false);
+
+    setClientInfoForm((prevState: any) => ({
+      ...prevState,
+      fillingStatus: value,
+    }));
+  };
+
+  // Input onChange handler
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    const keys = name.split(/[\[\]\.]+/).filter(Boolean);
+
+    setClientInfoForm((prevState: any) => {
+      const updatedState = { ...prevState };
+      let current: any = updatedState; // Temporarily use `any` for dynamic traversal
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = isNaN(Number(keys[i])) ? keys[i] : Number(keys[i]);
+        if (!current[key]) current[key] = isNaN(Number(keys[i + 1])) ? {} : [];
+        current = current[key];
+      }
+
+      const finalKey = keys[keys.length - 1];
+      current[finalKey] = isNaN(Number(value)) ? value : Number(value);
+
+      return updatedState;
+    });
+  };
+
+  // Data save handler
+
+  const handleSubmitFormData = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const action = (e.nativeEvent as SubmitEvent).submitter?.getAttribute(
+      "name"
+    );
+
+    if (action === "back") {
+      setActiveTab("basic-information");
+    }
+
+    if (action === "next") {
+      setNextLoading(true);
+    } else {
+      setSaveLoading(true);
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/client-details/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${session}`,
+          },
+          body: JSON.stringify(clientInfoForm),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setError(null);
+        if (action === "next") {
+          setActiveTab("strategy");
+        } else if (action === "save") {
+          toast.success("Client save successfully!");
+        }
+      } else {
+        const errorMessage = result?.error || "Failed to update client data.";
+        setError(errorMessage);
+      }
+    } catch (error) {
+      console.error("Error update client data:", error);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSaveLoading(false);
+      setNextLoading(false);
+    }
+  };
 
   return (
     <div>
       <div className="flex items-center space-x-6 pb-3">
-        <div className="w-full">
-          <label
-            htmlFor="name-icon"
-            className="block mb-2 text-lg font-normal text-gray-900"
-          >
-            Married Filing Jointly<span className="text-primary">*</span>
-          </label>
-          <div className="relative inline-block text-left w-full">
-            <button
-              id="dropdownDefaultButton"
-              onClick={() => setIsMarriedStatusDropdown(!marriedStatusDropdown)}
-              className="text-gray-600 bg-[#eeeeee] hover:bg-[#eeeeee]focus:ring-4 focus:outline-none  rounded-lg text-lg px-5 py-2.5 text-center inline-flex items-center justify-between w-full border border-gray-300"
-              type="button"
+        <form className="w-full" onSubmit={handleSubmitFormData}>
+          <div className="w-full">
+            <label
+              htmlFor="marital-status-dropdown"
+              className="block mb-2 text-lg font-normal text-gray-900"
             >
-              <p> Married</p>
-              <div className="">
+              Select Filling Status<span className="text-primary">*</span>
+            </label>
+            <div className="relative inline-block w-full">
+              <button
+                id="marital-status-dropdown"
+                onClick={() =>
+                  setIsMarriedStatusDropdown(!marriedStatusDropdown)
+                }
+                className="w-full px-5 py-2.5 text-lg text-gray-600 bg-[#eeeeee] border border-gray-300 rounded-lg hover:bg-[#eeeeee] focus:outline-none focus:ring-4 inline-flex items-center justify-between relative"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={marriedStatusDropdown}
+              >
+                <span>{clientInfoForm?.fillingStatus || "Select Status"}</span>
                 <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
+                  className="w-2.5 h-2.5 ml-3"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 10 6"
@@ -39,72 +144,83 @@ const FillingStatus = () => {
                     d="m1 1 4 4 4-4"
                   />
                 </svg>
-              </div>
-            </button>
+              </button>
 
-            {marriedStatusDropdown && (
-              <div
-                id="dropdown"
-                className=" mt-2 bg-[#eeeeee] divide-y divide-gray-100 rounded-lg shadow w-full border border-gray-300"
-              >
-                <ul className="py-2 text-lg text-gray-700 dark:text-gray-200 divide">
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Single
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Married Filing Jointly
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Married Filing separately
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Head of household
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            )}
+              {marriedStatusDropdown && (
+                <div
+                  className="absolute z-10 w-full mt-2 bg-[#eeeeee] border border-gray-300 rounded-lg shadow-md"
+                  role="menu"
+                  aria-labelledby="marital-status-dropdown"
+                >
+                  <ul className="divide-y divide-gray-200">
+                    {[
+                      "Single",
+                      "Married Filing Jointly",
+                      "Married Filing separately",
+                      "Head of household",
+                    ].map((status) => (
+                      <li key={status}>
+                        <button
+                          onClick={() =>
+                            onMarriedStatusHandler(status.toLowerCase())
+                          }
+                          className="block w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                        >
+                          {status}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="w-full flex items-center  justify-center mt-10 space-x-6">
-        <Link
-          href={"/"}
-          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
-        >
-          Back
-        </Link>
-        <Link
-          href={"/"}
-          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
-        >
-          Next
-        </Link>
-        <Link
-          href={"/"}
-          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center"
-        >
-          Save
-        </Link>
+
+          {/* Error Handling*/}
+
+          <div className="pt-6 text-center">
+            {error && <p className="text-red-500 text-base">{error}</p>}
+          </div>
+
+          {/* Submit Button*/}
+
+          <div className="w-full flex items-center  justify-center mt-10 space-x-6">
+            <button
+              name="back"
+              type="submit"
+              className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center h-[45px]"
+            >
+              Back
+            </button>
+            <button
+              name="next"
+              type="submit"
+              className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center h-[45px]"
+            >
+              {nextLoading ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <Loader />
+                </div>
+              ) : (
+                <p>Next</p>
+              )}
+            </button>
+            <button
+              name="save"
+              type="submit"
+              className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px]  text-center h-[45px]"
+            >
+              {saveLoading ? (
+                <div className="flex items-center justify-center space-x-2 ">
+                  <Loader />
+                </div>
+              ) : (
+                <p> Save</p>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

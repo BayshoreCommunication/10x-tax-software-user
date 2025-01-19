@@ -66,11 +66,11 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
 
     try {
       const result = await updateUserData(formData);
-      if (result.ok) {
-        toast.success("Successful update!");
+      if (result?.ok) {
         setError(null);
+        toast.success("Successful update!");
+
         router.push("/");
-        // toast.success("Info Update successfully!");
       } else {
         setError(result.error || "An unexpected error occurred.");
       }

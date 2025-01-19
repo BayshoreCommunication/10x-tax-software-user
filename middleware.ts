@@ -40,6 +40,7 @@
 // export default middleware;
 
 // import { auth } from "@/auth";
+
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getUserData } from "./app/actions/user";
@@ -48,9 +49,8 @@ import { auth } from "./auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Quickly allow static assets and public routes
   if (
-    pathname.startsWith("/_next/") || // Covers /_next/static and /_next/image
+    pathname.startsWith("/_next/") ||
     pathname === "/favicon.ico" ||
     pathname.startsWith("/assets/") ||
     ["/sign-in", "/sign-up", "/forget-password", "/confirm-subscription"].some(
@@ -61,13 +61,11 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Authenticate the user
     const session = await auth();
     if (!session) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-    // Fetch user data
     const { data: userData } = await getUserData();
     if (!userData?.subscription) {
       return NextResponse.redirect(
@@ -76,7 +74,6 @@ export async function middleware(request: NextRequest) {
     }
   } catch (error) {
     console.error("Middleware error:", error);
-    // Redirect to sign-in if any error occurs during auth or user data retrieval
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -84,7 +81,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.ico|assets/).*)"], // Streamlined matcher
+  matcher: ["/((?!_next/|favicon.ico|assets/).*)"],
 };
 
 export default middleware;

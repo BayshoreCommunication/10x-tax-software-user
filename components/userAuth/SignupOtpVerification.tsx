@@ -134,7 +134,7 @@ const SignupOtpVerification = ({
         setError("Invalid Sign up OTP.");
       } else {
         router.push("/sign-in");
-        toast.success("Successfully Sing up !", {
+        toast.success("Successfully Sign up!", {
           position: "top-center",
         });
       }

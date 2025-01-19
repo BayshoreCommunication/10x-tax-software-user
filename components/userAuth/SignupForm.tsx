@@ -127,6 +127,7 @@ const SignupForm: React.FC<SignUpFormProps> = ({
             onChange={handleChange}
             className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
             placeholder="Carlos Rosario"
+            autoComplete="off"
           />
         </div>
 
@@ -146,6 +147,7 @@ const SignupForm: React.FC<SignUpFormProps> = ({
             onChange={handleChange}
             className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
             placeholder="carlosrosario@gmail.com"
+            autoComplete="off"
           />
         </div>
 
@@ -165,6 +167,7 @@ const SignupForm: React.FC<SignUpFormProps> = ({
             onChange={handleChange}
             className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 outline-none"
             placeholder="(555) 555-1234"
+            autoComplete="off"
           />
         </div>
 
@@ -274,7 +277,7 @@ const SignupForm: React.FC<SignUpFormProps> = ({
         <div className="mt-3">
           <p className="text-lg">
             Already have an account?{" "}
-            <Link href="/sign-in" className="text-primary">
+            <Link href="/sign-in" className="text-primary hover:underline">
               Sign in
             </Link>
           </p>
