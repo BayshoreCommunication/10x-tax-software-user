@@ -174,7 +174,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
 
       const result = await response.json();
 
-      if (result.ok) {
+      if (result) {
         dispatch(removeData());
         router.push(`/view-proposal/${id}`);
         dispatch(setData(result?.payload?.newTaxPlan));
