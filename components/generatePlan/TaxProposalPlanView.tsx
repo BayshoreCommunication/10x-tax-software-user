@@ -100,6 +100,7 @@ const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
                       RenderComponent={ViewTaxProposal}
                       email={clientDetails?.basicInformation?.email}
                       clientName={clientDetails?.basicInformation?.fullName}
+                      cleintId={clientDetails?._id}
                     />
                   </div>
                   <Link

@@ -10,10 +10,12 @@ const TaxProposalSend = ({
   RenderComponent,
   clientName,
   email,
+  cleintId,
 }: {
   RenderComponent: React.FC;
   clientName: string;
   email: string;
+  cleintId: string;
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -109,10 +111,11 @@ const TaxProposalSend = ({
       formData.append("file", pdfBlob, "tax-proposal.pdf");
       formData.append("email", email);
       formData.append("clientName", clientName);
+      formData.append("clientId", cleintId);
 
       const result = await taxProposalSend(formData);
 
-      if (result?.ok ) {
+      if (result?.ok) {
         toast.success("Proposal successfully sent!");
       } else {
         const errorMessage = result?.error || "Failed to send PDF.";

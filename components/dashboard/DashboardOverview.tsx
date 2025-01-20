@@ -1,55 +1,66 @@
+import { getUserOverviewDetails } from "@/app/actions/user";
 import { CgNotes } from "react-icons/cg";
 import { FaRegCalendarTimes, FaRegFileAlt } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi";
 import { MdOutlinePaid } from "react-icons/md";
+import { formatDate } from "../shared/ui/DateFormat";
 
-const dashboardData = [
-  {
-    title: "Total Client",
-    value: 550,
-    description: "All Client Report",
-    icon: <HiUsers className="text-5xl  text-primary" />,
-    backgroundColor: "#F8ECCF",
-  },
-  {
-    title: "Total Plans",
-    value: 150,
-    description: "Plans Report",
-    icon: <CgNotes className="text-5xl  text-primary" />,
-    backgroundColor: "#FDD9D4",
-  },
-  {
-    title: "Total Proposal Sent",
-    value: 120,
-    description: "All Proposal Sent",
-    icon: <FaRegFileAlt className="text-5xl  text-primary" />,
-    backgroundColor: "#C5D4FD",
-  },
-  {
-    title: "Subscription Plan",
-    value: "$99",
-    description: "Monthly Plan",
-    icon: <MdOutlinePaid className="text-5xl  text-primary" />,
-    backgroundColor: "#D3EED1",
-  },
-  {
-    title: "Payment Status",
-    value: "Paid",
-    description: "$99.00",
-    icon: <FaMoneyBillTransfer className="text-5xl  text-primary" />,
-    backgroundColor: "#EBCBFE",
-  },
-  {
-    title: "Subscription End Date",
-    value: "12/08/2025",
-    description: "End Date",
-    icon: <FaRegCalendarTimes className="text-5xl  text-primary" />,
-    backgroundColor: "#B9EFF6",
-  },
-];
+const DashboardOverview = async () => {
+  const userOverviewDetails = await getUserOverviewDetails();
 
-const DashboardOverview = () => {
+  const dashboardData = [
+    {
+      title: "Total Client",
+      value: userOverviewDetails?.data?.totalClient,
+      description: "All Client Report",
+      icon: <HiUsers className="text-5xl  text-primary" />,
+      backgroundColor: "#F8ECCF",
+    },
+    {
+      title: "Total Plans",
+      value: userOverviewDetails?.data?.totalPlan,
+      description: "Plans Report",
+      icon: <CgNotes className="text-5xl  text-primary" />,
+      backgroundColor: "#FDD9D4",
+    },
+    {
+      title: "Total Proposal Sent",
+      value: userOverviewDetails?.data?.totalProposalSend,
+      description: "All Proposal Sent",
+      icon: <FaRegFileAlt className="text-5xl  text-primary" />,
+      backgroundColor: "#C5D4FD",
+    },
+    {
+      title: "Subscription Plan",
+      value:
+        userOverviewDetails?.data?.paymentStatus === "monthly" ? "$29" : "$229",
+      description:
+        userOverviewDetails?.data?.paymentStatus === "monthly"
+          ? "Monthly Plan"
+          : "Yearly Plan",
+      icon: <MdOutlinePaid className="text-5xl  text-primary" />,
+      backgroundColor: "#D3EED1",
+    },
+    {
+      title: "Payment Status",
+      value: userOverviewDetails?.data?.subscriptionPlan ? "Paid" : "Unpaid",
+      description:
+        userOverviewDetails?.data?.paymentStatus === "monthly"
+          ? "$29.00"
+          : "$229.00",
+      icon: <FaMoneyBillTransfer className="text-5xl  text-primary" />,
+      backgroundColor: "#EBCBFE",
+    },
+    {
+      title: "Subscription End Date",
+      value: formatDate(userOverviewDetails?.data?.subscriptionEndDate),
+      description: "End Date",
+      icon: <FaRegCalendarTimes className="text-5xl  text-primary" />,
+      backgroundColor: "#B9EFF6",
+    },
+  ];
+
   return (
     <div className="container py-10">
       <div className="grid grid-cols-3 items-center justify-between gap-5">
