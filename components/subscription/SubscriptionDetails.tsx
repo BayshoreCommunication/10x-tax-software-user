@@ -48,12 +48,9 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                   </p>
                 </div>
                 <div className="w-full flex items-center">
-                  <Link
-                    href={`/subscription/monthly`}
-                    className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
-                  >
+                  <button className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full">
                     Cancle
-                  </Link>
+                  </button>
                 </div>
               </div>
 
@@ -78,8 +75,8 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                 </div>
                 <div className="w-full flex items-center">
                   <Link
-                    href={`/subscription/yearly`}
-                    className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+                    href={`/confirm-subscription/yearly`}
+                    className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
                   >
                     Choose Plan & Save16%
                   </Link>
@@ -104,8 +101,8 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                 </div>
                 <div className="w-full flex items-center">
                   <Link
-                    href={`/subscription/monthly`}
-                    className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+                    href={`/confirm-subscription/monthly`}
+                    className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
                   >
                     Choose Plan
                   </Link>
@@ -153,12 +150,9 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                   </p>
                 </div>
                 <div className="w-full flex items-center">
-                  <Link
-                    href={`/subscription/yearly`}
-                    className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
-                  >
+                  <button className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full">
                     Cancle
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
