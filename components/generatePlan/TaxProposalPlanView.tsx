@@ -19,8 +19,6 @@ const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
   const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
   const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
 
-  console.log("check client deitla", taxInfo?.data);
-
   return (
     <div className="container py-10 overflow-hidden">
       <div className="bg-white p-14">
