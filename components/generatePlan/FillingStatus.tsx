@@ -154,16 +154,14 @@ const FillingStatus = ({
                 >
                   <ul className="divide-y divide-gray-200">
                     {[
-                      "Single",
+                      "Individual",
                       "Married Filing Jointly",
                       "Married Filing separately",
                       "Head of household",
                     ].map((status) => (
                       <li key={status}>
                         <button
-                          onClick={() =>
-                            onMarriedStatusHandler(status.toLowerCase())
-                          }
+                          onClick={() => onMarriedStatusHandler(status)}
                           className="block w-full px-4 py-2 text-left text-lg text-gray-700 hover:bg-gray-100"
                           role="menuitem"
                         >

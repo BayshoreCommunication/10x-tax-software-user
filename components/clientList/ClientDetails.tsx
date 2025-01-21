@@ -161,65 +161,66 @@ const ClientDetails = async ({ clientDetails }: any) => {
                 Tax Proposal
               </h4>
             </div>
-            {taxPlanList?.data?.taxPlan?.lenght === 0 ? (
+            {taxPlanList?.data?.taxPlan?.taxPlan?.length > 0 ? (
               <div className="">
-                {" "}
-                {taxPlanList?.data?.taxPlan?.map((el: any, index: number) => (
-                  <div className="flex items-start gap-10 2xl:gap-20">
-                    <div className="flex-1">
-                      <div className="mt-4">
-                        <div
-                          key={index}
-                          className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className="p-3 bg-primary text-white rounded-lg">
-                              <SiAdobeacrobatreader className="text-2xl" />
+                {taxPlanList?.data?.taxPlan?.taxPlan.map(
+                  (el: any, index: number) => (
+                    <div className="flex items-start gap-10 2xl:gap-20">
+                      <div className="flex-1">
+                        <div className="mt-4">
+                          <div
+                            key={index}
+                            className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="p-3 bg-primary text-white rounded-lg">
+                                <SiAdobeacrobatreader className="text-2xl" />
+                              </div>
+                              <div>
+                                <h6 className="text-xl font-medium text-secondary mb-1">
+                                  Tax Plan
+                                </h6>
+                                <p className="text-base font-normal text-secondary opacity-70">
+                                  {formatDate(el?.createdAt)}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h6 className="text-xl font-medium text-secondary mb-1">
-                                Tax Plan
-                              </h6>
-                              <p className="text-base font-normal text-secondary opacity-70">
-                                {formatDate(el?.createdAt)}
-                              </p>
-                            </div>
+                            <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                              <p>Download PDF</p>
+                              <FaDownload />
+                            </button>
                           </div>
-                          <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
-                            <p>Download PDF</p>
-                            <FaDownload />
-                          </button>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="mt-4">
+                          <div
+                            key={index}
+                            className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="p-3 bg-primary text-white rounded-lg">
+                                <SiAdobeacrobatreader className="text-2xl" />
+                              </div>
+                              <div>
+                                <h6 className="text-xl font-medium text-secondary mb-1">
+                                  Tax Proposal
+                                </h6>
+                                <p className="text-base font-normal text-secondary opacity-70">
+                                  {formatDate(el?.createdAt)}
+                                </p>
+                              </div>
+                            </div>
+                            <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
+                              <p>Download PDF</p>
+                              <FaDownload />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <div className="mt-4">
-                        <div
-                          key={index}
-                          className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className="p-3 bg-primary text-white rounded-lg">
-                              <SiAdobeacrobatreader className="text-2xl" />
-                            </div>
-                            <div>
-                              <h6 className="text-xl font-medium text-secondary mb-1">
-                                Tax Proposal
-                              </h6>
-                              <p className="text-base font-normal text-secondary opacity-70">
-                                {formatDate(el?.createdAt)}
-                              </p>
-                            </div>
-                          </div>
-                          <button className="flex items-center space-x-3 mt-3 text-lg justify-start hover:text-primary duration-300 font-medium">
-                            <p>Download PDF</p>
-                            <FaDownload />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             ) : (
               <p className="text-center text-base  text-gray-600 flex items-center justify-center min-h-[15vh]">

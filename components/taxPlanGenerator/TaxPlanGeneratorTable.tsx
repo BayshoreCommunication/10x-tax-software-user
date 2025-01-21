@@ -238,8 +238,16 @@ const TaxPlanGeneratorTable = () => {
                         <span>{el.basicInformation.fullName}</span>
                       </Link>
                     </td>
-                    <td className="px-6 py-4">{el.basicInformation.phone}</td>
-                    <td className="px-6 py-4">{el.basicInformation.email}</td>
+                    <td className="px-6 py-4">
+                      <Link href={`/client/${el?._id}`}>
+                        {el.basicInformation.phone}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4">
+                      <Link href={`/client/${el?._id}`}>
+                        {el.basicInformation.email}
+                      </Link>
+                    </td>
                     <td className="px-6 py-4 flex justify-center items-center space-x-3">
                       <Link
                         href={`/generate-plan/${el?._id}`}

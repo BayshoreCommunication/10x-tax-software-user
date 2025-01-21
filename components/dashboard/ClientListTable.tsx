@@ -240,10 +240,26 @@ const ClientListTable = () => {
                         <span>{client.basicInformation.fullName}</span>
                       </Link>
                     </td>
-                    <td>{client.basicInformation.phone}</td>
-                    <td>{client.basicInformation.email}</td>
-                    <td>{client.basicInformation.address}</td>
-                    <td>{formatDate(client.createdAt)}</td>
+                    <td>
+                      <Link href={`/client/${client?._id}`}>
+                        {client.basicInformation.phone}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link href={`/client/${client?._id}`}>
+                        {client.basicInformation.email}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link href={`/client/${client?._id}`}>
+                        {client.basicInformation.address}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link href={`/client/${client?._id}`}>
+                        {formatDate(client.createdAt)}
+                      </Link>
+                    </td>
                     <td className="flex justify-center space-x-3 mt-5">
                       <Link
                         href={`/client-edit/${client._id}`}

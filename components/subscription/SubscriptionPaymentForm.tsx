@@ -232,7 +232,13 @@ const SubscriptionPaymentForm: React.FC<SubscriptionPaymentFormProps> = ({
             ) : selectPaymentMethod === "paypal" ? (
               <PaypalCheckoutForm />
             ) : (
-              <BankCheckoutForm />
+              <BankCheckoutForm 
+                paymentInfo={paymentInfo}
+                setPaymentInfo={setPaymentInfo}
+                subscriptionInfo={subscriptionInfo}
+                amount={amount}
+                token={token}
+              />
             )}
           </div>
         </div>

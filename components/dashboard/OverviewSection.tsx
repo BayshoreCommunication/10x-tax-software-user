@@ -1,9 +1,4 @@
-import React from "react";
-import { IoCalendarOutline } from "react-icons/io5";
 import { LuCalendarDays } from "react-icons/lu";
-
-import SubscriptionsRatioChart from "../shared/rechart/SubscriptionsRatioChart";
-import SubscriptionsWaveRatioChart from "../shared/rechart/SubscriptionsWaveRatioChart";
 
 const newPayment = [
   {

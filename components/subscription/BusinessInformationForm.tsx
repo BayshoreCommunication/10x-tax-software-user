@@ -276,7 +276,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
             <div className="py-8 flex justify-center items-center mx-0">
               <button
                 type="submit"
-                className="text-white bg-primary hover:bg-hoverColor] font-medium rounded-lg text-lg px-5 py-3 w-[50%]"
+                className="text-white bg-primary hover:bg-hoverColor font-medium rounded-lg text-lg px-5 py-3 w-[50%]"
                 disabled={loading}
               >
                 {loading ? (

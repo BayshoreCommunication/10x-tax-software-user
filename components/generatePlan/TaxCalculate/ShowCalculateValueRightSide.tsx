@@ -1,4 +1,129 @@
-const ShowCalculateValueRightSide = () => {
+"use client";
+
+import { getTaxRangeSheet } from "@/app/actions/taxplan";
+import { useEffect, useState } from "react";
+
+interface TaxRate {
+  Individual?: { min: number; max: number };
+  MarriedFilingJointly?: { min: number; max: number };
+  MarriedFilingSeparately?: { min: number; max: number };
+  HeadOfHousehold?: { min: number; max: number };
+  TaxRate: number;
+}
+
+interface TaxRangeSheet {
+  taxRates: TaxRate[];
+}
+
+const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
+  const [taxRangeSheet, setTaxRangeSheet] = useState<TaxRangeSheet | null>(
+    null
+  );
+
+  const [clientTaxRate, setClientTaxRate] = useState("");
+
+  useEffect(() => {
+    const fetchTaxRangeSheet = async () => {
+      try {
+        const response = await getTaxRangeSheet();
+        setTaxRangeSheet(response?.data?.taxPlan?.taxRangeSheet);
+      } catch (error) {
+        console.error("Error fetching tax range sheet:", error);
+      }
+    };
+
+    fetchTaxRangeSheet();
+
+    if (clientInfoForm?.fillingStatus === "Individual") {
+      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
+        if (
+          el?.Individual?.min !== undefined &&
+          el?.Individual?.max !== undefined &&
+          el?.Individual?.min <=
+            clientInfoForm?.basicInformation?.annualGrossIncome &&
+          el?.Individual?.max >
+            clientInfoForm?.basicInformation?.annualGrossIncome
+        ) {
+          setClientTaxRate(el?.TaxRate);
+        }
+      });
+    } else if (clientInfoForm?.fillingStatus === "Married Filing Jointly") {
+      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
+        if (
+          el?.MarriedFilingJointly?.min !== undefined &&
+          el?.MarriedFilingJointly?.max !== undefined &&
+          el?.MarriedFilingJointly?.min <=
+            clientInfoForm?.basicInformation?.annualGrossIncome &&
+          el?.MarriedFilingJointly?.max >
+            clientInfoForm?.basicInformation?.annualGrossIncome
+        ) {
+          setClientTaxRate(el?.TaxRate);
+        }
+      });
+    } else if (clientInfoForm?.fillingStatus === "Married Filing separately") {
+      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
+        if (
+          el?.MarriedFilingSeparately?.min !== undefined &&
+          el?.MarriedFilingSeparately?.max !== undefined &&
+          el?.MarriedFilingSeparately?.min <=
+            clientInfoForm?.basicInformation?.annualGrossIncome &&
+          el?.MarriedFilingSeparately?.max >
+            clientInfoForm?.basicInformation?.annualGrossIncome
+        ) {
+          setClientTaxRate(el?.TaxRate);
+        }
+      });
+    } else if (clientInfoForm?.fillingStatus === "Head of household") {
+      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
+        if (
+          el?.HeadOfHousehold?.min !== undefined &&
+          el?.HeadOfHousehold?.max !== undefined &&
+          el?.HeadOfHousehold?.min <=
+            clientInfoForm?.basicInformation?.annualGrossIncome &&
+          el?.HeadOfHousehold?.max >
+            clientInfoForm?.basicInformation?.annualGrossIncome
+        ) {
+          setClientTaxRate(el?.TaxRate);
+        }
+      });
+    }
+
+    // const filingStatusKey =
+    //   clientInfoForm?.fillingStatus?.replace(/\s+/g, "") || "";
+
+    // taxRangeSheet?.taxRates?.forEach((el) => {
+    //   const statusData = el?.[filingStatusKey];
+    //   const annualIncome = clientInfoForm?.basicInformation?.annualGrossIncome;
+
+    //   if (statusData?.min < annualIncome && statusData?.max > annualIncome) {
+    //     setClientTaxRate(el?.TaxRate);
+    //   }
+    // });
+  }, [clientInfoForm]);
+
+  // taxRangeSheet?.map((el, index)=> if(el))
+
+  // if (clientInfoForm?.fillingStatus && taxRangeSheet?.taxRates) {
+  //   const taxRatesForStatus = taxRangeSheet.taxRates.map((el) => {
+  //     const { min, max, TaxRate } = el?.Individual || {};
+  //     const annualIncome = clientInfoForm?.basicInformation?.annualGrossIncome;
+
+  //     if (min < annualIncome && max > annualIncome) {
+  //       return TaxRate;
+  //     }
+  //     return null;
+  //   });
+
+  //   const matchedRate = taxRatesForStatus.find((rate) => rate !== null);
+  //   if (matchedRate !== undefined) {
+  //     setClientTaxRate(matchedRate);
+  //   }
+  // }
+
+  const taxableAmount =
+    clientInfoForm?.basicInformation?.annualGrossIncome *
+    (parseFloat(clientTaxRate) / 100);
+
   return (
     <div>
       <div className="border border-[#B1B1B1] p-5 2xl:p-8">
@@ -8,7 +133,7 @@ const ShowCalculateValueRightSide = () => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            $46,5456
+            ${taxableAmount}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -22,7 +147,7 @@ const ShowCalculateValueRightSide = () => {
                   Gross income
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $100,000
+                  ${clientInfoForm?.basicInformation?.annualGrossIncome}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -30,7 +155,7 @@ const ShowCalculateValueRightSide = () => {
                   <span>-</span> Standard deduction
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $13,850
+                  ${taxableAmount}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -51,7 +176,9 @@ const ShowCalculateValueRightSide = () => {
                 Taxable income
               </span>
               <span className="text-base font-medium text-[#126742]">
-                $86150
+                $
+                {clientInfoForm?.basicInformation?.annualGrossIncome -
+                  taxableAmount}
               </span>
             </p>
           </div>
@@ -86,7 +213,7 @@ const ShowCalculateValueRightSide = () => {
                 Taxes owed
               </span>
               <span className="text-base font-medium text-[#B50302]">
-                $14,260.38
+                ${taxableAmount}
               </span>
             </p>
           </div>
@@ -98,6 +225,7 @@ const ShowCalculateValueRightSide = () => {
                 </span>
                 <span className="text-base font-normal text-[#126742]">
                   22%
+                  {/* {clientTaxRate}% */}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -105,7 +233,7 @@ const ShowCalculateValueRightSide = () => {
                   Effective tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  16.55%
+                  {clientTaxRate}%
                 </span>
               </li>
             </ul>

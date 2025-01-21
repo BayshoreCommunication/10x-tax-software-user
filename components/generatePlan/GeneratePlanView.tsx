@@ -240,7 +240,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
           </div>
           {/* Tax Plan / Right Side */}
           <div className="w-[70%] ">
-            <ShowCalculateValueRightSide />
+            <ShowCalculateValueRightSide clientInfoForm={clientInfoForm} />
 
             {/* Error handle */}
 

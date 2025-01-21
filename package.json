@@ -26,7 +26,7 @@
     "@react-aria/visually-hidden": "3.8.12",
     "@reduxjs/toolkit": "^2.5.0",
     "@stripe/react-stripe-js": "^3.0.0",
-    "@stripe/stripe-js": "^5.2.0",
+    "@stripe/stripe-js": "^5.5.0",
     "@types/aos": "^3.0.7",
     "@types/html2canvas": "^1.0.0",
     "@types/react-icons": "^3.0.0",

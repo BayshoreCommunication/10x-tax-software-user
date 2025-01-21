@@ -133,16 +133,14 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
               >
                 <ul className="divide-y divide-gray-900">
                   {[
-                    "Single",
+                    "Individual",
                     "Married Filing Jointly",
                     "Married Filing separately",
                     "Head of household",
                   ].map((status) => (
                     <li key={status}>
                       <button
-                        onClick={() =>
-                          onMarriedStatusHandler(status.toLowerCase())
-                        }
+                        onClick={() => onMarriedStatusHandler(status)}
                         className="block w-full px-4 py-2 text-left text-lg text-white hover:bg-[#474f6b]"
                         role="menuitem"
                       >

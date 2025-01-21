@@ -91,6 +91,7 @@ const CheckoutForm = ({
             amount: 50,
             currency: "usd",
             customerDetails,
+            paymentMethodType: ["card"],
           }),
         }
       );
@@ -206,7 +207,7 @@ const CheckoutForm = ({
       <div className="py-6 flex justify-center items-center mx-0">
         <button
           type="submit"
-          className="text-white bg-primary hover:bg-[#be9837] font-medium rounded-lg text-lg px-5 py-3 w-[50%]"
+          className="text-white bg-primary hover:bg-hoverColor font-medium rounded-lg text-lg px-5 py-3 w-[50%]"
           disabled={!stripe || processing}
         >
           {processing ? (
@@ -232,7 +233,7 @@ const CheckoutForm = ({
               <p>Processing...</p>
             </div>
           ) : (
-            <p>Payment</p>
+            <p>Pay with Bank Card</p>
           )}
         </button>
       </div>
