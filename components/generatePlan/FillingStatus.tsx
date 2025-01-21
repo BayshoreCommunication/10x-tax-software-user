@@ -154,7 +154,7 @@ const FillingStatus = ({
                 >
                   <ul className="divide-y divide-gray-200">
                     {[
-                      "Individual",
+                      "Single",
                       "Married Filing Jointly",
                       "Married Filing separately",
                       "Head of household",

@@ -133,7 +133,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
               >
                 <ul className="divide-y divide-gray-900">
                   {[
-                    "Individual",
+                    "Single",
                     "Married Filing Jointly",
                     "Married Filing separately",
                     "Head of household",
@@ -328,7 +328,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                 htmlFor="bordered-radio-1"
                 className="w-full py-4 ms-2 text-lg font-normal text-white"
               >
-                Itemized Deduction
+                Standard Deduction
               </label>
             </div>
 
@@ -346,7 +346,7 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
                 htmlFor="bordered-radio-2"
                 className="w-full py-4 ms-2 text-lg font-normal text-white"
               >
-                Standard Deduction
+                Itemized Deduction
               </label>
             </div>
           </div>

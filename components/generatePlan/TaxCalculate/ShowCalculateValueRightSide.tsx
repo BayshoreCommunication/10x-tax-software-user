@@ -33,8 +33,10 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
     };
 
     fetchTaxRangeSheet();
+  }, [1]);
 
-    if (clientInfoForm?.fillingStatus === "Individual") {
+  useEffect(() => {
+    if (clientInfoForm?.fillingStatus === "Single") {
       taxRangeSheet?.taxRates?.map((el: any, index: any) => {
         if (
           el?.Individual?.min !== undefined &&
@@ -87,38 +89,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
         }
       });
     }
-
-    // const filingStatusKey =
-    //   clientInfoForm?.fillingStatus?.replace(/\s+/g, "") || "";
-
-    // taxRangeSheet?.taxRates?.forEach((el) => {
-    //   const statusData = el?.[filingStatusKey];
-    //   const annualIncome = clientInfoForm?.basicInformation?.annualGrossIncome;
-
-    //   if (statusData?.min < annualIncome && statusData?.max > annualIncome) {
-    //     setClientTaxRate(el?.TaxRate);
-    //   }
-    // });
-  }, [clientInfoForm]);
-
-  // taxRangeSheet?.map((el, index)=> if(el))
-
-  // if (clientInfoForm?.fillingStatus && taxRangeSheet?.taxRates) {
-  //   const taxRatesForStatus = taxRangeSheet.taxRates.map((el) => {
-  //     const { min, max, TaxRate } = el?.Individual || {};
-  //     const annualIncome = clientInfoForm?.basicInformation?.annualGrossIncome;
-
-  //     if (min < annualIncome && max > annualIncome) {
-  //       return TaxRate;
-  //     }
-  //     return null;
-  //   });
-
-  //   const matchedRate = taxRatesForStatus.find((rate) => rate !== null);
-  //   if (matchedRate !== undefined) {
-  //     setClientTaxRate(matchedRate);
-  //   }
-  // }
+  }, [taxRangeSheet, clientInfoForm]);
 
   const taxableAmount =
     clientInfoForm?.basicInformation?.annualGrossIncome *
