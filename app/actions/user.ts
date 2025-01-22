@@ -362,6 +362,9 @@ export async function getUserOverviewDetails(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
+        next: {
+          tags: ["clientDataCreate", "clientDataDelete", "clientDataUpdate"],
+        },
       }
     );
 
