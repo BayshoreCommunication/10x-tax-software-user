@@ -85,7 +85,11 @@ export async function middleware(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error("Middleware error:", error.message);
+    if (error instanceof Error) {
+      console.error("Middleware error:", error.message);
+    } else {
+      console.error("Middleware error:", error);
+    }
     // Redirect to sign-in on error
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
