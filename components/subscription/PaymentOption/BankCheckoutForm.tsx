@@ -40,7 +40,6 @@ const BankAccountCheckoutForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
     if (!stripe || !elements) {
       setError("Stripe has not loaded yet. Please try again later.");
       return;
@@ -50,17 +49,16 @@ const BankAccountCheckoutForm = ({
     setProcessing(true);
 
     try {
-
       const paymentMethodResult = await stripe.createPaymentMethod({
         type: "us_bank_account",
         us_bank_account: {
-          account_number: paymentInfo.accountNumber, 
-          routing_number: paymentInfo.routingNumber, 
-          account_holder_type: "individual", 
+          account_number: paymentInfo.accountNumber,
+          routing_number: paymentInfo.routingNumber,
+          account_holder_type: "individual",
         },
         billing_details: {
-          name: paymentInfo.name,
-          email: paymentInfo.email,
+          name: paymentInfo?.name,
+          email: paymentInfo?.email,
         },
       });
 
@@ -79,7 +77,6 @@ const BankAccountCheckoutForm = ({
         );
       }
 
-
       const paymentIntentResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/create-payment-intent`,
         {
@@ -89,10 +86,10 @@ const BankAccountCheckoutForm = ({
             Authorization: `${token}`,
           },
           body: JSON.stringify({
-            amount: 50, 
+            amount: 50,
             currency: "usd",
-            paymentMethodType: ["us_bank_account"], 
-            customerDetails, 
+            paymentMethodType: ["us_bank_account"],
+            customerDetails,
           }),
         }
       );
@@ -110,7 +107,6 @@ const BankAccountCheckoutForm = ({
 
       const { clientSecret } = paymentIntentData.payload;
 
- 
       const paymentInfos = {
         email: paymentInfo.email,
         name: paymentInfo.name,

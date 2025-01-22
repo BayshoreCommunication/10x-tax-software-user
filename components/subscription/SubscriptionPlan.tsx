@@ -26,7 +26,7 @@ const SubscriptionPlan = () => {
             <div className="w-full flex items-center">
               <Link
                 href={`confirm-subscription/monthly`}
-                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+                className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
               >
                 Choose Plan
               </Link>
@@ -54,7 +54,7 @@ const SubscriptionPlan = () => {
             <div className="w-full flex items-center">
               <Link
                 href={`/confirm-subscription/yearly`}
-                className=" bg-primary py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
+                className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
               >
                 Choose Plan & Save16%
               </Link>

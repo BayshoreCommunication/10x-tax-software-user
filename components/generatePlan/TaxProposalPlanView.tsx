@@ -12,6 +12,7 @@ import ViewTaxProposal from "./ViewTaxProposal";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { formatDate } from "../shared/ui/DateFormat";
 
 const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
   const taxInfo = useSelector((state: RootState) => state.taxInfo);
@@ -36,12 +37,12 @@ const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
                   <div className="p-3 bg-primary text-white rounded-lg ">
                     <SiAdobeacrobatreader className="text-2xl" />
                   </div>
-                  <div>
+                  <div className="text-left">
                     <h6 className="text-xl font-medium text-secondary mb-1">
                       Tax Plan
                     </h6>
                     <p className="text-base font-normal text-secondary opacity-70">
-                      19-06-24s
+                      {formatDate(taxInfo?.data?.createdAt)}
                     </p>
                   </div>
                 </div>
@@ -83,12 +84,12 @@ const TaxProposalPlanView = ({ clientDetails, taxId }: any) => {
                   <div className="p-3 bg-primary text-white rounded-lg ">
                     <SiAdobeacrobatreader className="text-2xl" />
                   </div>
-                  <div>
+                  <div className="text-left">
                     <h6 className="text-xl font-medium text-secondary mb-1">
                       Tax Proposal
                     </h6>
                     <p className="text-base font-normal text-secondary opacity-70">
-                      19-06-24s
+                      {formatDate(taxInfo?.data?.createdAt)}
                     </p>
                   </div>
                 </div>
