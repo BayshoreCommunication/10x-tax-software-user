@@ -29,10 +29,10 @@ const BankAccountCheckoutForm = ({
     email: paymentInfo?.email || "",
     phone: "",
     address: {
-      // line1: "",
+      line1: "",
       city: paymentInfo?.address || "",
-      // state: "NY",
-      // postal_code: "10001",
+      state: "NY",
+      postal_code: "10001",
       country: "US",
     },
   };
@@ -124,6 +124,8 @@ const BankAccountCheckoutForm = ({
         throw new Error("Failed to create subscription.");
       }
 
+      toast.success("Payment successful!");
+
       const paymentResult = await stripe.confirmPayment({
         clientSecret,
         confirmParams: {
@@ -138,8 +140,6 @@ const BankAccountCheckoutForm = ({
             "An unexpected error occurred during payment."
         );
       }
-
-      toast.success("Payment successful!");
     } catch (err: any) {
       console.error("Error:", err);
       setError(err.message || "An unexpected error occurred.");
