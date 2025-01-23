@@ -204,7 +204,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
 
   const beforAdjustment = calculatePercentage(
     clientInfoForm?.basicInformation?.annualGrossIncome,
-    clientTaxRate
+    parseFloat(clientTaxRate)
   );
 
   console.log(
