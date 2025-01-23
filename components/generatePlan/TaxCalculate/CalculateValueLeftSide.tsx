@@ -10,6 +10,9 @@ import { GoQuestion } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 
 const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
+  const [maxHomeOfficeAlert, setMaxHomeOfficeAlert] = useState(false);
+  const [minMaxAgeAlert, setMinMaxAgeAlert] = useState(false);
+
   const [clientAge, setClientAge] = useState<Number | String | null>(
     calculateAge(clientInfoForm?.basicInformation?.dateOfBirth) || ""
   );
@@ -162,7 +165,6 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
           >
             Home Office
           </label>
-
           <input
             autoComplete="off"
             type="text"
@@ -173,6 +175,48 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             value={clientInfoForm.strategy.homeOffice || ""}
             onChange={handleChange}
           />
+          {/* <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className={`border-opacity-10 text-lg rounded-md focus:ring-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80 outline-none text-white !appearance-none ${maxHomeOfficeAlert ? "bg-[#ffaca942] border border-[#db615c] focus:border-red-300" : "bg-[#383E54] border border-white focus:border-primary"}`}
+            placeholder="$"
+            name="strategy.homeOffice"
+            value={clientInfoForm.strategy.homeOffice || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              if (value === "") {
+                setMaxHomeOfficeAlert(false);
+                handleChange(e);
+              } else {
+                const parsedValue = parseInt(value, 10);
+
+                if (parsedValue > 1500) {
+                  setMaxHomeOfficeAlert(true);
+                  handleChange({
+                    target: { name: "strategy.homeOffice", value: value },
+                  });
+                } else if (parsedValue >= 0 && parsedValue < 1501) {
+                  setMaxHomeOfficeAlert(false);
+                  handleChange(e);
+                } else if (parsedValue >= 1501) {
+                  setMaxHomeOfficeAlert(false);
+                  handleChange(e);
+                } else {
+                  setMaxHomeOfficeAlert(false);
+                }
+              }
+            }}
+            min="0"
+            max="1501"
+          />
+
+          {maxHomeOfficeAlert && (
+            <p className="text-red-500 text-base mt-2">
+              Please enter a number between 0 and 1500
+            </p>
+          )} */}
         </div>
 
         {/* Depreciation */}
@@ -302,6 +346,45 @@ const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
             value={Number(clientAge) ?? ""}
             onChange={(e) => setClientAge(Number(e.target.value))}
           />
+
+          {/* <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className={`border-opacity-10 text-lg rounded-md focus:ring-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80 outline-none text-white !appearance-none ${minMaxAgeAlert ? "bg-[#ffaca942] border border-[#db615c] focus:border-red-300" : "bg-[#383E54] border border-white focus:border-primary"}`}
+            placeholder="$"
+            name="strategy.homeOffice"
+            value={clientAge || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              if (value === "") {
+                setMinMaxAgeAlertAlert(false);
+                setClientAge("");
+              } else {
+                const parsedValue = parseInt(value, 10);
+
+                if (parsedValue > 81) {
+                  setMinMaxAgeAlertAlert(true);
+                  setClientAge(81);
+                } else if (parsedValue >= 0 && parsedValue <= 81) {
+                  setMinMaxAgeAlertAlert(false);
+                  setClientAge(parsedValue);
+                } else {
+                  setMinMaxAgeAlertAlert(false);
+                  setClientAge("");
+                }
+              }
+            }}
+            min="0"
+            max="81"
+          /> */}
+
+          {minMaxAgeAlert && (
+            <p className="text-red-500 text-base mt-2">
+              Please enter a number between 18 and 80
+            </p>
+          )}
         </div>
 
         {/* You standard deduction: $13,850  */}

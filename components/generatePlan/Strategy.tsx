@@ -182,7 +182,7 @@ const Strategy = ({
 
         <h3 className="text-xl font-semibold mt-4 mb-1">Entry Structuring</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-[49%]">
+          <div className="w-full">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -201,10 +201,30 @@ const Strategy = ({
               onChange={handleChange}
             />
           </div>
+          <div className="w-full">
+            <label
+              htmlFor="name-icon"
+              className="block mb-2 text-lg font-normal text-gray-900"
+            >
+              Health Insurance
+              {/* <span className="text-primary">*</span> */}
+            </label>
+
+            <input
+              autoComplete="off"
+              type="text"
+              id="email-address-icon"
+              className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
+              placeholder="$"
+              name="strategy.healthInsurance"
+              value={clientInfoForm.strategy.healthInsurance || ""}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <h3 className="text-xl font-semibold mt-4 mb-1">Entry Structuring</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-[49%]">
+          <div className="w-full">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -223,10 +243,30 @@ const Strategy = ({
               onChange={handleChange}
             />
           </div>
+          <div className="w-full">
+            <label
+              htmlFor="name-icon"
+              className="block mb-2 text-lg font-normal text-gray-900"
+            >
+              Fringe Benefits
+              {/* <span className="text-primary">*</span> */}
+            </label>
+
+            <input
+              autoComplete="off"
+              type="text"
+              id="email-address-icon"
+              className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
+              placeholder="$"
+              name="strategy.fringeBenefits"
+              value={clientInfoForm.strategy.fringeBenefits || ""}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <h3 className="text-xl font-semibold mt-4 mb-1">Niche</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-[49%]">
+          <div className="w-full">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -246,10 +286,30 @@ const Strategy = ({
               onChange={handleChange}
             />
           </div>
+          <div className="w-full">
+            <label
+              htmlFor="name-icon"
+              className="block mb-2 text-lg font-normal text-gray-900"
+            >
+              Accountable Plan
+              {/* <span className="text-primary">*</span> */}
+            </label>
+
+            <input
+              autoComplete="off"
+              type="text"
+              id="email-address-icon"
+              className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
+              placeholder="$"
+              name="strategy.accountablePlan"
+              value={clientInfoForm.strategy.accountablePlan || ""}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <h3 className="text-xl font-semibold mt-4 mb-1">Advanced Strategies</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-[49%]">
+          <div className="w-full">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -266,6 +326,26 @@ const Strategy = ({
               placeholder="$"
               name="strategy.rentHomeToCorporation"
               value={clientInfoForm.strategy.rentHomeToCorporation || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="w-full">
+            <label
+              htmlFor="name-icon"
+              className="block mb-2 text-lg font-normal text-gray-900"
+            >
+              Other
+              {/* <span className="text-primary">*</span> */}
+            </label>
+
+            <input
+              autoComplete="off"
+              type="text"
+              id="email-address-icon"
+              className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
+              placeholder="$"
+              name="strategy.other"
+              value={clientInfoForm.strategy.other || ""}
               onChange={handleChange}
             />
           </div>
