@@ -202,9 +202,10 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
     parseFloat(clientTaxRate)
   );
 
-  const beforAdjustment =
-    clientInfoForm?.basicInformation?.annualGrossIncome *
-    (parseFloat(clientTaxRate) / 100);
+  const beforAdjustment = calculatePercentage(
+    clientInfoForm?.basicInformation?.annualGrossIncome,
+    clientTaxRate
+  );
 
   console.log(
     "check right now",
@@ -220,7 +221,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${taxableAmount}
+            ${beforAdjustment}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -265,7 +266,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
               <span className="text-base font-medium text-[#126742]">
                 $
                 {clientInfoForm?.basicInformation?.annualGrossIncome -
-                  totalDeductions}
+                  beforAdjustment}
               </span>
             </p>
           </div>
