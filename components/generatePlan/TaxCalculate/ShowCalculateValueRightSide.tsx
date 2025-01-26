@@ -1,216 +1,191 @@
 "use client";
 
-import { getTaxRangeSheet } from "@/app/actions/taxplan";
-import { useEffect, useState } from "react";
-
-interface TaxRate {
-  Individual?: { min: number; max: number };
-  MarriedFilingJointly?: { min: number; max: number };
-  MarriedFilingSeparately?: { min: number; max: number };
-  HeadOfHousehold?: { min: number; max: number };
-  TaxRate: number;
+interface TaxBracket {
+  min: number;
+  max: number | null; // Use null for no upper limit
+  rate: number; // Tax rate in percentage
 }
 
-interface TaxRangeSheet {
-  taxRates: TaxRate[];
+const taxData = {
+  Single: [
+    { min: 0, max: 11600, rate: 10 },
+    { min: 11601, max: 47150, rate: 12 },
+    { min: 47151, max: 100525, rate: 22 },
+    { min: 100526, max: 191950, rate: 24 },
+    { min: 191951, max: 243725, rate: 32 },
+    { min: 243726, max: 609350, rate: 35 },
+    { min: 609351, max: null, rate: 37 },
+  ],
+  "Married filing jointly": [
+    { min: 0, max: 23200, rate: 10 },
+    { min: 23201, max: 94300, rate: 12 },
+    { min: 94301, max: 201050, rate: 22 },
+    { min: 201051, max: 383900, rate: 24 },
+    { min: 383901, max: 487450, rate: 32 },
+    { min: 487451, max: 731200, rate: 35 },
+    { min: 731201, max: null, rate: 37 },
+  ],
+  "Married filing separately": [
+    { min: 0, max: 11600, rate: 10 },
+    { min: 11601, max: 47150, rate: 12 },
+    { min: 47151, max: 100525, rate: 22 },
+    { min: 100526, max: 191950, rate: 24 },
+    { min: 191951, max: 243725, rate: 32 },
+    { min: 243726, max: 365600, rate: 35 },
+    { min: 365601, max: null, rate: 37 },
+  ],
+  "Head of household": [
+    { min: 0, max: 16550, rate: 10 },
+    { min: 16551, max: 63100, rate: 12 },
+    { min: 63101, max: 100525, rate: 22 },
+    { min: 100526, max: 191950, rate: 24 },
+    { min: 191951, max: 243700, rate: 32 },
+    { min: 243701, max: 609350, rate: 35 },
+    { min: 609351, max: null, rate: 37 },
+  ],
+};
+
+interface MarginalTaxRateDetails {
+  taxableIncome: number;
+  marginalRate: number;
+  bracket: TaxBracket;
 }
 
 const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
-  const [taxRangeSheet, setTaxRangeSheet] = useState<TaxRangeSheet | null>(
-    null
-  );
+  // const [filingStatus, setFilingStatus] = useState<FilingStatus | undefined>(
+  //   clientInfoForm?.fillingStatus || "Single"
+  // );
+  // const [calculatedTax, setCalculatedTax] = useState<number>(0);
+  // const [effectiveTaxRate, setEffectiveTaxRate] = useState<number>(0);
+  // const [taxableIncome, setTaxableIncome] = useState<number | null>(null);
+  // const [totalDeductions, setTotalDeductions] = useState<number>(0);
+  // const [marginalTaxRate, setMarginalTaxRate] = useState<
+  //   MarginalTaxRateDetails[]
+  // >([]);
 
-  const [clientTaxRate, setClientTaxRate] = useState("");
+  // // Helper: Calculate dependents' deductions
+  // const calculateDependentsDeduction = (
+  //   dependents: Dependents | undefined
+  // ): number => {
+  //   if (!dependents) return 0;
 
-  useEffect(() => {
-    const fetchTaxRangeSheet = async () => {
-      try {
-        const response = await getTaxRangeSheet();
-        setTaxRangeSheet(response?.data?.taxPlan?.taxRangeSheet);
-      } catch (error) {
-        console.error("Error fetching tax range sheet:", error);
-      }
-    };
+  //   return (
+  //     (dependents.underAge17 || 0) * 2000 +
+  //     (dependents.fullTimeStudentsAge17To23 || 0) * 500 +
+  //     (dependents.otherDependents || 0) * 1
+  //   );
+  // };
 
-    fetchTaxRangeSheet();
-  }, [1]);
+  // // Helper: Calculate strategy deductions
+  // const calculateStrategyDeductions = (
+  //   strategy: Strategy | null | undefined
+  // ): number => {
+  //   if (!strategy) {
+  //     return 0;
+  //   }
 
-  useEffect(() => {
-    if (clientInfoForm?.fillingStatus === "Single") {
-      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
-        if (
-          el?.Individual?.min !== undefined &&
-          el?.Individual?.max !== undefined &&
-          el?.Individual?.min <=
-            clientInfoForm?.basicInformation?.annualGrossIncome &&
-          el?.Individual?.max >
-            clientInfoForm?.basicInformation?.annualGrossIncome
-        ) {
-          setClientTaxRate(el?.TaxRate);
-        }
-      });
-    } else if (clientInfoForm?.fillingStatus === "Married Filing Jointly") {
-      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
-        if (
-          el?.MarriedFilingJointly?.min !== undefined &&
-          el?.MarriedFilingJointly?.max !== undefined &&
-          el?.MarriedFilingJointly?.min <=
-            clientInfoForm?.basicInformation?.annualGrossIncome &&
-          el?.MarriedFilingJointly?.max >
-            clientInfoForm?.basicInformation?.annualGrossIncome
-        ) {
-          setClientTaxRate(el?.TaxRate);
-        }
-      });
-    } else if (clientInfoForm?.fillingStatus === "Married Filing separately") {
-      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
-        if (
-          el?.MarriedFilingSeparately?.min !== undefined &&
-          el?.MarriedFilingSeparately?.max !== undefined &&
-          el?.MarriedFilingSeparately?.min <=
-            clientInfoForm?.basicInformation?.annualGrossIncome &&
-          el?.MarriedFilingSeparately?.max >
-            clientInfoForm?.basicInformation?.annualGrossIncome
-        ) {
-          setClientTaxRate(el?.TaxRate);
-        }
-      });
-    } else if (clientInfoForm?.fillingStatus === "Head of household") {
-      taxRangeSheet?.taxRates?.map((el: any, index: any) => {
-        if (
-          el?.HeadOfHousehold?.min !== undefined &&
-          el?.HeadOfHousehold?.max !== undefined &&
-          el?.HeadOfHousehold?.min <=
-            clientInfoForm?.basicInformation?.annualGrossIncome &&
-          el?.HeadOfHousehold?.max >
-            clientInfoForm?.basicInformation?.annualGrossIncome
-        ) {
-          setClientTaxRate(el?.TaxRate);
-        }
-      });
-    }
-  }, [taxRangeSheet, clientInfoForm]);
+  //   return Object.values(strategy).reduce((total, value) => {
+  //     if (typeof value === "string") {
+  //       return total + (parseInt(value, 10) || 0);
+  //     }
+  //     return total;
+  //   }, 0);
+  // };
 
-  const calculatePercentage = (value: any, percent: number) => {
-    return (parseFloat(value) || 0) * (percent / 100);
-  };
+  // // Helper: Calculate marginal tax rate
+  // const calculateMarginalTaxRate = (
+  //   grossIncome: number | null,
+  //   deductions: number,
+  //   filingStatus: FilingStatus
+  // ): MarginalTaxRateDetails => {
+  //   const taxableIncome =
+  //     grossIncome && grossIncome > 0 ? grossIncome - deductions : 0;
+  //   const brackets = taxData[filingStatus];
 
-  // Function to calculate dependents deduction
-  const calculateDependentsDeduction = (dependents: any) => {
-    if (!dependents) return 0;
+  //   if (!brackets || brackets.length === 0) {
+  //     return {
+  //       taxableIncome: 0,
+  //       marginalRate: 0,
+  //       bracket: { min: 0, max: null, rate: 0 },
+  //     };
+  //   }
 
-    const underAge17Deduction = dependents.underAge17
-      ? parseInt(dependents.underAge17, 10) * 2000
-      : 0;
+  //   for (const bracket of brackets) {
+  //     if (
+  //       taxableIncome >= bracket.min &&
+  //       (bracket.max === null || taxableIncome <= bracket.max)
+  //     ) {
+  //       return { taxableIncome, marginalRate: bracket.rate, bracket };
+  //     }
+  //   }
 
-    const fullTimeStudentsDeduction = dependents.fullTimeStudentsAge17To23
-      ? parseInt(dependents.fullTimeStudentsAge17To23, 10) * 500
-      : 0;
+  //   return {
+  //     taxableIncome: 0,
+  //     marginalRate: 0,
+  //     bracket: { min: 0, max: null, rate: 0 },
+  //   };
+  // };
 
-    const otherDependentsDeduction = dependents.otherDependents
-      ? parseInt(dependents.otherDependents, 10) * 1
-      : 0;
+  // // Main calculation flow
+  // const calculateTaxDetails = () => {
+  //   const grossIncome = parseFloat(
+  //     clientInfoForm?.basicInformation?.annualGrossIncome?.toString() || "0"
+  //   );
 
-    return (
-      underAge17Deduction + fullTimeStudentsDeduction + otherDependentsDeduction
-    );
-  };
+  //   // If grossIncome is null or invalid, set default to null
+  //   if (isNaN(grossIncome)) {
+  //     setTaxableIncome(null);
+  //     setCalculatedTax(0);
+  //     setEffectiveTaxRate(0);
+  //     setMarginalTaxRate([]);
+  //     return;
+  //   }
 
-  const calculateStrategyDeductions = (strategy: any) => {
-    if (!strategy) return 0;
+  //   const dependentsDeduction = calculateDependentsDeduction(
+  //     clientInfoForm?.dependents
+  //   );
+  //   const strategyDeductions = calculateStrategyDeductions(
+  //     clientInfoForm?.strategy
+  //   );
 
-    const {
-      costSegregation = "0",
-      depreciation = "0",
-      hiringChildren = "0",
-      homeOffice = "0",
-      meals = "0",
-      rentHomeToCorporation = "0",
-      scheduleCToSCorp = "0",
-      travel = "0",
-      healthInsurance = "0",
-      fringeBenefits = "0",
-      accountablePlan = "0",
-      other = "0",
-    } = strategy;
+  //   const totalDeductions = dependentsDeduction + strategyDeductions;
+  //   setTotalDeductions(totalDeductions);
 
-    return (
-      parseInt(costSegregation, 10) +
-      parseInt(depreciation, 10) +
-      parseInt(hiringChildren, 10) +
-      parseInt(homeOffice, 10) +
-      parseInt(meals, 10) +
-      parseInt(rentHomeToCorporation, 10) +
-      parseInt(scheduleCToSCorp, 10) +
-      parseInt(travel, 10) +
-      parseInt(healthInsurance, 10) +
-      parseInt(fringeBenefits, 10) +
-      parseInt(accountablePlan, 10) +
-      parseInt(other, 10)
-    );
-  };
+  //   const taxableIncome = grossIncome - totalDeductions;
+  //   setTaxableIncome(taxableIncome);
 
-  // Function to calculate the total deductions
-  const calculateTotalDeductions = (
-    dependents: any,
-    strategy: any,
-    clientTaxRate: number
-  ) => {
-    const dependentsDeduct = calculateDependentsDeduction(dependents);
-    const strategyDeduct = calculateStrategyDeductions(strategy);
+  //   // Ensure filingStatus is valid and taxData[filingStatus] exists
+  //   const brackets = taxData[filingStatus || "Single"];
+  //   if (!brackets || brackets.length === 0) {
+  //     console.error("No tax brackets found for the provided filing status.");
+  //     setCalculatedTax(0);
+  //     return;
+  //   }
 
-    return (dependentsDeduct + strategyDeduct || 0) * (clientTaxRate / 100);
-  };
+  //   const totalTax = brackets.reduce((tax, { min, max, rate }) => {
+  //     if (taxableIncome > min) {
+  //       const taxableAmount =
+  //         Math.min(taxableIncome, max ?? taxableIncome) - min;
+  //       tax += taxableAmount * (rate / 100);
+  //     }
+  //     return tax;
+  //   }, 0);
+  //   setCalculatedTax(totalTax);
 
-  // Function to calculate taxable amount
-  const calculateTaxableAmount = (
-    annualGrossIncome: number,
-    totalDeductions: number,
-    clientTaxRate: number
-  ) => {
-    return annualGrossIncome - totalDeductions * (clientTaxRate / 100);
-  };
+  //   const effectiveRate = (totalTax / grossIncome) * 100;
+  //   setEffectiveTaxRate(effectiveRate);
 
-  // Main calculation function
-  const calculateTaxDetails = (clientInfoForm: any, clientTaxRate: number) => {
-    const dependents = clientInfoForm?.dependents || {};
-    const strategy = clientInfoForm?.strategy || {};
-    const annualGrossIncome =
-      clientInfoForm?.basicInformation?.annualGrossIncome || 0;
+  //   const marginalDetails = calculateMarginalTaxRate(
+  //     grossIncome,
+  //     totalDeductions,
+  //     filingStatus || "Single"
+  //   );
+  //   setMarginalTaxRate([marginalDetails]);
+  // };
 
-    // Step-by-step calculation
-    const totalDeductions = calculateTotalDeductions(
-      dependents,
-      strategy,
-      clientTaxRate
-    );
-
-    const taxableAmount = calculateTaxableAmount(
-      annualGrossIncome,
-      totalDeductions,
-      clientTaxRate
-    );
-
-    return {
-      totalDeductions,
-      taxableAmount,
-    };
-  };
-
-  const { totalDeductions, taxableAmount } = calculateTaxDetails(
-    clientInfoForm,
-    parseFloat(clientTaxRate)
-  );
-
-  const beforAdjustment = calculatePercentage(
-    clientInfoForm?.basicInformation?.annualGrossIncome,
-    parseFloat(clientTaxRate)
-  );
-
-  console.log(
-    "check right now",
-    clientInfoForm?.basicInformation?.annualGrossIncome
-  );
+  // useEffect(() => {
+  //   calculateTaxDetails();
+  // }, [clientInfoForm, filingStatus]);
 
   return (
     <div>
@@ -221,7 +196,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${beforAdjustment}
+            {/* ${calculatedTax} */}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -234,16 +209,14 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 <span className="text-base font-normal text-[#555555]">
                   Gross income
                 </span>
-                <span className="text-base font-normal text-[#126742]">
-                  ${clientInfoForm?.basicInformation?.annualGrossIncome}
-                </span>
+                <span className="text-base font-normal text-[#126742]"></span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Standard deduction
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${totalDeductions}
+                  {/* ${totalDeductions} */}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -264,9 +237,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 Taxable income
               </span>
               <span className="text-base font-medium text-[#126742]">
-                $
-                {clientInfoForm?.basicInformation?.annualGrossIncome -
-                  beforAdjustment}
+                {/* ${taxableIncome} */}
               </span>
             </p>
           </div>
@@ -280,7 +251,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Estimated taxes before adjustments
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${beforAdjustment}
+                  {/* ${marginalTaxRate?.taxableIncome} */}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -301,7 +272,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 Taxes owed
               </span>
               <span className="text-base font-medium text-[#B50302]">
-                ${beforAdjustment}
+                {/* ${beforAdjustment} */}
               </span>
             </p>
           </div>
@@ -312,7 +283,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Marginal tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {clientTaxRate}%{/* {clientTaxRate}% */}
+                  {/* {marginalTaxRate?.marginalRate?.toFixed(2)}% */}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -320,7 +291,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Effective tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {clientTaxRate}%
+                  {/* {effectiveTaxRate.toFixed(2)}% */}
                 </span>
               </li>
             </ul>

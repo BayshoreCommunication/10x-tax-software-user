@@ -155,8 +155,8 @@ const FillingStatus = ({
                   <ul className="divide-y divide-gray-200">
                     {[
                       "Single",
-                      "Married Filing Jointly",
-                      "Married Filing separately",
+                      "Married filing jointly",
+                      "Married filing separately",
                       "Head of household",
                     ].map((status) => (
                       <li key={status}>
