@@ -100,6 +100,12 @@ type TaxState = {
   taxesWithheld: number;
 };
 
+interface ShowCalculateValueRightSideProps {
+  clientInfoForm: ClientInfoForm;
+  taxDetails: TaxState | null;
+  setTaxDetails: React.Dispatch<React.SetStateAction<TaxState | null>>;
+}
+
 const taxData = {
   Single: [
     { min: 0, max: 11600, rate: 10 },
@@ -139,11 +145,9 @@ const taxData = {
   ],
 };
 
-const ShowCalculateValueRightSide = ({
-  clientInfoForm,
-}: {
-  clientInfoForm: ClientInfoForm;
-}) => {
+const ShowCalculateValueRightSide: React.FC<
+  ShowCalculateValueRightSideProps
+> = ({ clientInfoForm, taxDetails, setTaxDetails }) => {
   const [filingStatus, setFilingStatus] = useState<FilingStatus>(
     clientInfoForm.fillingStatus
   );
@@ -153,22 +157,6 @@ const ShowCalculateValueRightSide = ({
   const [clientAge, setClientAge] = useState<number | null>(
     calculateAge(clientInfoForm.basicInformation?.dateOfBirth) || null
   );
-
-  const [taxDetails, setTaxDetails] = useState<TaxState | null>({
-    ageDeductions: 0,
-    calculatedTax: 0,
-    effectiveTaxRate: 0,
-    marginalTaxRate: 0,
-    taxableIncome: 0,
-    totalDeductions: 0,
-    standardAndItemizedDeduction: 0,
-    otherDeductions: 0,
-    strategyDeductions: 0,
-    taxesWithheld: 0,
-    taxCredits: 0,
-    taxesOwed: 0,
-    beforAdjustingTax: 0,
-  });
 
   const calculateStandardDeductions = (
     filingStatus: FilingStatus,
@@ -393,7 +381,7 @@ const ShowCalculateValueRightSide = ({
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${taxDetails?.calculatedTax}
+            ${taxDetails?.calculatedTax?.toFixed(2)}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -443,7 +431,7 @@ const ShowCalculateValueRightSide = ({
                 Taxable income
               </span>
               <span className="text-base font-medium text-[#126742]">
-                ${taxDetails?.taxableIncome}
+                ${taxDetails?.taxableIncome?.toFixed(2)}
               </span>
             </p>
           </div>
@@ -457,7 +445,7 @@ const ShowCalculateValueRightSide = ({
                   Estimated taxes before adjustments
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.beforAdjustingTax}
+                  ${taxDetails?.beforAdjustingTax?.toFixed(2)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -482,7 +470,7 @@ const ShowCalculateValueRightSide = ({
                 Taxes owed
               </span>
               <span className="text-base font-medium text-[#B50302]">
-                ${taxDetails?.taxesOwed}
+                ${taxDetails?.taxesOwed?.toFixed(2)}
               </span>
             </p>
           </div>

@@ -77,6 +77,22 @@ interface ClientInfoForm {
   advanced: Advanced;
 }
 
+type TaxState = {
+  calculatedTax: number;
+  otherDeductions: number;
+  strategyDeductions: number;
+  standardAndItemizedDeduction: number;
+  marginalTaxRate: number;
+  effectiveTaxRate: number;
+  taxableIncome: number;
+  ageDeductions: number;
+  taxesOwed: number;
+  beforAdjustingTax: number;
+  taxCredits: number;
+  totalDeductions: number;
+  taxesWithheld: number;
+};
+
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -149,26 +165,29 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     },
   });
 
+  // Taxcalculate
+
+  const [taxDetails, setTaxDetails] = useState<TaxState | null>({
+    ageDeductions: 0,
+    calculatedTax: 0,
+    effectiveTaxRate: 0,
+    marginalTaxRate: 0,
+    taxableIncome: 0,
+    totalDeductions: 0,
+    standardAndItemizedDeduction: 0,
+    otherDeductions: 0,
+    strategyDeductions: 0,
+    taxesWithheld: 0,
+    taxCredits: 0,
+    taxesOwed: 0,
+    beforAdjustingTax: 0,
+  });
+
   // Test Data
 
   const taxPlanData = {
     clientId: id,
-    taxableIncome: {
-      grossIncome: 100000,
-      standardDeduction: 13850,
-      retirementContributions: 0,
-      otherDeductions: 0,
-      taxableIncome: 86150,
-    },
-
-    estimatedFederalTaxes: {
-      estimatedTaxesBeforeAdjustments: 14260,
-      federalTaxesWithheld: 0,
-      taxCredits: 0,
-      taxesOwed: 14260.38,
-      marginalTaxRate: 22,
-      effectiveTaxRate: 16.55,
-    },
+    taxInfo: taxDetails,
   };
 
   const createTaxPlanByClient = async () => {
@@ -249,11 +268,17 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
             <CalculateValueLeftSide
               clientInfoForm={clientInfoForm}
               setClientInfoForm={setClientInfoForm}
+              taxDetails={taxDetails}
+              setTaxDetails={setTaxDetails}
             />
           </div>
           {/* Tax Plan / Right Side */}
           <div className="w-[70%] ">
-            <ShowCalculateValueRightSide clientInfoForm={clientInfoForm} />
+            <ShowCalculateValueRightSide
+              clientInfoForm={clientInfoForm}
+              taxDetails={taxDetails}
+              setTaxDetails={setTaxDetails}
+            />
 
             {/* Error handle */}
 

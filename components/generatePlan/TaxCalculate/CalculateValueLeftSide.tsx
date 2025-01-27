@@ -9,7 +9,11 @@ import { useEffect, useState } from "react";
 import { GoQuestion } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 
-const CalculateValueLeftSide = ({ clientInfoForm, setClientInfoForm }: any) => {
+const CalculateValueLeftSide = ({
+  clientInfoForm,
+  setClientInfoForm,
+  taxDetails,
+}: any) => {
   const [maxHomeOfficeAlert, setMaxHomeOfficeAlert] = useState(false);
   const [minMaxAgeAlert, setMinMaxAgeAlert] = useState(false);
 
