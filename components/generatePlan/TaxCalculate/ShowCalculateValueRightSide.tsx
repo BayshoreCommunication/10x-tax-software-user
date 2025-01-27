@@ -3,6 +3,11 @@
 import { calculateAge } from "@/components/shared/ageCalculater/ageToDateAndDateToAge";
 import { useEffect, useState } from "react";
 
+interface StandardDeduction {
+  itemizedDeduction: string | undefined;
+  taxesWithheld?: string | undefined;
+}
+
 type FilingStatus =
   | "Single"
   | "Married filing jointly"
@@ -30,6 +35,12 @@ interface Dependents {
   otherDependents: string;
   totalNumberOfDependents: string;
 }
+interface Advanced {
+  contributations: string;
+  iRAContributations: string;
+  otherDeductions: string;
+  taxCredits: string;
+}
 
 interface ClientInfoForm {
   fillingStatus: FilingStatus;
@@ -37,7 +48,8 @@ interface ClientInfoForm {
   strategy: Strategy;
   dependents: Dependents;
   deduction: boolean;
-  standardDeduction: { itemizedDeduction: string };
+  advanced: Advanced;
+  standardDeduction: StandardDeduction | undefined;
 }
 
 interface BasicInformation {
@@ -64,6 +76,29 @@ interface TaxBracket {
   max: number | null;
   rate: number;
 }
+
+interface Advanced {
+  contributations: string;
+  iRAContributations: string;
+  otherDeductions: string;
+  taxCredits: string;
+}
+
+type TaxState = {
+  calculatedTax: number;
+  otherDeductions: number;
+  strategyDeductions: number;
+  standardAndItemizedDeduction: number;
+  marginalTaxRate: number;
+  effectiveTaxRate: number;
+  taxableIncome: number;
+  ageDeductions: number;
+  taxesOwed: number;
+  beforAdjustingTax: number;
+  taxCredits: number;
+  totalDeductions: number;
+  taxesWithheld: number;
+};
 
 const taxData = {
   Single: [
@@ -119,7 +154,7 @@ const ShowCalculateValueRightSide = ({
     calculateAge(clientInfoForm.basicInformation?.dateOfBirth) || null
   );
 
-  const [taxDetails, setTaxDetails] = useState({
+  const [taxDetails, setTaxDetails] = useState<TaxState | null>({
     ageDeductions: 0,
     calculatedTax: 0,
     effectiveTaxRate: 0,
@@ -132,12 +167,13 @@ const ShowCalculateValueRightSide = ({
     taxesWithheld: 0,
     taxCredits: 0,
     taxesOwed: 0,
+    beforAdjustingTax: 0,
   });
 
   const calculateStandardDeductions = (
     filingStatus: FilingStatus,
     deduction: boolean,
-    itemizedDeduction: string
+    itemizedDeduction: string | undefined
   ): number => {
     let deductionsValue = 0;
     if (!deduction) {
@@ -153,9 +189,16 @@ const ShowCalculateValueRightSide = ({
     return deductionsValue;
   };
 
-  const calculateStrategyDeductions = (
-    strategy: Record<string, string>
-  ): number => {
+  // const calculateStrategyDeductions = (
+  //   strategy: Record<string, string>
+  // ): number => {
+  //   return Object.values(strategy).reduce((total, value) => {
+  //     const numericValue = parseFloat(value);
+  //     return total + (isNaN(numericValue) ? 0 : numericValue);
+  //   }, 0);
+  // };
+
+  const calculateStrategyDeductions = (strategy: Strategy): number => {
     return Object.values(strategy).reduce((total, value) => {
       const numericValue = parseFloat(value);
       return total + (isNaN(numericValue) ? 0 : numericValue);
@@ -175,11 +218,29 @@ const ShowCalculateValueRightSide = ({
     );
   };
 
+  // const calculateAgeDeductions = (
+  //   clientAge: number | null,
+  //   filingStatus: FilingStatus | undefined
+  // ): number => {
+  //   if (clientAge && clientAge > 65) {
+  //     const deductionsMap: Record<FilingStatus, number> = {
+  //       Single: 13850,
+  //       "Married filing jointly": 27700,
+  //       "Head of household": 20800,
+  //       "Married filing separately": 13850,
+  //     };
+
+  //     return deductionsMap[filingStatus || ""] || 0;
+  //   }
+
+  //   return 0;
+  // };
+
   const calculateAgeDeductions = (
     clientAge: number | null,
     filingStatus: FilingStatus | undefined
   ): number => {
-    if (clientAge && clientAge > 65) {
+    if (clientAge && clientAge > 65 && filingStatus) {
       const deductionsMap: Record<FilingStatus, number> = {
         Single: 13850,
         "Married filing jointly": 27700,
@@ -187,7 +248,7 @@ const ShowCalculateValueRightSide = ({
         "Married filing separately": 13850,
       };
 
-      return deductionsMap[filingStatus || ""] || 0;
+      return deductionsMap[filingStatus] || 0;
     }
 
     return 0;
@@ -232,7 +293,7 @@ const ShowCalculateValueRightSide = ({
     const totalStandardDeductions = calculateStandardDeductions(
       clientInfoForm?.fillingStatus,
       clientInfoForm?.deduction,
-      clientInfoForm?.standardDeduction?.itemizedDeduction || 0
+      clientInfoForm?.standardDeduction?.itemizedDeduction
     );
 
     const ageDeductions = calculateAgeDeductions(
@@ -252,7 +313,8 @@ const ShowCalculateValueRightSide = ({
         totalStandardDeductions || 0;
 
     const taxableIncome =
-      clientInfoForm?.basicInformation?.annualGrossIncome - totalDeductions;
+      (clientInfoForm?.basicInformation?.annualGrossIncome ?? 0) -
+      totalDeductions;
 
     const calculateTotalTax = (
       income: number,
@@ -267,7 +329,8 @@ const ShowCalculateValueRightSide = ({
 
         if (remainingIncome <= min) break;
 
-        if (remainingIncome > max) {
+        // Check if max is null or undefined
+        if (max !== null && remainingIncome > max) {
           totalTax += (max - min) * (rate / 100);
           remainingIncome -= max - min;
         } else {
@@ -292,10 +355,8 @@ const ShowCalculateValueRightSide = ({
     );
 
     const taxGiven =
-      parseFloat(
-        clientInfoForm?.advanced?.taxCredits +
-          clientInfoForm?.standardDeduction?.taxesWithheld
-      ) || 0;
+      parseFloat(clientInfoForm?.advanced?.taxCredits || "0") +
+      parseFloat(clientInfoForm?.standardDeduction?.taxesWithheld || "0");
 
     const taxesOwed = totalTax - taxGiven;
 
@@ -315,10 +376,13 @@ const ShowCalculateValueRightSide = ({
       ageDeductions: ageDeductions || 0,
       taxesOwed: taxesOwed || 0,
       beforAdjustingTax: totalTax || 0,
-      taxCredits: clientInfoForm?.advanced?.taxCredits || 0,
-      taxesWithheld: clientInfoForm?.standardDeduction?.taxesWithheld || 0,
+      taxCredits: parseFloat(clientInfoForm?.advanced?.taxCredits || "0"),
+      taxesWithheld: parseFloat(
+        clientInfoForm?.standardDeduction?.taxesWithheld || "0"
+      ),
+      totalDeductions: totalDeductions || 0,
     });
-  }, [clientInfoForm]);
+  }, [clientInfoForm, clientInfoForm?.strategy]);
 
   return (
     <div>

@@ -38,6 +38,10 @@ interface Strategy {
   scheduleCToSCorp: string;
   costSegregation: string;
   rentHomeToCorporation: string;
+  healthInsurance: string;
+  fringeBenefits: string;
+  accountablePlan: string;
+  other: string;
 }
 
 interface Dependents {
@@ -58,8 +62,13 @@ interface Advanced {
   taxCredits: string;
 }
 
+type FilingStatus =
+  | "Single"
+  | "Married filing jointly"
+  | "Married filing separately"
+  | "Head of household";
 interface ClientInfoForm {
-  fillingStatus: string;
+  fillingStatus: FilingStatus;
   deduction: boolean;
   basicInformation: BasicInformation;
   strategy: Strategy;
@@ -110,6 +119,10 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       costSegregation: clientDetails?.strategy?.costSegregation || "",
       rentHomeToCorporation:
         clientDetails?.strategy?.rentHomeToCorporation || "",
+      healthInsurance: clientDetails?.strategy?.healthInsurance || "",
+      fringeBenefits: clientDetails?.strategy?.fringeBenefits || "",
+      accountablePlan: clientDetails?.strategy?.accountablePlan || "",
+      other: clientDetails?.strategy?.other || "",
     },
 
     dependents: {

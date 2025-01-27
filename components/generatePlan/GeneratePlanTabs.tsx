@@ -51,11 +51,40 @@ interface Dependents {
   totalNumberOfDependents: string;
 }
 
+type FilingStatus =
+  | "Single"
+  | "Married filing jointly"
+  | "Married filing separately"
+  | "Head of household";
+
+interface Advanced {
+  contributations: string;
+  iRAContributations: string;
+  otherDeductions: string;
+  taxCredits: string;
+}
+
 interface ClientInfoForm {
   fillingStatus: string;
-  basicInformation: BasicInformation;
-  strategy: Strategy;
-  dependents: Dependents;
+  basicInformation: {
+    fullName: string;
+    phone: string;
+    email: string;
+    profession: string;
+    annualGrossIncome: number;
+    dateOfBirth: string;
+    maritalStatus: string;
+    address: string;
+    spouseDetails: {
+      fullName: string;
+      profession: string;
+      income: number;
+      dateOfBirth: string;
+    };
+  };
+  strategy: Record<string, any>;
+  dependents: Record<string, any>;
+  advanced?: Record<string, any>; // Make 'advanced' optional
 }
 
 const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
@@ -87,7 +116,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       email: clientDetails?.basicInformation?.email || "",
       profession: clientDetails?.basicInformation?.profession || "",
       annualGrossIncome:
-        clientDetails?.basicInformation?.annualGrossIncome || null,
+        clientDetails?.basicInformation?.annualGrossIncome || 0,
       dateOfBirth: clientDetails?.basicInformation?.dateOfBirth || "",
       maritalStatus: clientDetails?.basicInformation?.maritalStatus || "",
       address: clientDetails?.basicInformation?.address || "",
@@ -96,7 +125,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
           clientDetails?.basicInformation?.spouseDetails?.fullName || "",
         profession:
           clientDetails?.basicInformation?.spouseDetails?.profession || "",
-        income: clientDetails?.basicInformation?.spouseDetails?.income || null,
+        income: clientDetails?.basicInformation?.spouseDetails?.income || 0,
         dateOfBirth:
           clientDetails?.basicInformation?.spouseDetails?.dateOfBirth || "",
       },
@@ -111,7 +140,6 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       costSegregation: clientDetails?.strategy?.costSegregation || "",
       rentHomeToCorporation:
         clientDetails?.strategy?.rentHomeToCorporation || "",
-
       healthInsurance: clientDetails?.strategy?.healthInsurance || "",
       fringeBenefits: clientDetails?.strategy?.fringeBenefits || "",
       accountablePlan: clientDetails?.strategy?.accountablePlan || "",
@@ -125,6 +153,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       totalNumberOfDependents:
         clientDetails?.dependents?.totalNumberOfDependents || "",
     },
+    advanced: clientDetails?.advanced || {}, // Add 'advanced' here, with a default value (empty object)
   });
 
   // Handler for marital status
