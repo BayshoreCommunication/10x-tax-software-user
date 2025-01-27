@@ -1,9 +1,68 @@
 "use client";
 
+import { calculateAge } from "@/components/shared/ageCalculater/ageToDateAndDateToAge";
+import { useEffect, useState } from "react";
+
+type FilingStatus =
+  | "Single"
+  | "Married filing jointly"
+  | "Married filing separately"
+  | "Head of household";
+
+interface Strategy {
+  homeOffice: string;
+  depreciation: string;
+  travel: string;
+  meals: string;
+  hiringChildren: string;
+  scheduleCToSCorp: string;
+  costSegregation: string;
+  rentHomeToCorporation: string;
+  healthInsurance: string;
+  fringeBenefits: string;
+  accountablePlan: string;
+  other: string;
+}
+
+interface Dependents {
+  underAge17: string;
+  fullTimeStudentsAge17To23: string;
+  otherDependents: string;
+  totalNumberOfDependents: string;
+}
+
+interface ClientInfoForm {
+  fillingStatus: FilingStatus;
+  basicInformation: BasicInformation;
+  strategy: Strategy;
+  dependents: Dependents;
+  deduction: boolean;
+  standardDeduction: { itemizedDeduction: string };
+}
+
+interface BasicInformation {
+  fullName: string;
+  phone: string;
+  email: string;
+  profession: string;
+  annualGrossIncome: number | null;
+  dateOfBirth: string;
+  maritalStatus: string;
+  address: string;
+  spouseDetails: SpouseDetails;
+}
+
+interface SpouseDetails {
+  fullName: string;
+  profession: string;
+  income: number | null;
+  dateOfBirth: string;
+}
+
 interface TaxBracket {
   min: number;
-  max: number | null; // Use null for no upper limit
-  rate: number; // Tax rate in percentage
+  max: number | null;
+  rate: number;
 }
 
 const taxData = {
@@ -45,147 +104,221 @@ const taxData = {
   ],
 };
 
-interface MarginalTaxRateDetails {
-  taxableIncome: number;
-  marginalRate: number;
-  bracket: TaxBracket;
-}
+const ShowCalculateValueRightSide = ({
+  clientInfoForm,
+}: {
+  clientInfoForm: ClientInfoForm;
+}) => {
+  const [filingStatus, setFilingStatus] = useState<FilingStatus>(
+    clientInfoForm.fillingStatus
+  );
+  const [grossIncome, setGrossIncome] = useState<number | null>(
+    clientInfoForm.basicInformation?.annualGrossIncome || null
+  );
+  const [clientAge, setClientAge] = useState<number | null>(
+    calculateAge(clientInfoForm.basicInformation?.dateOfBirth) || null
+  );
 
-const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
-  // const [filingStatus, setFilingStatus] = useState<FilingStatus | undefined>(
-  //   clientInfoForm?.fillingStatus || "Single"
-  // );
-  // const [calculatedTax, setCalculatedTax] = useState<number>(0);
-  // const [effectiveTaxRate, setEffectiveTaxRate] = useState<number>(0);
-  // const [taxableIncome, setTaxableIncome] = useState<number | null>(null);
-  // const [totalDeductions, setTotalDeductions] = useState<number>(0);
-  // const [marginalTaxRate, setMarginalTaxRate] = useState<
-  //   MarginalTaxRateDetails[]
-  // >([]);
+  const [taxDetails, setTaxDetails] = useState({
+    ageDeductions: 0,
+    calculatedTax: 0,
+    effectiveTaxRate: 0,
+    marginalTaxRate: 0,
+    taxableIncome: 0,
+    totalDeductions: 0,
+    standardAndItemizedDeduction: 0,
+    otherDeductions: 0,
+    strategyDeductions: 0,
+    taxesWithheld: 0,
+    taxCredits: 0,
+    taxesOwed: 0,
+  });
 
-  // // Helper: Calculate dependents' deductions
-  // const calculateDependentsDeduction = (
-  //   dependents: Dependents | undefined
-  // ): number => {
-  //   if (!dependents) return 0;
+  const calculateStandardDeductions = (
+    filingStatus: FilingStatus,
+    deduction: boolean,
+    itemizedDeduction: string
+  ): number => {
+    let deductionsValue = 0;
+    if (!deduction) {
+      if (filingStatus === "Single") deductionsValue = 15000;
+      else if (filingStatus === "Married filing jointly")
+        deductionsValue = 30000;
+      else if (filingStatus === "Head of household") deductionsValue = 22500;
+      else if (filingStatus === "Married filing separately")
+        deductionsValue = 15000;
+    } else {
+      deductionsValue = parseFloat(itemizedDeduction || "0");
+    }
+    return deductionsValue;
+  };
 
-  //   return (
-  //     (dependents.underAge17 || 0) * 2000 +
-  //     (dependents.fullTimeStudentsAge17To23 || 0) * 500 +
-  //     (dependents.otherDependents || 0) * 1
-  //   );
-  // };
+  const calculateStrategyDeductions = (
+    strategy: Record<string, string>
+  ): number => {
+    return Object.values(strategy).reduce((total, value) => {
+      const numericValue = parseFloat(value);
+      return total + (isNaN(numericValue) ? 0 : numericValue);
+    }, 0);
+  };
 
-  // // Helper: Calculate strategy deductions
-  // const calculateStrategyDeductions = (
-  //   strategy: Strategy | null | undefined
-  // ): number => {
-  //   if (!strategy) {
-  //     return 0;
-  //   }
+  const calculateDependentsDeduction = (
+    dependents: Dependents | undefined
+  ): number => {
+    if (!dependents) return 0;
+    const underAge17 = parseInt(dependents.underAge17) || 0;
+    const fullTimeStudentsAge17To23 =
+      parseInt(dependents.fullTimeStudentsAge17To23) || 0;
+    const otherDependents = parseInt(dependents.otherDependents) || 0;
+    return (
+      underAge17 * 2000 + fullTimeStudentsAge17To23 * 500 + otherDependents * 1
+    );
+  };
 
-  //   return Object.values(strategy).reduce((total, value) => {
-  //     if (typeof value === "string") {
-  //       return total + (parseInt(value, 10) || 0);
-  //     }
-  //     return total;
-  //   }, 0);
-  // };
+  const calculateAgeDeductions = (
+    clientAge: number | null,
+    filingStatus: FilingStatus | undefined
+  ): number => {
+    if (clientAge && clientAge > 65) {
+      const deductionsMap: Record<FilingStatus, number> = {
+        Single: 13850,
+        "Married filing jointly": 27700,
+        "Head of household": 20800,
+        "Married filing separately": 13850,
+      };
 
-  // // Helper: Calculate marginal tax rate
-  // const calculateMarginalTaxRate = (
-  //   grossIncome: number | null,
-  //   deductions: number,
-  //   filingStatus: FilingStatus
-  // ): MarginalTaxRateDetails => {
-  //   const taxableIncome =
-  //     grossIncome && grossIncome > 0 ? grossIncome - deductions : 0;
-  //   const brackets = taxData[filingStatus];
+      return deductionsMap[filingStatus || ""] || 0;
+    }
 
-  //   if (!brackets || brackets.length === 0) {
-  //     return {
-  //       taxableIncome: 0,
-  //       marginalRate: 0,
-  //       bracket: { min: 0, max: null, rate: 0 },
-  //     };
-  //   }
+    return 0;
+  };
 
-  //   for (const bracket of brackets) {
-  //     if (
-  //       taxableIncome >= bracket.min &&
-  //       (bracket.max === null || taxableIncome <= bracket.max)
-  //     ) {
-  //       return { taxableIncome, marginalRate: bracket.rate, bracket };
-  //     }
-  //   }
+  const calculateMarginalTaxRate = (
+    income: number,
+    filingStatus: FilingStatus
+  ): number => {
+    const taxBrackets = taxData[filingStatus];
 
-  //   return {
-  //     taxableIncome: 0,
-  //     marginalRate: 0,
-  //     bracket: { min: 0, max: null, rate: 0 },
-  //   };
-  // };
+    for (let i = 0; i < taxBrackets.length; i++) {
+      const bracket = taxBrackets[i];
+      if (
+        income >= bracket.min &&
+        (bracket.max === null || income <= bracket.max)
+      ) {
+        return bracket.rate;
+      }
+    }
 
-  // // Main calculation flow
-  // const calculateTaxDetails = () => {
-  //   const grossIncome = parseFloat(
-  //     clientInfoForm?.basicInformation?.annualGrossIncome?.toString() || "0"
-  //   );
+    return taxBrackets[taxBrackets.length - 1].rate;
+  };
 
-  //   // If grossIncome is null or invalid, set default to null
-  //   if (isNaN(grossIncome)) {
-  //     setTaxableIncome(null);
-  //     setCalculatedTax(0);
-  //     setEffectiveTaxRate(0);
-  //     setMarginalTaxRate([]);
-  //     return;
-  //   }
+  const calculateEffectiveTaxRate = (
+    income: number,
+    totalTax: number
+  ): number => {
+    if (income > 0) return (totalTax / income) * 100;
+    return 0;
+  };
 
-  //   const dependentsDeduction = calculateDependentsDeduction(
-  //     clientInfoForm?.dependents
-  //   );
-  //   const strategyDeductions = calculateStrategyDeductions(
-  //     clientInfoForm?.strategy
-  //   );
+  useEffect(() => {
+    const strategyDeductions = calculateStrategyDeductions(
+      clientInfoForm?.strategy
+    );
 
-  //   const totalDeductions = dependentsDeduction + strategyDeductions;
-  //   setTotalDeductions(totalDeductions);
+    const dependentsDeduction = calculateDependentsDeduction(
+      clientInfoForm?.dependents
+    );
 
-  //   const taxableIncome = grossIncome - totalDeductions;
-  //   setTaxableIncome(taxableIncome);
+    const totalStandardDeductions = calculateStandardDeductions(
+      clientInfoForm?.fillingStatus,
+      clientInfoForm?.deduction,
+      clientInfoForm?.standardDeduction?.itemizedDeduction || 0
+    );
 
-  //   // Ensure filingStatus is valid and taxData[filingStatus] exists
-  //   const brackets = taxData[filingStatus || "Single"];
-  //   if (!brackets || brackets.length === 0) {
-  //     console.error("No tax brackets found for the provided filing status.");
-  //     setCalculatedTax(0);
-  //     return;
-  //   }
+    const ageDeductions = calculateAgeDeductions(
+      calculateAge(clientInfoForm.basicInformation?.dateOfBirth),
+      clientInfoForm?.fillingStatus
+    );
 
-  //   const totalTax = brackets.reduce((tax, { min, max, rate }) => {
-  //     if (taxableIncome > min) {
-  //       const taxableAmount =
-  //         Math.min(taxableIncome, max ?? taxableIncome) - min;
-  //       tax += taxableAmount * (rate / 100);
-  //     }
-  //     return tax;
-  //   }, 0);
-  //   setCalculatedTax(totalTax);
+    const marginalTaxRate = calculateMarginalTaxRate(
+      clientInfoForm?.basicInformation?.annualGrossIncome || 0,
+      clientInfoForm?.fillingStatus
+    );
 
-  //   const effectiveRate = (totalTax / grossIncome) * 100;
-  //   setEffectiveTaxRate(effectiveRate);
+    const totalDeductions =
+      dependentsDeduction +
+        strategyDeductions +
+        ageDeductions +
+        totalStandardDeductions || 0;
 
-  //   const marginalDetails = calculateMarginalTaxRate(
-  //     grossIncome,
-  //     totalDeductions,
-  //     filingStatus || "Single"
-  //   );
-  //   setMarginalTaxRate([marginalDetails]);
-  // };
+    const taxableIncome =
+      clientInfoForm?.basicInformation?.annualGrossIncome - totalDeductions;
 
-  // useEffect(() => {
-  //   calculateTaxDetails();
-  // }, [clientInfoForm, filingStatus]);
+    const calculateTotalTax = (
+      income: number,
+      filingStatus: FilingStatus
+    ): number => {
+      const taxBrackets = taxData[filingStatus];
+      let totalTax = 0;
+      let remainingIncome = income;
+
+      for (let i = 0; i < taxBrackets.length; i++) {
+        const { min, max, rate } = taxBrackets[i];
+
+        if (remainingIncome <= min) break;
+
+        if (remainingIncome > max) {
+          totalTax += (max - min) * (rate / 100);
+          remainingIncome -= max - min;
+        } else {
+          totalTax += (remainingIncome - min) * (rate / 100);
+          break;
+        }
+      }
+
+      return totalTax;
+    };
+
+    const calculateEffectiveTaxRate = (
+      income: number,
+      totalTax: number
+    ): number => {
+      return income > 0 ? (totalTax / income) * 100 : 0;
+    };
+
+    const totalTax = calculateTotalTax(
+      taxableIncome,
+      clientInfoForm?.fillingStatus
+    );
+
+    const taxGiven =
+      parseFloat(
+        clientInfoForm?.advanced?.taxCredits +
+          clientInfoForm?.standardDeduction?.taxesWithheld
+      ) || 0;
+
+    const taxesOwed = totalTax - taxGiven;
+
+    const effectiveTaxRate = calculateEffectiveTaxRate(
+      clientInfoForm?.basicInformation?.annualGrossIncome || 0,
+      totalTax
+    );
+
+    setTaxDetails({
+      calculatedTax: taxesOwed || 0,
+      otherDeductions: strategyDeductions || 0,
+      strategyDeductions: strategyDeductions || 0,
+      standardAndItemizedDeduction: totalStandardDeductions || 0,
+      marginalTaxRate: marginalTaxRate || 0,
+      effectiveTaxRate: effectiveTaxRate || 0,
+      taxableIncome: taxableIncome || 0,
+      ageDeductions: ageDeductions || 0,
+      taxesOwed: taxesOwed || 0,
+      beforAdjustingTax: totalTax || 0,
+      taxCredits: clientInfoForm?.advanced?.taxCredits || 0,
+      taxesWithheld: clientInfoForm?.standardDeduction?.taxesWithheld || 0,
+    });
+  }, [clientInfoForm]);
 
   return (
     <div>
@@ -196,7 +329,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            {/* ${calculatedTax} */}
+            ${taxDetails?.calculatedTax}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -209,27 +342,36 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 <span className="text-base font-normal text-[#555555]">
                   Gross income
                 </span>
-                <span className="text-base font-normal text-[#126742]"></span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${grossIncome}
+                </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Standard deduction
+                  <span>-</span>{" "}
+                  {clientInfoForm?.deduction
+                    ? "Itemized deductions"
+                    : "Standard deduction"}
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {/* ${totalDeductions} */}
+                  ${taxDetails?.standardAndItemizedDeduction || 0}
                 </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Retirement contributions
                 </span>
-                <span className="text-base font-normal text-[#126742]">$0</span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.ageDeductions || 0}
+                </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Other deductions
                 </span>
-                <span className="text-base font-normal text-[#126742]">$0</span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.otherDeductions}
+                </span>
               </li>
             </ul>
             <p className="flex justify-between">
@@ -237,7 +379,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 Taxable income
               </span>
               <span className="text-base font-medium text-[#126742]">
-                {/* ${taxableIncome} */}
+                ${taxDetails?.taxableIncome}
               </span>
             </p>
           </div>
@@ -251,20 +393,24 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Estimated taxes before adjustments
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {/* ${marginalTaxRate?.taxableIncome} */}
+                  ${taxDetails?.beforAdjustingTax}
                 </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Federal taxes withheld
                 </span>
-                <span className="text-base font-normal text-[#126742]">$0</span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.taxesWithheld}
+                </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Tax credits
                 </span>
-                <span className="text-base font-normal text-[#126742]">$0</span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.taxCredits}
+                </span>
               </li>
             </ul>
             <p className="flex justify-between">
@@ -272,7 +418,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                 Taxes owed
               </span>
               <span className="text-base font-medium text-[#B50302]">
-                {/* ${beforAdjustment} */}
+                ${taxDetails?.taxesOwed}
               </span>
             </p>
           </div>
@@ -283,7 +429,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Marginal tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {/* {marginalTaxRate?.marginalRate?.toFixed(2)}% */}
+                  {taxDetails?.marginalTaxRate}%
                 </span>
               </li>
               <li className="flex justify-between">
@@ -291,7 +437,7 @@ const ShowCalculateValueRightSide = ({ clientInfoForm }: any) => {
                   Effective tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {/* {effectiveTaxRate.toFixed(2)}% */}
+                  {taxDetails?.effectiveTaxRate?.toFixed(2)}%
                 </span>
               </li>
             </ul>

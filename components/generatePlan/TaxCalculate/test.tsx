@@ -333,6 +333,230 @@
 
 // export default ShowCalculateValueRightSide;
 
+// useEffect(() => {
+//   const calculateTaxDetails = () => {
+//     const calculateDependentsDeduction = (
+//       dependents: Dependents | undefined
+//     ): number => {
+//       if (!dependents) return 0;
+//       const underAge17 = parseInt(dependents.underAge17) || 0;
+//       const fullTimeStudentsAge17To23 =
+//         parseInt(dependents.fullTimeStudentsAge17To23) || 0;
+//       const otherDependents = parseInt(dependents.otherDependents) || 0;
+//       return (
+//         underAge17 * 2000 +
+//         fullTimeStudentsAge17To23 * 500 +
+//         otherDependents * 1
+//       );
+//     };
+
+//     const calculateStrategyDeductions = (
+//       strategy: Strategy | undefined
+//     ): number => {
+//       if (!strategy) return 0;
+//       let total = 0;
+//       if (strategy.deduction1)
+//         total += parseInt(strategy.deduction1, 10) || 0;
+//       if (strategy.deduction2)
+//         total += parseInt(strategy.deduction2, 10) || 0;
+//       if (strategy.deduction3)
+//         total += parseInt(strategy.deduction3, 10) || 0;
+//       if (strategy.deduction4)
+//         total += parseInt(strategy.deduction4, 10) || 0;
+//       return total;
+//     };
+
+//     const calculateAgeDeductions = (
+//       clientAge: number | null,
+//       filingStatus: FilingStatus
+//     ): number => {
+//       if (clientAge && clientAge > 65) {
+//         if (filingStatus === "Single") return 13850;
+//         if (filingStatus === "Married filing jointly") return 27700;
+//         if (filingStatus === "Head of household") return 20800;
+//         if (filingStatus === "Married filing separately") return 13850;
+//       }
+//       return 0;
+//     };
+
+//     const calculateStandardDeductions = (
+//       filingStatus: FilingStatus,
+//       deduction: boolean,
+//       itemizedDeduction: string
+//     ): number => {
+//       let deductionsValue = 0;
+//       if (!deduction) {
+//         if (filingStatus === "Single") deductionsValue = 15000;
+//         else if (filingStatus === "Married filing jointly")
+//           deductionsValue = 30000;
+//         else if (filingStatus === "Head of household")
+//           deductionsValue = 22500;
+//         else if (filingStatus === "Married filing separately")
+//           deductionsValue = 15000;
+//       } else {
+//         deductionsValue = parseFloat(itemizedDeduction || "0");
+//       }
+//       return deductionsValue;
+//     };
+
+//     const calculateMarginalTaxRate = (
+//       income: number,
+//       filingStatus: FilingStatus
+//     ): number => {
+//       const taxBrackets = taxData[filingStatus];
+//       if (
+//         income >= taxBrackets[0].min &&
+//         (taxBrackets[0].max === null || income <= taxBrackets[0].max)
+//       ) {
+//         return taxBrackets[0].rate;
+//       }
+//       if (
+//         income >= taxBrackets[1].min &&
+//         (taxBrackets[1].max === null || income <= taxBrackets[1].max)
+//       ) {
+//         return taxBrackets[1].rate;
+//       }
+//       if (
+//         income >= taxBrackets[2].min &&
+//         (taxBrackets[2].max === null || income <= taxBrackets[2].max)
+//       ) {
+//         return taxBrackets[2].rate;
+//       }
+//       if (
+//         income >= taxBrackets[3].min &&
+//         (taxBrackets[3].max === null || income <= taxBrackets[3].max)
+//       ) {
+//         return taxBrackets[3].rate;
+//       }
+//       if (
+//         income >= taxBrackets[4].min &&
+//         (taxBrackets[4].max === null || income <= taxBrackets[4].max)
+//       ) {
+//         return taxBrackets[4].rate;
+//       }
+//       if (
+//         income >= taxBrackets[5].min &&
+//         (taxBrackets[5].max === null || income <= taxBrackets[5].max)
+//       ) {
+//         return taxBrackets[5].rate;
+//       }
+//       return taxBrackets[taxBrackets.length - 1].rate;
+//     };
+
+//     const calculateTotalTax = (
+//       income: number,
+//       filingStatus: FilingStatus
+//     ): number => {
+//       const taxBrackets = taxData[filingStatus];
+//       let totalTax = 0;
+//       let remainingIncome = income;
+
+//       if (remainingIncome > taxBrackets[0].min) {
+//         let taxableIncome =
+//           Math.min(remainingIncome, taxBrackets[0].max ?? remainingIncome) -
+//           taxBrackets[0].min;
+//         totalTax += taxableIncome * (taxBrackets[0].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0 && remainingIncome <= taxBrackets[1].max) {
+//         let taxableIncome = remainingIncome - taxBrackets[1].min;
+//         totalTax += taxableIncome * (taxBrackets[1].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0 && remainingIncome <= taxBrackets[2].max) {
+//         let taxableIncome = remainingIncome - taxBrackets[2].min;
+//         totalTax += taxableIncome * (taxBrackets[2].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0 && remainingIncome <= taxBrackets[3].max) {
+//         let taxableIncome = remainingIncome - taxBrackets[3].min;
+//         totalTax += taxableIncome * (taxBrackets[3].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0 && remainingIncome <= taxBrackets[4].max) {
+//         let taxableIncome = remainingIncome - taxBrackets[4].min;
+//         totalTax += taxableIncome * (taxBrackets[4].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0 && remainingIncome <= taxBrackets[5].max) {
+//         let taxableIncome = remainingIncome - taxBrackets[5].min;
+//         totalTax += taxableIncome * (taxBrackets[5].rate / 100);
+//         remainingIncome -= taxableIncome;
+//       }
+
+//       if (remainingIncome > 0) {
+//         totalTax +=
+//           remainingIncome * (taxBrackets[taxBrackets.length - 1].rate / 100);
+//       }
+
+//       return totalTax;
+//     };
+
+//     const calculateEffectiveTaxRate = (
+//       income: number,
+//       totalTax: number
+//     ): number => {
+//       if (income > 0) return (totalTax / income) * 100;
+//       return 0;
+//     };
+
+//     // Perform calculations
+//     const dependentsDeduction = calculateDependentsDeduction(
+//       clientInfoForm?.dependents
+//     );
+//     const strategyDeductions = calculateStrategyDeductions(
+//       clientInfoForm?.strategy
+//     );
+//     const totalStandardDeductions = calculateStandardDeductions(
+//       filingStatus,
+//       clientInfoForm.deduction,
+//       clientInfoForm.standardDeduction?.itemizedDeduction || ""
+//     );
+//     const clientAgeDeductions = calculateAgeDeductions(
+//       clientAge,
+//       clientInfoForm.fillingStatus
+//     );
+
+//     const totalDeductions =
+//       dependentsDeduction +
+//       strategyDeductions +
+//       clientAgeDeductions +
+//       totalStandardDeductions;
+
+//     const taxableIncome =
+//       grossIncome && totalDeductions ? grossIncome - totalDeductions : 0;
+
+//     const marginalRate = calculateMarginalTaxRate(
+//       grossIncome || 0,
+//       clientInfoForm.fillingStatus
+//     );
+//     const totalTax = calculateTotalTax(grossIncome || 0, filingStatus);
+//     const effectiveTaxRate = calculateEffectiveTaxRate(
+//       grossIncome || 0,
+//       totalTax
+//     );
+
+//     // Set all tax details in one go
+//     setTaxDetails({
+//       ageDeductions: clientAgeDeductions,
+//       calculatedTax: totalTax,
+//       effectiveTaxRate,
+//       marginalTaxRate: marginalRate,
+//       taxableIncome,
+//       totalDeductions,
+//       standardAndItemizedDeduction: totalStandardDeductions,
+//       otherDeductions: dependentsDeduction + strategyDeductions,
+//     });
+//   };
+
+//   calculateTaxDetails();
+// }, [clientInfoForm]);
+
 const test = () => {
   return <div>test</div>;
 };
