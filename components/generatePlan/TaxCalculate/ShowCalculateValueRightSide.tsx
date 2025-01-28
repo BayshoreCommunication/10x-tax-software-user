@@ -119,45 +119,6 @@ interface ShowCalculateValueRightSideProps {
   setTaxDetails: React.Dispatch<React.SetStateAction<TaxState | null>>;
 }
 
-// const taxData = {
-//   Single: [
-//     { min: 0, max: 11600, rate: 10 },
-//     { min: 11601, max: 47150, rate: 12 },
-//     { min: 47151, max: 100525, rate: 22 },
-//     { min: 100526, max: 191950, rate: 24 },
-//     { min: 191951, max: 243725, rate: 32 },
-//     { min: 243726, max: 609350, rate: 35 },
-//     { min: 609351, max: null, rate: 37 },
-//   ],
-//   "Married filing jointly": [
-//     { min: 0, max: 23200, rate: 10 },
-//     { min: 23201, max: 94300, rate: 12 },
-//     { min: 94301, max: 201050, rate: 22 },
-//     { min: 201051, max: 383900, rate: 24 },
-//     { min: 383901, max: 487450, rate: 32 },
-//     { min: 487451, max: 731200, rate: 35 },
-//     { min: 731201, max: null, rate: 37 },
-//   ],
-//   "Married filing separately": [
-//     { min: 0, max: 11600, rate: 10 },
-//     { min: 11601, max: 47150, rate: 12 },
-//     { min: 47151, max: 100525, rate: 22 },
-//     { min: 100526, max: 191950, rate: 24 },
-//     { min: 191951, max: 243725, rate: 32 },
-//     { min: 243726, max: 365600, rate: 35 },
-//     { min: 365601, max: null, rate: 37 },
-//   ],
-//   "Head of household": [
-//     { min: 0, max: 16550, rate: 10 },
-//     { min: 16551, max: 63100, rate: 12 },
-//     { min: 63101, max: 100525, rate: 22 },
-//     { min: 100526, max: 191950, rate: 24 },
-//     { min: 191951, max: 243700, rate: 32 },
-//     { min: 243701, max: 609350, rate: 35 },
-//     { min: 609351, max: null, rate: 37 },
-//   ],
-// };
-
 const ShowCalculateValueRightSide: React.FC<
   ShowCalculateValueRightSideProps
 > = ({ clientInfoForm, taxDetails, setTaxDetails }) => {
