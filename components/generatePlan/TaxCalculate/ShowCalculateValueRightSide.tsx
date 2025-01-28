@@ -162,6 +162,14 @@ const ShowCalculateValueRightSide: React.FC<
     fetchTaxRangeSheet();
   }, []);
 
+  const taxBrackets = taxRangeSheet[clientInfoForm?.fillingStatus];
+
+  console.log(
+    "check this vlaue form output",
+    taxBrackets,
+    clientInfoForm?.fillingStatus
+  );
+
   const calculateStandardDeductions = (
     filingStatus: FilingStatus,
     deduction: boolean,
@@ -245,23 +253,61 @@ const ShowCalculateValueRightSide: React.FC<
     return 0;
   };
 
+  // const calculateMarginalTaxRate = (
+  //   income: number,
+  //   filingStatus: FilingStatus
+  // ): number => {
+  //   const taxBrackets = taxRangeSheet[filingStatus];
+
+  //   for (let i = 0; i < taxBrackets?.length; i++) {
+  //     const bracket = taxBrackets[i];
+  //     if (
+  //       income >= bracket.min &&
+  //       (bracket.max === null ||
+  //         bracket.max === undefined ||
+  //         income <= bracket.max)
+  //     ) {
+  //       return bracket.rate;
+  //     }
+  //   }
+
+  //   return taxBrackets[taxBrackets?.length - 1]?.rate;
+  // };
+
   const calculateMarginalTaxRate = (
     income: number,
     filingStatus: FilingStatus
   ): number => {
     const taxBrackets = taxRangeSheet[filingStatus];
 
+    // Check if taxBrackets is defined and not empty
+    if (!taxBrackets || taxBrackets.length === 0) {
+      // throw new Error(
+      //   "Tax brackets are not defined or empty for the given filing status."
+      // );
+      return 0;
+    }
+
     for (let i = 0; i < taxBrackets.length; i++) {
       const bracket = taxBrackets[i];
       if (
         income >= bracket.min &&
-        (bracket.max === null || income <= bracket.max)
+        (bracket.max === null ||
+          bracket.max === undefined ||
+          income <= bracket.max)
       ) {
         return bracket.rate;
       }
     }
 
-    return taxBrackets[taxBrackets.length - 1]?.rate;
+    // Ensure the last element is defined before accessing its rate
+    const lastBracket = taxBrackets[taxBrackets.length - 1];
+    if (!lastBracket) {
+      // throw new Error("The last tax bracket is undefined.");
+      return 0;
+    }
+
+    return lastBracket.rate;
   };
 
   const calculateEffectiveTaxRate = (
@@ -315,7 +361,7 @@ const ShowCalculateValueRightSide: React.FC<
       let totalTax = 0;
       let remainingIncome = income;
 
-      for (let i = 0; i < taxBrackets.length; i++) {
+      for (let i = 0; i < taxBrackets?.length; i++) {
         const { min, max, rate } = taxBrackets[i];
 
         if (remainingIncome <= min) break;
@@ -375,7 +421,12 @@ const ShowCalculateValueRightSide: React.FC<
       ),
       totalDeductions: totalDeductions || 0,
     });
-  }, [clientInfoForm, clientInfoForm?.strategy]);
+  }, [
+    clientInfoForm,
+    clientInfoForm?.strategy,
+    clientInfoForm?.fillingStatus,
+    taxRangeSheet,
+  ]);
 
   return (
     <div>
