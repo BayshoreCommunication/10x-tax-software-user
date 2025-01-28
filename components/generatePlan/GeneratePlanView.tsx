@@ -63,10 +63,10 @@ interface Advanced {
 }
 
 type FilingStatus =
-  | "Single"
-  | "Married filing jointly"
-  | "Married filing separately"
-  | "Head of household";
+  | "single"
+  | "marriedFilingJointly"
+  | "marriedFilingSeparately"
+  | "headOfHousehold";
 interface ClientInfoForm {
   fillingStatus: FilingStatus;
   deduction: boolean;
@@ -91,6 +91,7 @@ type TaxState = {
   taxCredits: number;
   totalDeductions: number;
   taxesWithheld: number;
+  annualGrossIncome: number;
 };
 
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
@@ -181,6 +182,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     taxCredits: 0,
     taxesOwed: 0,
     beforAdjustingTax: 0,
+    annualGrossIncome: 0,
   });
 
   // Test Data
@@ -258,6 +260,8 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       setLoading(false);
     }
   };
+
+  console.log("check v alue", clientDetails);
 
   return (
     <div className="container  py-10">

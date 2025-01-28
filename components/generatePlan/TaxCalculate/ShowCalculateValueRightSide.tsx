@@ -1,5 +1,6 @@
 "use client";
 
+import { getTaxRangeSheet } from "@/app/actions/taxplan";
 import { calculateAge } from "@/components/shared/ageCalculater/ageToDateAndDateToAge";
 import { useEffect, useState } from "react";
 
@@ -9,10 +10,10 @@ interface StandardDeduction {
 }
 
 type FilingStatus =
-  | "Single"
-  | "Married filing jointly"
-  | "Married filing separately"
-  | "Head of household";
+  | "single"
+  | "marriedFilingJointly"
+  | "marriedFilingSeparately"
+  | "headOfHousehold";
 
 interface Strategy {
   homeOffice: string;
@@ -75,6 +76,17 @@ interface TaxBracket {
   min: number;
   max: number | null;
   rate: number;
+  _id: string;
+}
+
+interface TaxData {
+  single: TaxBracket[];
+  marriedFilingJointly: TaxBracket[];
+  marriedFilingSeparately: TaxBracket[];
+  headOfHousehold: TaxBracket[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 interface Advanced {
@@ -98,6 +110,7 @@ type TaxState = {
   taxCredits: number;
   totalDeductions: number;
   taxesWithheld: number;
+  annualGrossIncome: number;
 };
 
 interface ShowCalculateValueRightSideProps {
@@ -106,48 +119,58 @@ interface ShowCalculateValueRightSideProps {
   setTaxDetails: React.Dispatch<React.SetStateAction<TaxState | null>>;
 }
 
-const taxData = {
-  Single: [
-    { min: 0, max: 11600, rate: 10 },
-    { min: 11601, max: 47150, rate: 12 },
-    { min: 47151, max: 100525, rate: 22 },
-    { min: 100526, max: 191950, rate: 24 },
-    { min: 191951, max: 243725, rate: 32 },
-    { min: 243726, max: 609350, rate: 35 },
-    { min: 609351, max: null, rate: 37 },
-  ],
-  "Married filing jointly": [
-    { min: 0, max: 23200, rate: 10 },
-    { min: 23201, max: 94300, rate: 12 },
-    { min: 94301, max: 201050, rate: 22 },
-    { min: 201051, max: 383900, rate: 24 },
-    { min: 383901, max: 487450, rate: 32 },
-    { min: 487451, max: 731200, rate: 35 },
-    { min: 731201, max: null, rate: 37 },
-  ],
-  "Married filing separately": [
-    { min: 0, max: 11600, rate: 10 },
-    { min: 11601, max: 47150, rate: 12 },
-    { min: 47151, max: 100525, rate: 22 },
-    { min: 100526, max: 191950, rate: 24 },
-    { min: 191951, max: 243725, rate: 32 },
-    { min: 243726, max: 365600, rate: 35 },
-    { min: 365601, max: null, rate: 37 },
-  ],
-  "Head of household": [
-    { min: 0, max: 16550, rate: 10 },
-    { min: 16551, max: 63100, rate: 12 },
-    { min: 63101, max: 100525, rate: 22 },
-    { min: 100526, max: 191950, rate: 24 },
-    { min: 191951, max: 243700, rate: 32 },
-    { min: 243701, max: 609350, rate: 35 },
-    { min: 609351, max: null, rate: 37 },
-  ],
-};
+// const taxData = {
+//   Single: [
+//     { min: 0, max: 11600, rate: 10 },
+//     { min: 11601, max: 47150, rate: 12 },
+//     { min: 47151, max: 100525, rate: 22 },
+//     { min: 100526, max: 191950, rate: 24 },
+//     { min: 191951, max: 243725, rate: 32 },
+//     { min: 243726, max: 609350, rate: 35 },
+//     { min: 609351, max: null, rate: 37 },
+//   ],
+//   "Married filing jointly": [
+//     { min: 0, max: 23200, rate: 10 },
+//     { min: 23201, max: 94300, rate: 12 },
+//     { min: 94301, max: 201050, rate: 22 },
+//     { min: 201051, max: 383900, rate: 24 },
+//     { min: 383901, max: 487450, rate: 32 },
+//     { min: 487451, max: 731200, rate: 35 },
+//     { min: 731201, max: null, rate: 37 },
+//   ],
+//   "Married filing separately": [
+//     { min: 0, max: 11600, rate: 10 },
+//     { min: 11601, max: 47150, rate: 12 },
+//     { min: 47151, max: 100525, rate: 22 },
+//     { min: 100526, max: 191950, rate: 24 },
+//     { min: 191951, max: 243725, rate: 32 },
+//     { min: 243726, max: 365600, rate: 35 },
+//     { min: 365601, max: null, rate: 37 },
+//   ],
+//   "Head of household": [
+//     { min: 0, max: 16550, rate: 10 },
+//     { min: 16551, max: 63100, rate: 12 },
+//     { min: 63101, max: 100525, rate: 22 },
+//     { min: 100526, max: 191950, rate: 24 },
+//     { min: 191951, max: 243700, rate: 32 },
+//     { min: 243701, max: 609350, rate: 35 },
+//     { min: 609351, max: null, rate: 37 },
+//   ],
+// };
 
 const ShowCalculateValueRightSide: React.FC<
   ShowCalculateValueRightSideProps
 > = ({ clientInfoForm, taxDetails, setTaxDetails }) => {
+  const [taxRangeSheet, setTaxRangeSheet] = useState<TaxData>({
+    single: [],
+    marriedFilingJointly: [],
+    marriedFilingSeparately: [],
+    headOfHousehold: [],
+    createdAt: "",
+    updatedAt: "",
+    __v: 0,
+  });
+
   const [filingStatus, setFilingStatus] = useState<FilingStatus>(
     clientInfoForm.fillingStatus
   );
@@ -158,6 +181,26 @@ const ShowCalculateValueRightSide: React.FC<
     calculateAge(clientInfoForm.basicInformation?.dateOfBirth) || null
   );
 
+  // tax range sheet get
+
+  useEffect(() => {
+    const fetchTaxRangeSheet = async () => {
+      try {
+        const response = await getTaxRangeSheet();
+
+        if (response?.data?.taxPlan?.taxRangeSheet) {
+          setTaxRangeSheet(response.data.taxPlan.taxRangeSheet);
+        } else {
+          console.error("Invalid tax range sheet data structure:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching tax range sheet:", error);
+      }
+    };
+
+    fetchTaxRangeSheet();
+  }, []);
+
   const calculateStandardDeductions = (
     filingStatus: FilingStatus,
     deduction: boolean,
@@ -165,11 +208,10 @@ const ShowCalculateValueRightSide: React.FC<
   ): number => {
     let deductionsValue = 0;
     if (!deduction) {
-      if (filingStatus === "Single") deductionsValue = 15000;
-      else if (filingStatus === "Married filing jointly")
-        deductionsValue = 30000;
-      else if (filingStatus === "Head of household") deductionsValue = 22500;
-      else if (filingStatus === "Married filing separately")
+      if (filingStatus === "single") deductionsValue = 15000;
+      else if (filingStatus === "marriedFilingJointly") deductionsValue = 30000;
+      else if (filingStatus === "headOfHousehold") deductionsValue = 22500;
+      else if (filingStatus === "marriedFilingSeparately")
         deductionsValue = 15000;
     } else {
       deductionsValue = parseFloat(itemizedDeduction || "0");
@@ -230,10 +272,10 @@ const ShowCalculateValueRightSide: React.FC<
   ): number => {
     if (clientAge && clientAge > 65 && filingStatus) {
       const deductionsMap: Record<FilingStatus, number> = {
-        Single: 13850,
-        "Married filing jointly": 27700,
-        "Head of household": 20800,
-        "Married filing separately": 13850,
+        single: 13850,
+        marriedFilingJointly: 27700,
+        headOfHousehold: 20800,
+        marriedFilingSeparately: 13850,
       };
 
       return deductionsMap[filingStatus] || 0;
@@ -246,7 +288,7 @@ const ShowCalculateValueRightSide: React.FC<
     income: number,
     filingStatus: FilingStatus
   ): number => {
-    const taxBrackets = taxData[filingStatus];
+    const taxBrackets = taxRangeSheet[filingStatus];
 
     for (let i = 0; i < taxBrackets.length; i++) {
       const bracket = taxBrackets[i];
@@ -258,7 +300,7 @@ const ShowCalculateValueRightSide: React.FC<
       }
     }
 
-    return taxBrackets[taxBrackets.length - 1].rate;
+    return taxBrackets[taxBrackets.length - 1]?.rate;
   };
 
   const calculateEffectiveTaxRate = (
@@ -308,7 +350,7 @@ const ShowCalculateValueRightSide: React.FC<
       income: number,
       filingStatus: FilingStatus
     ): number => {
-      const taxBrackets = taxData[filingStatus];
+      const taxBrackets = taxRangeSheet[filingStatus];
       let totalTax = 0;
       let remainingIncome = income;
 
@@ -354,6 +396,8 @@ const ShowCalculateValueRightSide: React.FC<
     );
 
     setTaxDetails({
+      annualGrossIncome:
+        clientInfoForm?.basicInformation?.annualGrossIncome || 0,
       calculatedTax: taxesOwed || 0,
       otherDeductions: strategyDeductions || 0,
       strategyDeductions: strategyDeductions || 0,
@@ -395,7 +439,7 @@ const ShowCalculateValueRightSide: React.FC<
                   Gross income
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${grossIncome}
+                  ${taxDetails?.annualGrossIncome}
                 </span>
               </li>
               <li className="flex justify-between">

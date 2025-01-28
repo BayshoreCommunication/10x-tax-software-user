@@ -18,12 +18,29 @@ const FillingStatus = ({
 
   // Handler for marital status
 
+  const toCamelCase = (str: any) => {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word: any, index: any) =>
+        index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+      )
+      .join("");
+  };
+
+  const camelCaseToSpaced = (str: any) => {
+    return str
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (match: any) => match.toUpperCase())
+      .trim();
+  };
+
   const onMarriedStatusHandler = (value: string) => {
     setIsMarriedStatusDropdown(false);
 
     setClientInfoForm((prevState: any) => ({
       ...prevState,
-      fillingStatus: value,
+      fillingStatus: toCamelCase(value),
     }));
   };
 
@@ -129,7 +146,10 @@ const FillingStatus = ({
                 aria-haspopup="true"
                 aria-expanded={marriedStatusDropdown}
               >
-                <span>{clientInfoForm?.fillingStatus || "Select Status"}</span>
+                <span>
+                  {camelCaseToSpaced(clientInfoForm?.fillingStatus) ||
+                    "Select Status"}
+                </span>
                 <svg
                   className="w-2.5 h-2.5 ml-3"
                   xmlns="http://www.w3.org/2000/svg"

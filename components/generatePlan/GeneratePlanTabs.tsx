@@ -52,10 +52,10 @@ interface Dependents {
 }
 
 type FilingStatus =
-  | "Single"
-  | "Married filing jointly"
-  | "Married filing separately"
-  | "Head of household";
+  | "single"
+  | "marriedFilingJointly"
+  | "marriedFilingSeparately"
+  | "headOfHousehold";
 
 interface Advanced {
   contributations: string;
