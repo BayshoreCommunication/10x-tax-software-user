@@ -2,7 +2,7 @@
 
 import { updateUserEmailOtpVerify } from "@/app/actions/user";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 interface OtpType {
@@ -55,13 +55,12 @@ const EmailChangeOtpVerifyForm: React.FC<EmailChangeOtpVerifyFormProps> = ({
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  const maskEmail = (email: string): string => {
+  // Mask email for display
+  const maskEmail = useCallback((email: string | undefined): string => {
+    if (!email) return "";
     const [localPart, domain] = email.split("@");
-    if (localPart.length <= 2) return email;
-
-    const maskedLocalPart = localPart[0] + "***" + localPart.slice(-2);
-    return `${maskedLocalPart}@${domain}`;
-  };
+    return `${localPart[0]}***${localPart.slice(-2)}@${domain}`;
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -174,7 +173,7 @@ const EmailChangeOtpVerifyForm: React.FC<EmailChangeOtpVerifyFormProps> = ({
             We have sent an OTP to:
           </p>
           <p className="text-black font-medium mb-4 text-center">
-            {maskEmail("test@example.com")}
+            {maskEmail(email)}
           </p>
 
           <h3 className="text-green-500 font-medium text-xl mb-4 text-center">

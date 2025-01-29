@@ -2,7 +2,7 @@
 
 import { updateUserPasswordOtpVerify } from "@/app/actions/user";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 interface OtpType {
@@ -19,11 +19,18 @@ interface PasswordChangeOtpVerifyModalProps {
   setOtpVerifyFlag: (value: boolean) => void;
   newPassword: string;
   oldPassword: string;
+  userEmail: string;
 }
 
 const PasswordChangeOtpVerifyForm: React.FC<
   PasswordChangeOtpVerifyModalProps
-> = ({ otpVerifyFlag, setOtpVerifyFlag, newPassword, oldPassword }) => {
+> = ({
+  otpVerifyFlag,
+  setOtpVerifyFlag,
+  newPassword,
+  oldPassword,
+  userEmail,
+}) => {
   const [otp, setOtp] = useState<OtpType>({
     digit1: "",
     digit2: "",
@@ -54,13 +61,12 @@ const PasswordChangeOtpVerifyForm: React.FC<
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  const maskEmail = (email: string): string => {
+  // Mask email for display
+  const maskEmail = useCallback((email: string | undefined): string => {
+    if (!email) return "";
     const [localPart, domain] = email.split("@");
-    if (localPart.length <= 2) return email;
-
-    const maskedLocalPart = localPart[0] + "***" + localPart.slice(-2);
-    return `${maskedLocalPart}@${domain}`;
-  };
+    return `${localPart[0]}***${localPart.slice(-2)}@${domain}`;
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -179,7 +185,7 @@ const PasswordChangeOtpVerifyForm: React.FC<
             We have sent an OTP to:
           </p>
           <p className="text-black font-medium mb-4 text-center">
-            {maskEmail("test@example.com")}
+            {maskEmail(userEmail)}
           </p>
 
           <h3 className="text-green-500 font-medium text-xl mb-4 text-center">

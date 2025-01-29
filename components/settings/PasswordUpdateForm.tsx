@@ -15,6 +15,7 @@ interface PasswordUpdateFormProps {
 }
 
 const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
+  userData,
   userPasswordUpdateFlag,
   setUserPasswordUpdateFlag,
 }) => {
@@ -233,6 +234,7 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = ({
       </div>
 
       <PasswordChangeOtpVerifyForm
+        userEmail={userData?.email}
         otpVerifyFlag={otpVerifyFlag}
         setOtpVerifyFlag={setOtpVerifyFlag}
         newPassword={newPassword}
