@@ -111,6 +111,14 @@ type TaxState = {
   totalDeductions: number;
   taxesWithheld: number;
   annualGrossIncome: number;
+  retirementDeduction: number;
+  dependentsDeduction: number;
+};
+
+type DeductionInput = {
+  contributations?: number | string;
+  iRAContributations?: number | string;
+  otherDeductions?: number | string;
 };
 
 interface ShowCalculateValueRightSideProps {
@@ -318,6 +326,27 @@ const ShowCalculateValueRightSide: React.FC<
     return 0;
   };
 
+  const otherAndRetirementDeductions = (value: DeductionInput = {}) => {
+    const { contributations, iRAContributations, otherDeductions } = value;
+
+    const parsedContributations = contributations
+      ? Number(contributations)
+      : undefined;
+    const parsedIRAContributations = iRAContributations
+      ? Number(iRAContributations)
+      : undefined;
+    const parsedOtherDeductions = otherDeductions ? Number(otherDeductions) : 0;
+
+    const retirementDeduction =
+      parsedContributations === undefined ||
+      parsedContributations === null ||
+      parsedContributations === 0
+        ? (parsedIRAContributations ?? 0)
+        : parsedContributations;
+
+    return { retirementDeduction, otherDeduction: parsedOtherDeductions };
+  };
+
   useEffect(() => {
     const strategyDeductions = calculateStrategyDeductions(
       clientInfoForm?.strategy
@@ -343,11 +372,20 @@ const ShowCalculateValueRightSide: React.FC<
       clientInfoForm?.fillingStatus
     );
 
+    const { retirementDeduction, otherDeduction } =
+      otherAndRetirementDeductions({
+        contributations: clientInfoForm?.advanced?.contributations,
+        iRAContributations: clientInfoForm?.advanced?.iRAContributations,
+        otherDeductions: clientInfoForm?.advanced?.otherDeductions,
+      });
+
     const totalDeductions =
       dependentsDeduction +
         strategyDeductions +
         ageDeductions +
-        totalStandardDeductions || 0;
+        totalStandardDeductions +
+        retirementDeduction +
+        otherDeduction || 0;
 
     const taxableIncome =
       (clientInfoForm?.basicInformation?.annualGrossIncome ?? 0) -
@@ -406,13 +444,15 @@ const ShowCalculateValueRightSide: React.FC<
       annualGrossIncome:
         clientInfoForm?.basicInformation?.annualGrossIncome || 0,
       calculatedTax: taxesOwed || 0,
-      otherDeductions: strategyDeductions || 0,
+      otherDeductions: otherDeduction || 0,
       strategyDeductions: strategyDeductions || 0,
       standardAndItemizedDeduction: totalStandardDeductions || 0,
       marginalTaxRate: marginalTaxRate || 0,
       effectiveTaxRate: effectiveTaxRate || 0,
       taxableIncome: taxableIncome || 0,
       ageDeductions: ageDeductions || 0,
+      retirementDeduction: retirementDeduction || 0,
+      dependentsDeduction: dependentsDeduction || 0,
       taxesOwed: taxesOwed || 0,
       beforAdjustingTax: totalTax || 0,
       taxCredits: parseFloat(clientInfoForm?.advanced?.taxCredits || "0"),
@@ -462,15 +502,34 @@ const ShowCalculateValueRightSide: React.FC<
                     : "Standard deduction"}
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.standardAndItemizedDeduction || 0}
+                  $
+                  {(taxDetails?.standardAndItemizedDeduction ?? 0) +
+                    (taxDetails?.ageDeductions ?? 0)}
                 </span>
               </li>
+              <li className="flex justify-between">
+                <span className="text-base font-normal text-[#555555]">
+                  <span>-</span> Strategy Deductions
+                </span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.strategyDeductions || 0}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-base font-normal text-[#555555]">
+                  <span>-</span> Dependents Deduction
+                </span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxDetails?.dependentsDeduction || 0}
+                </span>
+              </li>
+
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Retirement contributions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.ageDeductions || 0}
+                  ${taxDetails?.retirementDeduction || 0}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -486,7 +545,7 @@ const ShowCalculateValueRightSide: React.FC<
               <span className="text-base font-medium text-[#555555]">
                 Taxable income
               </span>
-              <span className="text-base font-medium text-[#126742]">
+              <span className="text-lg font-medium text-[#dca100f9]">
                 ${taxDetails?.taxableIncome?.toFixed(2)}
               </span>
             </p>
@@ -525,7 +584,7 @@ const ShowCalculateValueRightSide: React.FC<
               <span className="text-base font-medium text-[#555555]">
                 Taxes owed
               </span>
-              <span className="text-base font-medium text-[#B50302]">
+              <span className="text-lg font-medium text-[#B50302]">
                 ${taxDetails?.taxesOwed?.toFixed(2)}
               </span>
             </p>

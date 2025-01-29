@@ -92,6 +92,8 @@ type TaxState = {
   totalDeductions: number;
   taxesWithheld: number;
   annualGrossIncome: number;
+  retirementDeduction: number;
+  dependentsDeduction: number;
 };
 
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
@@ -183,6 +185,8 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     taxesOwed: 0,
     beforAdjustingTax: 0,
     annualGrossIncome: 0,
+    retirementDeduction: 0,
+    dependentsDeduction: 0,
   });
 
   // Test Data
