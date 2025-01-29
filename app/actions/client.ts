@@ -31,7 +31,7 @@ export async function getUserOverviewDetails(): Promise<UserDataResponse> {
           Authorization: `${session?.user?.accessToken || ""}`,
         },
         next: {
-          tags: ["clientDataCreate", "clientDataDelete", "clientDataUpdate"],
+          tags: ["clientDataCreate", "clientDataDelete"],
         },
       }
     );
