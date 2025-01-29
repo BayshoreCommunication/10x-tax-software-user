@@ -1,16 +1,32 @@
 "use client";
 
+import { removeData, setData } from "@/redux/features/taxInfoSlice";
 import { useState } from "react";
 import { FaDownload } from "react-icons/fa";
 import { SiAdobeacrobatreader } from "react-icons/si";
+import { useDispatch } from "react-redux";
 import ViewTaxPlan from "../generatePlan/ViewTaxPlan";
 import ViewTaxProposal from "../generatePlan/ViewTaxProposal";
 import PDFGeneratorWithDownload from "../shared/pdfGenerator/PDFGeneratorWithDownload";
 import { formatDate } from "../shared/ui/DateFormat";
 
 const ClientTaxPlanandProposal = ({ clientTaxPlanAndProposal }: any) => {
+  const dispatch = useDispatch();
   const [pdfDownloadPlan, setPdfDownloadPlan] = useState(false);
   const [pdfDownloadProposal, setPdfDownloadProposa] = useState(false);
+
+  const onClickHandleMouseEnter = (index: number) => {
+    dispatch(removeData());
+    setPdfDownloadPlan(true);
+
+    const clientDetails = clientTaxPlanAndProposal?.find(
+      (value: any, i: number) => i === index
+    );
+
+    if (clientDetails) {
+      dispatch(setData(clientDetails));
+    }
+  };
 
   return (
     <div className="mt-6 p-5 2xl:p-10 border">
@@ -30,7 +46,7 @@ const ClientTaxPlanandProposal = ({ clientTaxPlanAndProposal }: any) => {
                 <div className="flex-1">
                   <div className="mt-4">
                     <button
-                      onMouseEnter={() => setPdfDownloadPlan(true)}
+                      onMouseEnter={() => onClickHandleMouseEnter(index)}
                       onMouseLeave={() => setPdfDownloadPlan(false)}
                       key={index}
                       className="py-3 2xl:py-4 bg-white flex justify-between items-center space-x-4 w-full"
@@ -49,7 +65,6 @@ const ClientTaxPlanandProposal = ({ clientTaxPlanAndProposal }: any) => {
                         </div>
                       </div>
                       <div className="">
-                        {" "}
                         {pdfDownloadPlan ? (
                           <PDFGeneratorWithDownload
                             RenderComponent={ViewTaxPlan}

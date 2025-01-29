@@ -22,7 +22,7 @@ const ViewTaxPlanAndEdit = () => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${taxInfo?.data?.taxableIncome?.grossIncome}
+            ${taxInfo?.data?.taxInfo?.calculatedTax?.toFixed(2)}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -36,32 +36,53 @@ const ViewTaxPlanAndEdit = () => {
                   Gross income
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxableIncome?.grossIncome}
+                  ${taxInfo?.data?.taxInfo?.annualGrossIncome}
                 </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Standard deduction
+                  {/* {clientInfoForm?.deduction
+                    ? "Itemized deductions"
+                    : "Standard deduction"} */}
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxableIncome?.standardDeduction}
+                  $
+                  {(taxInfo?.data?.taxInfo?.standardAndItemizedDeduction ?? 0) +
+                    (taxInfo?.data?.taxInfo?.ageDeductions ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Retirement contributions
+                  <span>-</span> Strategy Deductions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxableIncome?.retirementContributions}
+                  ${taxInfo?.data?.taxInfo?.strategyDeductions || 0}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-base font-normal text-[#555555]">
+                  <span>-</span> Dependents Deduction
+                </span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxInfo?.data?.taxInfo?.dependentsDeduction || 0}
                 </span>
               </li>
 
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
+                  <span>-</span> Retirement contributions
+                </span>
+                <span className="text-base font-normal text-[#126742]">
+                  ${taxInfo?.data?.taxInfo?.retirementDeduction || 0}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-base font-normal text-[#555555]">
                   <span>-</span> Other deductions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxableIncome?.otherDeductions}
+                  ${taxInfo?.data?.taxInfo?.otherDeductions}
                 </span>
               </li>
             </ul>
@@ -69,8 +90,8 @@ const ViewTaxPlanAndEdit = () => {
               <span className="text-base font-medium text-[#555555]">
                 Taxable income
               </span>
-              <span className="text-base font-medium text-[#126742]">
-                ${taxInfo?.data?.taxableIncome?.taxableIncome}
+              <span className="text-lg font-medium text-[#dca100f9]">
+                ${taxInfo?.data?.taxInfo?.taxableIncome?.toFixed(2)}
               </span>
             </p>
           </div>
@@ -84,11 +105,7 @@ const ViewTaxPlanAndEdit = () => {
                   Estimated taxes before adjustments
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $
-                  {
-                    taxInfo?.data?.estimatedFederalTaxes
-                      ?.estimatedTaxesBeforeAdjustments
-                  }
+                  ${taxInfo?.data?.taxInfo?.beforAdjustingTax?.toFixed(2)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -96,7 +113,7 @@ const ViewTaxPlanAndEdit = () => {
                   <span>-</span> Federal taxes withheld
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $ {taxInfo?.data?.estimatedFederalTaxes?.federalTaxesWithheld}
+                  ${taxInfo?.data?.taxInfo?.taxesWithheld}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -104,7 +121,7 @@ const ViewTaxPlanAndEdit = () => {
                   <span>-</span> Tax credits
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $ {taxInfo?.data?.estimatedFederalTaxes?.taxCredits}
+                  ${taxInfo?.data?.taxInfo?.taxCredits}
                 </span>
               </li>
             </ul>
@@ -112,8 +129,8 @@ const ViewTaxPlanAndEdit = () => {
               <span className="text-base font-medium text-[#555555]">
                 Taxes owed
               </span>
-              <span className="text-base font-medium text-[#B50302]">
-                $ {taxInfo?.data?.estimatedFederalTaxes?.taxesOwed}
+              <span className="text-lg font-medium text-[#B50302]">
+                ${taxInfo?.data?.taxInfo?.taxesOwed?.toFixed(2)}
               </span>
             </p>
           </div>
@@ -124,7 +141,7 @@ const ViewTaxPlanAndEdit = () => {
                   Marginal tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {taxInfo?.data?.estimatedFederalTaxes?.marginalTaxRate}%
+                  {taxInfo?.data?.taxInfo?.marginalTaxRate}%
                 </span>
               </li>
               <li className="flex justify-between">
@@ -132,19 +149,20 @@ const ViewTaxPlanAndEdit = () => {
                   Effective tax rate
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  {taxInfo?.data?.estimatedFederalTaxes?.effectiveTaxRate}%
+                  {taxInfo?.data?.taxInfo?.effectiveTaxRate?.toFixed(2)}%
                 </span>
               </li>
             </ul>
           </div>
-          <div className="w-full flex items-center  justify-start space-x-6  ">
-            <button
-              onClick={goBackTwoSteps}
-              className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[200px] w-full"
-            >
-              Edit
-            </button>
-          </div>
+        </div>
+
+        <div className="w-full flex items-center  justify-start space-x-6  ">
+          <button
+            onClick={goBackTwoSteps}
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[200px] w-full"
+          >
+            Edit
+          </button>
         </div>
       </div>
     </div>
