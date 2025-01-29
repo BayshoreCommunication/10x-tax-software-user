@@ -360,7 +360,7 @@ export async function cancelUserAutoSubscription(): Promise<{
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/user/subscription-cancle`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user//subscription-cancel`,
       {
         method: "PUT",
         headers: {
