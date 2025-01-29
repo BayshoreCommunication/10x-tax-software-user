@@ -4,11 +4,11 @@ const SubscriptionPlan = () => {
   return (
     <div className="container py-10">
       <div className="bg-white  p-12">
-        <h2 className="text-3xl font-bold text-[#11142D] text-center py-4">
+        <h2 className="text-3xl font-bold text-[#11142D] text-center py-4 mx-[10%] 2xl:mx-[20%]">
           Choose Your Monthly Or Yearly Plan
         </h2>
 
-        <div className="max-w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
+        <div className="w-[90%] xl:w-[80%] 2xl:w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
           <div className="shadow-medium rounded-xl px-6 py-16 w-[50%]">
             <div className="w-full bg-[#EBEBEB] py-3 px-4 rounded-large mb-6">
               <h2 className="text-2xl font-normal text-[#11142D] text-center">

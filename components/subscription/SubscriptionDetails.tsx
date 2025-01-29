@@ -37,14 +37,14 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
   return (
     <div className="container py-10">
       <div className="bg-white  p-12 ">
-        <h2 className="text-3xl font-bold text-[#11142D]  py-4 mx-[20%]">
+        <h2 className="text-3xl font-bold text-[#11142D]  py-4 mx-[10%] 2xl:mx-[20%]">
           Subscription Plan
         </h2>
 
         <div>
           {userData?.currentSubscriptionType === "monthly" ? (
-            <div className="max-w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
-              <div className="shadow-medium rounded-xl px-6 py-16 w-[50%]">
+            <div className="w-[90%] xl:w-[80%] 2xl:w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
+              <div className="shadow-medium rounded-xl px-6 py-16  w-[50%]">
                 <div className="w-full  mb-6">
                   <h2 className="text-3xl font-bold text-[#11142D] text-left py-4 ">
                     Your Current Plan
