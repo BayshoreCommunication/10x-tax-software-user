@@ -112,12 +112,12 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                       )}
                     </button>
                   ) : (
-                    <Link
-                      href={`/confirm-subscription/monthly`}
+                    <button
+                      // href={`/confirm-subscription/monthly`}
                       className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
                     >
-                      Choose Plan
-                    </Link>
+                      Running
+                    </button>
                   )}
                 </div>
               </div>
@@ -250,12 +250,12 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                       )}
                     </button>
                   ) : (
-                    <Link
-                      href={`/confirm-subscription/monthly`}
+                    <button
+                      // href={`/confirm-subscription/monthly`}
                       className=" bg-primary hover:bg-hoverColor py-3 px-4 rounded-large text-2xl font-normal text-white text-center w-full"
                     >
-                      Choose Plan
-                    </Link>
+                      Running
+                    </button>
                   )}
                 </div>
               </div>
