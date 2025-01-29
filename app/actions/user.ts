@@ -29,7 +29,13 @@ export async function getUserData(): Promise<UserDataResponse> {
           "Content-Type": "application/json",
           Authorization: `${session?.user?.accessToken || ""}`,
         },
-        next: { tags: ["userDataUpdate", "createSubscription"] },
+        next: {
+          tags: [
+            "userDataUpdate",
+            "createSubscription",
+            "userSubscriptionCalcle",
+          ],
+        },
       }
     );
 
@@ -342,53 +348,45 @@ export async function updateUserEmailOtpVerify(
   }
 }
 
-export async function getUserOverviewDetails(): Promise<UserDataResponse> {
+export async function cancelUserAutoSubscription(): Promise<{
+  error?: string;
+  ok: boolean;
+}> {
   const session = await auth();
 
-  // Check for authentication and access token
   if (!session?.user?.accessToken) {
-    return {
-      error: "User is not authenticated.",
-      ok: false,
-    };
+    return { error: "Unauthorized. Access token is missing.", ok: false };
   }
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/user-overview`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/subscription-cancle`,
       {
-        method: "GET",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${session?.user?.accessToken || ""}`,
-        },
-        next: {
-          tags: ["clientDataCreate", "clientDataDelete", "clientDataUpdate"],
+          Authorization: `${session.user.accessToken}`,
         },
       }
     );
 
+    revalidateTag("userSubscriptionCalcle");
+
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Failed to fetch user overview details:", errorData);
       return {
-        error: errorData?.message || "Failed to fetch user  overview details.",
+        error: errorData?.message || "Failed to cancel auto subscription.",
         ok: false,
-        data: null,
       };
     }
 
     const data = await response.json();
-    return {
-      ok: true,
-      data: data?.payload?.overview || null,
-    };
+    return { ok: true, ...data };
   } catch (error) {
-    console.error("Error fetching  overview details:", error);
+    console.error("Error canceling auto subscription:", error);
     return {
       error: "An unexpected error occurred. Please try again later.",
       ok: false,
-      data: null,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { getUserOverviewDetails } from "@/app/actions/user";
+import { getUserOverviewDetails } from "@/app/actions/client";
 import { CgNotes } from "react-icons/cg";
 import { FaRegCalendarTimes, FaRegFileAlt } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";

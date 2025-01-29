@@ -10,6 +10,57 @@ interface UserDataResponse {
 
 // Get all client data
 
+export async function getUserOverviewDetails(): Promise<UserDataResponse> {
+  const session = await auth();
+
+  // Check for authentication and access token
+  if (!session?.user?.accessToken) {
+    return {
+      error: "User is not authenticated.",
+      ok: false,
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user-overview`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${session?.user?.accessToken || ""}`,
+        },
+        next: {
+          tags: ["clientDataCreate", "clientDataDelete", "clientDataUpdate"],
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Failed to fetch user overview details:", errorData);
+      return {
+        error: errorData?.message || "Failed to fetch user  overview details.",
+        ok: false,
+        data: null,
+      };
+    }
+
+    const data = await response.json();
+    return {
+      ok: true,
+      data: data?.payload?.overview || null,
+    };
+  } catch (error) {
+    console.error("Error fetching  overview details:", error);
+    return {
+      error: "An unexpected error occurred. Please try again later.",
+      ok: false,
+      data: null,
+    };
+  }
+}
+
 export async function getAllClientData(
   search: string = "",
   page: number = 1,
