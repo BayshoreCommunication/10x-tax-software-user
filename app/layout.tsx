@@ -16,7 +16,9 @@ export default async function RootLayout({
   const { ok, data: userData } = await getUserData();
 
   const brandColor = ok ? userData?.brandColor : "#D5AD45";
-  const hoverColor = tinycolor(brandColor).darken(10).toString();
+  const hoverColor = tinycolor(brandColor || "#D5AD45")
+    .darken(10)
+    .toString();
 
   return (
     <html lang="en">
