@@ -16,10 +16,10 @@ const ViewTaxProposalEdit = () => {
   const taxInfo = useSelector((state: RootState) => state.taxInfo);
 
   const [estimatedPay, setEstimatedPay] = useState({
-    year2023: taxInfo?.data?.taxProposalInfo?.year2023 || 0,
-    year2024: taxInfo?.data?.taxProposalInfo?.year2024 || 0,
-    year2025: taxInfo?.data?.taxProposalInfo?.year2025 || 0,
-    lastyearLost: taxInfo?.data?.taxProposalInfo?.lastyearLost || 0,
+    year2023: taxInfo?.data?.taxProposalInfo?.year2023 || 35822,
+    year2024: taxInfo?.data?.taxProposalInfo?.year2024 || 42563,
+    year2025: taxInfo?.data?.taxProposalInfo?.year2025 || 25631,
+    lastyearLost: taxInfo?.data?.taxProposalInfo?.lastyearLost || 58741,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
