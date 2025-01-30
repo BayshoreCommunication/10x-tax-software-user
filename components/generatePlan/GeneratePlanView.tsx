@@ -194,6 +194,12 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
   const taxPlanData = {
     clientId: id,
     taxInfo: taxDetails,
+    taxProposalInfo: {
+      year2023: 2541111,
+      year2024: 5816525,
+      year2025: taxDetails?.calculatedTax,
+      lastyearLost: 51111,
+    },
   };
 
   const createTaxPlanByClient = async () => {
@@ -264,8 +270,6 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       setLoading(false);
     }
   };
-
-  console.log("check v alue", clientDetails);
 
   return (
     <div className="container  py-10">
