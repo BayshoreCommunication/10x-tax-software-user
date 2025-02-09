@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserOverviewDetails } from "@/app/actions/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -177,6 +178,7 @@ const AddNewClientForm = ({ session }: any) => {
         setError(null);
         toast.success("Client created successfully!");
         router.back();
+        const updateOverViewData = await getUserOverviewDetails();
       } else {
         const errorMessage = result?.error || "Failed to create client data.";
         toast.error(errorMessage);
