@@ -102,8 +102,8 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       key: "basic-information",
     },
     { title: "Filling Status", key: "filling-status" },
-    { title: "Strategy", key: "strategy" },
     { title: "Dependents", key: "dependents" },
+    { title: "Strategy", key: "strategy" },
   ];
 
   // Initial state with proper typing

@@ -15,6 +15,7 @@ export async function middleware(request: NextRequest) {
     "/sign-up",
     "/forget-password",
     "/confirm-subscription",
+    "/paymenttest",
   ];
 
   if (excludedPaths.some((path) => pathname.startsWith(path))) {

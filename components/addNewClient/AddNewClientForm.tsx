@@ -49,6 +49,7 @@ interface ClientInfoForm {
 }
 
 const AddNewClientForm = ({ session }: any) => {
+  const [formErrors, setFormErrors] = useState<any>({});
   const router = useRouter();
   const [marriedStatusDropdown, setIsMarriedStatusDropdown] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -151,6 +152,9 @@ const AddNewClientForm = ({ session }: any) => {
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setFormErrors(validate(clientInfoForm));
+
     setLoading(true);
 
     try {
@@ -187,6 +191,44 @@ const AddNewClientForm = ({ session }: any) => {
     }
   };
 
+  const validate = (values: ClientInfoForm) => {
+    const errors: any = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    if (!values?.basicInformation?.fullName) {
+      errors.fullName = "Name is required!";
+    }
+    if (!values?.basicInformation?.email) {
+      errors.email = "Email is required!";
+    } else if (!regex.test(values?.basicInformation?.email)) {
+      errors.email = "This is not a valid email format!";
+    }
+    if (!values?.basicInformation?.phone) {
+      errors.phone = "Phone number is required!";
+    }
+    if (!values?.basicInformation?.annualGrossIncome) {
+      errors.annualGrossIncome = "Annual gross income is required!";
+    }
+
+    if (!values?.basicInformation?.dateOfBirth) {
+      errors.dateOfBirth = "Date of birth is required!";
+    }
+
+    if (!values?.basicInformation?.profession) {
+      errors.profession = "Profession is required!";
+    }
+
+    if (!values?.basicInformation?.address) {
+      errors.address = "Address is required!";
+    }
+
+    if (!values?.basicInformation?.maritalStatus) {
+      errors.maritalStatus = "Marital status is required!";
+    }
+
+    return errors;
+  };
+
   return (
     <div className="container  py-10">
       <div className="bg-white p-10">
@@ -195,7 +237,7 @@ const AddNewClientForm = ({ session }: any) => {
         </h2>
         <div>
           <form className="">
-            <div className="flex items-center space-x-6 py-3">
+            <div className="flex items-start space-x-6 py-3">
               <div className="w-full">
                 <label
                   htmlFor="name-icon"
@@ -214,6 +256,7 @@ const AddNewClientForm = ({ session }: any) => {
                   value={clientInfoForm.basicInformation.fullName || ""}
                   onChange={handleChange}
                 />
+                <span className="text-red-500">{formErrors?.fullName}</span>
               </div>
               <div className="w-full">
                 <label
@@ -233,9 +276,10 @@ const AddNewClientForm = ({ session }: any) => {
                   value={clientInfoForm.basicInformation.phone || ""}
                   onChange={handleChange}
                 />
+                <span className="text-red-500">{formErrors?.phone}</span>
               </div>
             </div>
-            <div className="flex items-center space-x-6 py-3">
+            <div className="flex items-start space-x-6 py-3">
               <div className="w-full">
                 <label
                   htmlFor="name-icon"
@@ -254,6 +298,7 @@ const AddNewClientForm = ({ session }: any) => {
                   value={clientInfoForm.basicInformation.email || ""}
                   onChange={handleChange}
                 />
+                <span className="text-red-500">{formErrors?.email}</span>
               </div>
               <div className="w-full">
                 <label
@@ -273,10 +318,11 @@ const AddNewClientForm = ({ session }: any) => {
                   value={clientInfoForm.basicInformation.profession || ""}
                   onChange={handleChange}
                 />
+                <span className="text-red-500">{formErrors?.profession}</span>
               </div>
             </div>
 
-            <div className="flex items-center space-x-6 py-3">
+            <div className="flex items-start space-x-6 py-3">
               <div className="w-full">
                 <label
                   htmlFor="name-icon"
@@ -297,6 +343,9 @@ const AddNewClientForm = ({ session }: any) => {
                   }
                   onChange={handleChange}
                 />
+                <span className="text-red-500">
+                  {formErrors?.annualGrossIncome}
+                </span>
               </div>
               <div className="w-full">
                 <label
@@ -328,9 +377,10 @@ const AddNewClientForm = ({ session }: any) => {
                     onChange={handleChange}
                   />
                 </div>
+                <span className="text-red-500">{formErrors?.dateOfBirth}</span>
               </div>
             </div>
-            <div className="flex items-center space-x-6 py-3">
+            <div className="flex items-start space-x-6 py-3">
               <div className="w-full">
                 <label
                   htmlFor="marital-status-dropdown"
@@ -368,6 +418,9 @@ const AddNewClientForm = ({ session }: any) => {
                       />
                     </svg>
                   </button>
+                  <span className="text-red-500">
+                    {formErrors?.maritalStatus}
+                  </span>
 
                   {marriedStatusDropdown && (
                     <div
@@ -413,6 +466,7 @@ const AddNewClientForm = ({ session }: any) => {
                   value={clientInfoForm.basicInformation.address || ""}
                   onChange={handleChange}
                 />
+                <span className="text-red-500">{formErrors?.address}</span>
               </div>
             </div>
 

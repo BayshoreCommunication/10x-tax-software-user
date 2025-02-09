@@ -1,7 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import Loader from "../shared/ui/Loader";
 
 const Strategy = ({
@@ -11,9 +11,9 @@ const Strategy = ({
   id,
   session,
 }: any) => {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [saveLoading, setSaveLoading] = useState<boolean>(false);
-  const [nextLoading, setNextLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Input onChange handler
 
@@ -45,20 +45,8 @@ const Strategy = ({
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const action = (e.nativeEvent as SubmitEvent).submitter?.getAttribute(
-      "name"
-    );
-
-    if (action === "back") {
-      setActiveTab("filling-status");
-    }
-
-    if (action === "next") {
-      setNextLoading(true);
-    } else {
-      setSaveLoading(true);
-    }
+    setError(null);
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -77,11 +65,7 @@ const Strategy = ({
 
       if (response.ok) {
         setError(null);
-        if (action === "next") {
-          setActiveTab("dependents");
-        } else if (action === "save") {
-          toast.success("Client save successfully!");
-        }
+        router.push(`/calculate-tax/${id}`);
       } else {
         const errorMessage = result?.error || "Failed to update client data.";
         setError(errorMessage);
@@ -90,8 +74,7 @@ const Strategy = ({
       console.error("Error update client data:", error);
       setError("Something went wrong. Please try again.");
     } finally {
-      setSaveLoading(false);
-      setNextLoading(false);
+      setLoading(false);
     }
   };
 
@@ -361,37 +344,16 @@ const Strategy = ({
 
         <div className="w-full flex items-center  justify-center mt-10 space-x-6">
           <button
-            name="back"
             type="submit"
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[400px] text-center h-[45px]"
           >
-            Back
-          </button>
-          <button
-            name="next"
-            type="submit"
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center h-[45px]"
-          >
-            {nextLoading ? (
+            {loading ? (
               <div className="flex items-center justify-center space-x-2">
                 <Loader />
+                <p>Generating...</p>
               </div>
             ) : (
-              <p>Next</p>
-            )}
-          </button>
-          <button
-            name="save"
-            type="submit"
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center h-[45px]"
-          >
-            {saveLoading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <Loader />
-                <p>Saving...</p>
-              </div>
-            ) : (
-              <p> Save</p>
+              <p> Generate</p>
             )}
           </button>
         </div>

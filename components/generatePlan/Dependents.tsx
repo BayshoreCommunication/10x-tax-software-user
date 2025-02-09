@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { PiInfo } from "react-icons/pi";
+import { toast } from "react-toastify";
 import Loader from "../shared/ui/Loader";
 
 const Dependents = ({
@@ -16,7 +17,9 @@ const Dependents = ({
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const [saveLoading, setSaveLoading] = useState<boolean>(false);
+  const [nextLoading, setNextLoading] = useState<boolean>(false);
 
   // Input onchange handler
 
@@ -48,8 +51,20 @@ const Dependents = ({
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+
+    const action = (e.nativeEvent as SubmitEvent).submitter?.getAttribute(
+      "name"
+    );
+
+    if (action === "back") {
+      setActiveTab("filling-status");
+    }
+
+    if (action === "next") {
+      setNextLoading(true);
+    } else {
+      setSaveLoading(true);
+    }
 
     try {
       const response = await fetch(
@@ -68,7 +83,11 @@ const Dependents = ({
 
       if (response.ok) {
         setError(null);
-        router.push(`/calculate-tax/${id}`);
+        if (action === "next") {
+          setActiveTab("strategy");
+        } else if (action === "save") {
+          toast.success("Client save successfully!");
+        }
       } else {
         const errorMessage = result?.error || "Failed to update client data.";
         setError(errorMessage);
@@ -77,7 +96,8 @@ const Dependents = ({
       console.error("Error update client data:", error);
       setError("Something went wrong. Please try again.");
     } finally {
-      setLoading(false);
+      setSaveLoading(false);
+      setNextLoading(false);
     }
   };
 
@@ -181,16 +201,37 @@ const Dependents = ({
 
       <div className="w-full flex items-center  justify-center mt-10 space-x-6">
         <button
+          name="back"
           type="submit"
-          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[400px] text-center h-[45px]"
+          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center"
         >
-          {loading ? (
+          Back
+        </button>
+        <button
+          name="next"
+          type="submit"
+          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white w-[120px] text-center h-[45px]"
+        >
+          {nextLoading ? (
             <div className="flex items-center justify-center space-x-2">
               <Loader />
-              <p>Generating...</p>
             </div>
           ) : (
-            <p> Generate</p>
+            <p>Next</p>
+          )}
+        </button>
+        <button
+          name="save"
+          type="submit"
+          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-secondary hover:bg-[#0d121c] hover:text-white w-[120px] text-center h-[45px]"
+        >
+          {saveLoading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <Loader />
+              <p>Saving...</p>
+            </div>
+          ) : (
+            <p> Save</p>
           )}
         </button>
       </div>

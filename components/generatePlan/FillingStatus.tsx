@@ -107,7 +107,7 @@ const FillingStatus = ({
       if (response.ok) {
         setError(null);
         if (action === "next") {
-          setActiveTab("strategy");
+          setActiveTab("dependents");
         } else if (action === "save") {
           toast.success("Client save successfully!");
         }

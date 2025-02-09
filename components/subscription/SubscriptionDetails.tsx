@@ -42,7 +42,7 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
         </h2>
 
         <div>
-          {userData?.currentSubscriptionType === "monthly" ? (
+          {userData?.currentSubscriptionType === "month" ? (
             <div className="w-[90%] xl:w-[80%] 2xl:w-[60%] flex items-center justify-between space-x-8 mx-auto pt-20 pb-40">
               <div className="shadow-medium rounded-xl px-6 py-16  w-[50%]">
                 <div className="w-full  mb-6">
