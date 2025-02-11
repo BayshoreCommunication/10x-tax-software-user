@@ -64,14 +64,14 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                 </div>
                 <div className="mb-4">
                   <p>
-                    <strong>Duration</strong>:{" "}
+                    <strong>Duration </strong>:{" "}
                     {calculateRemainingDays(
                       userData?.currentSubscriptionExpiredDate
                     )}{" "}
                     Days
                   </p>
                   <p>
-                    <strong>Start : </strong>:{" "}
+                    <strong>Start </strong>:{" "}
                     {formatDate(userData?.currentSubscriptionPayDate)}
                   </p>
                   <p>
@@ -202,14 +202,14 @@ const SubscriptionDetails = ({ userData }: { userData: any }) => {
                 </div>
                 <div className="mb-4 text-white">
                   <p>
-                    <strong>Duration</strong>:{" "}
+                    <strong>Duration </strong>:{" "}
                     {calculateRemainingDays(
                       userData?.currentSubscriptionExpiredDate
                     )}{" "}
                     Days
                   </p>
                   <p>
-                    <strong>Start : </strong>:{" "}
+                    <strong>Start </strong>:{" "}
                     {formatDate(userData?.currentSubscriptionPayDate)}
                   </p>
                   <p>

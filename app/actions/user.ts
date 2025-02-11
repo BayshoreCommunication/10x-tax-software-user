@@ -33,7 +33,7 @@ export async function getUserData(): Promise<UserDataResponse> {
           tags: [
             "userDataUpdate",
             "createSubscription",
-            "userSubscriptionCalcle",
+            "userSubscriptionCancel",
           ],
         },
       }
@@ -370,7 +370,7 @@ export async function cancelUserAutoSubscription(): Promise<{
       }
     );
 
-    revalidateTag("userSubscriptionCalcle");
+    revalidateTag("userSubscriptionCancel");
 
     if (!response.ok) {
       const errorData = await response.json();
