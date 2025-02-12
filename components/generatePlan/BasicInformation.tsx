@@ -255,14 +255,13 @@ const BasicInformation = ({
                 onClick={() =>
                   setIsMarriedStatusDropdown(!marriedStatusDropdown)
                 }
-                className="w-full px-5 py-2.5 text-lg text-gray-600 bg-[#eeeeee] border border-gray-300 rounded-lg hover:bg-[#eeeeee] focus:outline-none focus:ring-4 inline-flex items-center justify-between"
+                className="w-full px-5 py-2.5 text-lg text-gray-600 bg-[#eeeeee] border border-gray-300 rounded-lg hover:bg-[#eeeeee] focus:outline-none focus:ring-4 inline-flex items-center justify-between capitalize"
                 type="button"
                 aria-haspopup="true"
                 aria-expanded={marriedStatusDropdown}
               >
                 <span>
-                  {clientInfoForm?.basicInformation?.maritalStatus ||
-                    "Select Status"}
+                  {clientInfoForm?.basicInformation?.maritalStatus || "Select"}
                 </span>
                 <svg
                   className="w-2.5 h-2.5 ml-3"
