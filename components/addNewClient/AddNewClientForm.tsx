@@ -431,7 +431,7 @@ const AddNewClientForm = ({ session }: any) => {
                       aria-labelledby="marital-status-dropdown"
                     >
                       <ul className="divide-y divide-gray-200">
-                        {["Single", "Married", "Divorced"].map((status) => (
+                        {["Single", "Married"].map((status) => (
                           <li key={status}>
                             <button
                               onClick={() =>
