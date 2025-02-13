@@ -34,9 +34,9 @@ const DashboardOverview = async () => {
     {
       title: "Subscription Plan",
       value:
-        userOverviewDetails?.data?.paymentStatus === "monthly" ? "$29" : "$229",
+        userOverviewDetails?.data?.paymentStatus === "month" ? "$29" : "$299",
       description:
-        userOverviewDetails?.data?.paymentStatus === "monthly"
+        userOverviewDetails?.data?.paymentStatus === "month"
           ? "Monthly Plan"
           : "Yearly Plan",
       icon: <MdOutlinePaid className="text-5xl  text-primary" />,
@@ -46,9 +46,9 @@ const DashboardOverview = async () => {
       title: "Payment Status",
       value: userOverviewDetails?.data?.subscriptionPlan ? "Paid" : "Unpaid",
       description:
-        userOverviewDetails?.data?.paymentStatus === "monthly"
+        userOverviewDetails?.data?.paymentStatus === "month"
           ? "$29.00"
-          : "$229.00",
+          : "$299.00",
       icon: <FaMoneyBillTransfer className="text-5xl  text-primary" />,
       backgroundColor: "#EBCBFE",
     },
