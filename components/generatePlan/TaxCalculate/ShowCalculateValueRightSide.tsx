@@ -468,6 +468,14 @@ const ShowCalculateValueRightSide: React.FC<
     taxRangeSheet,
   ]);
 
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+    }).format(amount);
+  };
+
   return (
     <div>
       <div className="border border-[#B1B1B1] p-5 2xl:p-8">
@@ -477,7 +485,7 @@ const ShowCalculateValueRightSide: React.FC<
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${taxDetails?.calculatedTax?.toFixed(2)}
+            {formatCurrency(taxDetails?.calculatedTax ?? 0)}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -491,7 +499,7 @@ const ShowCalculateValueRightSide: React.FC<
                   Gross income
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.annualGrossIncome}
+                  {formatCurrency(taxDetails?.annualGrossIncome ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -502,9 +510,10 @@ const ShowCalculateValueRightSide: React.FC<
                     : "Standard deduction"}
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  $
-                  {(taxDetails?.standardAndItemizedDeduction ?? 0) +
-                    (taxDetails?.ageDeductions ?? 0)}
+                  {formatCurrency(
+                    (taxDetails?.standardAndItemizedDeduction ?? 0) +
+                      (taxDetails?.ageDeductions ?? 0)
+                  )}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -512,7 +521,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Strategy Deductions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.strategyDeductions || 0}
+                  {formatCurrency(taxDetails?.strategyDeductions ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -520,7 +529,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Dependents Deduction
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.dependentsDeduction || 0}
+                  {formatCurrency(taxDetails?.dependentsDeduction ?? 0)}
                 </span>
               </li>
 
@@ -529,7 +538,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Retirement contributions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.retirementDeduction || 0}
+                  {formatCurrency(taxDetails?.retirementDeduction ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -537,7 +546,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Other deductions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.otherDeductions}
+                  {formatCurrency(taxDetails?.otherDeductions ?? 0)}
                 </span>
               </li>
             </ul>
@@ -546,7 +555,7 @@ const ShowCalculateValueRightSide: React.FC<
                 Taxable income
               </span>
               <span className="text-lg font-medium text-[#dca100f9]">
-                ${taxDetails?.taxableIncome?.toFixed(2)}
+                {formatCurrency(taxDetails?.taxableIncome ?? 0)}
               </span>
             </p>
           </div>
@@ -560,7 +569,7 @@ const ShowCalculateValueRightSide: React.FC<
                   Estimated taxes before adjustments
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.beforAdjustingTax?.toFixed(2)}
+                  {formatCurrency(taxDetails?.beforAdjustingTax ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -568,7 +577,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Federal taxes withheld
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.taxesWithheld}
+                  {formatCurrency(taxDetails?.taxesWithheld ?? 0)}
                 </span>
               </li>
               <li className="flex justify-between">
@@ -576,7 +585,7 @@ const ShowCalculateValueRightSide: React.FC<
                   <span>-</span> Tax credits
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxDetails?.taxCredits}
+                  {formatCurrency(taxDetails?.taxCredits ?? 0)}
                 </span>
               </li>
             </ul>
@@ -585,7 +594,7 @@ const ShowCalculateValueRightSide: React.FC<
                 Taxes owed
               </span>
               <span className="text-lg font-medium text-[#B50302]">
-                ${taxDetails?.taxesOwed?.toFixed(2)}
+                {formatCurrency(taxDetails?.taxesOwed ?? 0)}
               </span>
             </p>
           </div>
