@@ -83,7 +83,7 @@ const Strategy = ({
       <form onSubmit={handleSubmitFormData}>
         <h3 className="text-xl font-semibold mt-3">Maximize Deductions</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-full">
+          <div className="w-full h-[90px]">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -120,7 +120,7 @@ const Strategy = ({
             )}
           </div>
 
-          <div className="w-full">
+          <div className="w-full h-[90px">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
