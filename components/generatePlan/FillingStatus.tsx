@@ -133,7 +133,7 @@ const FillingStatus = ({
               htmlFor="marital-status-dropdown"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Select Filling Status<span className="text-primary">*</span>
+              Select Filling Status
             </label>
             <div className="relative inline-block w-full">
               <button
