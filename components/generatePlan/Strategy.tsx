@@ -88,7 +88,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Home Office<span className="text-primary">*</span>
+              Home Office
             </label>
 
             <input
@@ -125,7 +125,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Depreciation<span className="text-primary">*</span>
+              Depreciation
             </label>
 
             <input
@@ -146,7 +146,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Travel<span className="text-primary">*</span>
+              Travel
             </label>
 
             <input
@@ -165,7 +165,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Meals<span className="text-primary">*</span>
+              Meals
             </label>
 
             <input
@@ -188,7 +188,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Hiring Children<span className="text-primary">*</span>
+              Hiring Children
             </label>
 
             <input
@@ -230,7 +230,7 @@ const Strategy = ({
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
             >
-              Schedule C to S Corp<span className="text-primary">*</span>
+              Schedule C to S Corp
             </label>
 
             <input
@@ -273,7 +273,7 @@ const Strategy = ({
               className="block mb-2 text-lg font-normal text-gray-900"
             >
               Cost Segregation
-              <span className="text-primary">*</span>
+       
             </label>
 
             <input
@@ -316,7 +316,7 @@ const Strategy = ({
               className="block mb-2 text-lg font-normal text-gray-900"
             >
               Rent home to corporation (Augusta)
-              <span className="text-primary">*</span>
+  
             </label>
 
             <input
