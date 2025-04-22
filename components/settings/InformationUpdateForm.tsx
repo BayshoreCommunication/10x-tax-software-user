@@ -147,8 +147,8 @@ const InformationUpdateForm = memo(
     return (
       <div>
         <div className="flex items-center space-x-8">
-          <div className="relative w-[150px] h-[150px] border-2 rounded-full">
-            <div className="relative w-[150px] h-[150px] border-2 rounded-full">
+          <div className="relative w-[150px] h-[150px] border-2  rounded-full">
+            <div className="relative w-[150px] h-[150px] border-2 rounded-full ">
               <Image
                 src={logoPreview || "/assets/user-image/user-image.png"}
                 alt="User Picture"
@@ -160,20 +160,21 @@ const InformationUpdateForm = memo(
             </div>
 
             {userInfoUpdateFlag && (
-              <div className="mt-6">
-                <button
-                  onClick={handleSubmitUpdateFormData}
-                  disabled={loading}
-                  className="bg-primary hover:bg-hoverColor text-white px-6 py-2 rounded-lg"
+              <div className="bg-primary hover:bg-hoverColor p-1 flex items-center justify-center w-8 h-8 border border-white rounded-full absolute bottom-5 right-6 translate-x-1/2 translate-y-1/2 cursor-pointer">
+                <label
+                  htmlFor="image"
+                  className="cursor-pointer flex items-center justify-center w-full h-full"
                 >
-                  {loading ? "Saving..." : "Save Changes"}
-                </button>
-                <button
-                  onClick={userInfoChangeHandle}
-                  className="ml-4 text-gray-600 hover:text-red-500 underline"
-                >
-                  Cancel
-                </button>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                    name="image"
+                  />
+                  <TbEditCircle className="text-white text-xl" />
+                </label>
               </div>
             )}
           </div>
