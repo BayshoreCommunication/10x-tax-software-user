@@ -89,7 +89,7 @@ const Strategy = ({
                 htmlFor="home-office"
                 className="block mb-2 text-lg font-normal text-gray-900"
               >
-                Home Office <span className="text-primary">*</span>
+                Home Office
               </label>
               <input
                 type="text"
@@ -270,7 +270,6 @@ const Strategy = ({
               className="block mb-2 text-lg font-normal text-gray-900"
             >
               Cost Segregation
-       
             </label>
 
             <input
@@ -313,7 +312,6 @@ const Strategy = ({
               className="block mb-2 text-lg font-normal text-gray-900"
             >
               Rent home to corporation (Augusta)
-  
             </label>
 
             <input
