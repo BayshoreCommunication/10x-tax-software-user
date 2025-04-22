@@ -11,26 +11,6 @@ const BusinessInformation = ({ userData }: { userData: any }) => {
   const [userPasswordUpdateFlag, setUserPasswordUpdateFlag] =
     useState<boolean>(false);
 
-  // Update Flag Change
-
-  const userInfoChangeHandle = () => {
-    setUserInfoUpdateFlag(true);
-    setUserEmailUpdateFlag(false);
-    setUserPasswordUpdateFlag(false);
-  };
-
-  const userEmailChangeHandle = () => {
-    setUserInfoUpdateFlag(false);
-    setUserEmailUpdateFlag(true);
-    setUserPasswordUpdateFlag(false);
-  };
-
-  const userPasswordChangeHandle = () => {
-    setUserInfoUpdateFlag(false);
-    setUserEmailUpdateFlag(false);
-    setUserPasswordUpdateFlag(true);
-  };
-
   return (
     <div className="container py-10">
       <div className=" bg-white p-12">
@@ -59,8 +39,6 @@ const BusinessInformation = ({ userData }: { userData: any }) => {
           <PasswordUpdateForm
             userData={userData}
             userPasswordUpdateFlag={userPasswordUpdateFlag}
-            setUserInfoUpdateFlag={setUserInfoUpdateFlag}
-            setUserEmailUpdateFlag={setUserEmailUpdateFlag}
             setUserPasswordUpdateFlag={setUserPasswordUpdateFlag}
           />
         </div>

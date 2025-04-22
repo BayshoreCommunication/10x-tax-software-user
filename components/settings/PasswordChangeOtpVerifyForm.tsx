@@ -19,7 +19,7 @@ interface PasswordChangeOtpVerifyModalProps {
   setOtpVerifyFlag: (value: boolean) => void;
   newPassword: string;
   oldPassword: string;
-  userEmail: string;
+  userEmail: string | undefined;
 }
 
 const PasswordChangeOtpVerifyForm: React.FC<

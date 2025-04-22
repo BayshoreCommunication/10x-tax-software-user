@@ -65,7 +65,7 @@ export async function getUserData(): Promise<UserDataResponse> {
 }
 
 export async function updateUserData(
-  formData: FormData
+  formData: any
 ): Promise<{ error: string; ok: boolean }> {
   const file = formData.get("image");
 
@@ -187,7 +187,7 @@ export async function userImageUpload(
 //  update user password
 
 export async function updateUserPassword(
-  formData: FormData
+  formData: any
 ): Promise<{ error?: string; ok: boolean }> {
   const session = await auth();
 
@@ -269,7 +269,7 @@ export async function updateUserPasswordOtpVerify(
 //  update user email
 
 export async function updateUserEmail(
-  formData: FormData
+  formData: any
 ): Promise<{ error?: string; ok: boolean }> {
   const session = await auth();
 
