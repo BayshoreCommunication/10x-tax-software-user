@@ -21,7 +21,6 @@ const page = () => {
     <div className="bg-[#eeeeee]">
       <DashboardOverview />
       <ClientListTable />
-      {/* <ViewTaxProposalEdit /> */}
     </div>
   );
 };

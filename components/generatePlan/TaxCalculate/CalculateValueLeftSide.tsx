@@ -193,12 +193,21 @@ const CalculateValueLeftSide = ({
             autoComplete="off"
             type="text"
             id="email-address-icon"
-            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            className={`bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white  ${
+              Number(clientInfoForm.strategy.homeOffice) > 1500
+                ? "border-red-300 focus:ring-red-300 focus:border-red-300"
+                : "border-gray-300 focus:ring-primary focus:border-primary"
+            }"`}
             placeholder="$"
             name="strategy.homeOffice"
             value={clientInfoForm.strategy.homeOffice || ""}
             onChange={handleChange}
           />
+          {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
+            <p className="mt-2 text-sm text-red-500">
+              Maximum home office deduction is $1,500.
+            </p>
+          )}
           {/* <input
             autoComplete="off"
             type="text"
@@ -363,49 +372,19 @@ const CalculateValueLeftSide = ({
 
           <input
             autoComplete="off"
-            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            className={`bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white  ${
+              Number(clientAge) < 80 && Number(clientAge) < 18
+                ? "border-red-300 focus:ring-red-300 focus:border-red-300"
+                : "border-gray-300 focus:ring-primary focus:border-primary"
+            }"`}
             placeholder="35"
             type="text"
             id="age"
             value={Number(clientAge) ?? ""}
             onChange={(e) => setClientAge(Number(e.target.value))}
           />
-
-          {/* <input
-            autoComplete="off"
-            type="text"
-            id="email-address-icon"
-            className={`border-opacity-10 text-lg rounded-md focus:ring-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80 outline-none text-white !appearance-none ${minMaxAgeAlert ? "bg-[#ffaca942] border border-[#db615c] focus:border-red-300" : "bg-[#383E54] border border-white focus:border-primary"}`}
-            placeholder="$"
-            name="strategy.homeOffice"
-            value={clientAge || ""}
-            onChange={(e) => {
-              const value = e.target.value;
-
-              if (value === "") {
-                setMinMaxAgeAlertAlert(false);
-                setClientAge("");
-              } else {
-                const parsedValue = parseInt(value, 10);
-
-                if (parsedValue > 81) {
-                  setMinMaxAgeAlertAlert(true);
-                  setClientAge(81);
-                } else if (parsedValue >= 0 && parsedValue <= 81) {
-                  setMinMaxAgeAlertAlert(false);
-                  setClientAge(parsedValue);
-                } else {
-                  setMinMaxAgeAlertAlert(false);
-                  setClientAge("");
-                }
-              }
-            }}
-            min="0"
-            max="81"
-          /> */}
-
-          {minMaxAgeAlert && (
-            <p className="text-red-500 text-base mt-2">
+          {clientAge && (Number(clientAge) < 18 || Number(clientAge) > 80) && (
+            <p className="mt-2 text-sm text-red-500">
               Please enter a number between 18 and 80
             </p>
           )}

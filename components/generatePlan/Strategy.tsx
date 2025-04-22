@@ -83,26 +83,39 @@ const Strategy = ({
       <form onSubmit={handleSubmitFormData}>
         <h3 className="text-xl font-semibold mt-3">Maximize Deductions</h3>
         <div className="flex items-center space-x-6 py-3">
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-gray-900"
-            >
-              Home Office<span className="text-primary">*</span>
-            </label>
+          <div className="w-full h-[90px]">
+            <div>
+              <label
+                htmlFor="home-office"
+                className="block mb-2 text-lg font-normal text-gray-900"
+              >
+                Home Office <span className="text-primary">*</span>
+              </label>
+              <input
+                type="text"
+                id="home-office"
+                name="strategy.homeOffice"
+                value={clientInfoForm.strategy.homeOffice || ""}
+                onChange={handleChange}
+                placeholder="$"
+                autoComplete="off"
+                className={`bg-[#eeeeee] border text-lg rounded-lg block w-full pl-4 py-2 placeholder-gray-400 outline-none 
+                ${
+                  Number(clientInfoForm.strategy.homeOffice) > 1500
+                    ? "border-red-300 focus:ring-red-300 focus:border-red-300"
+                    : "border-gray-300 focus:ring-primary focus:border-primary"
+                }`}
+              />
+            </div>
 
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-              placeholder="$"
-              name="strategy.homeOffice"
-              value={clientInfoForm.strategy.homeOffice || ""}
-              onChange={handleChange}
-            />
+            {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
+              <p className="mt-2 text-sm text-red-500">
+                Maximum home office deduction is $1,500.
+              </p>
+            )}
           </div>
-          <div className="w-full">
+
+          <div className="w-full h-[90px]">
             <label
               htmlFor="name-icon"
               className="block mb-2 text-lg font-normal text-gray-900"
@@ -122,6 +135,7 @@ const Strategy = ({
             />
           </div>
         </div>
+
         <div className="flex items-center space-x-6 py-3">
           <div className="w-full">
             <label
@@ -142,6 +156,7 @@ const Strategy = ({
               onChange={handleChange}
             />
           </div>
+
           <div className="w-full">
             <label
               htmlFor="name-icon"
@@ -205,7 +220,7 @@ const Strategy = ({
             />
           </div>
         </div>
-        <h3 className="text-xl font-semibold mt-4 mb-1">Entry Structuring</h3>
+        {/* <h3 className="text-xl font-semibold mt-4 mb-1">Entry Structuring</h3> */}
         <div className="flex items-center space-x-6 py-3">
           <div className="w-full">
             <label
