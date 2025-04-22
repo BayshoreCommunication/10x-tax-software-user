@@ -193,16 +193,25 @@ const CalculateValueLeftSide = ({
             autoComplete="off"
             type="text"
             id="email-address-icon"
+<<<<<<< HEAD
             className={`bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white  ${
               Number(clientInfoForm.strategy.homeOffice) > 1500
                 ? "border-red-300 focus:ring-red-300 focus:border-red-300"
                 : "border-gray-300 focus:ring-primary focus:border-primary"
             }"`}
+=======
+            className={`bg-[#383E54] border border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white ${
+              Number(clientInfoForm.strategy.homeOffice) > 1500
+                ? "border-red-300 focus:ring-red-300 focus:border-red-300"
+                : "border-gray-300 focus:ring-primary focus:border-primary"
+            }`}
+>>>>>>> 267f7ae36c8483379c1ea112f0ddf723d4bd1c06
             placeholder="$"
             name="strategy.homeOffice"
             value={clientInfoForm.strategy.homeOffice || ""}
             onChange={handleChange}
           />
+<<<<<<< HEAD
           {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
             <p className="mt-2 text-sm text-red-500">
               Maximum home office deduction is $1,500.
@@ -218,38 +227,14 @@ const CalculateValueLeftSide = ({
             value={clientInfoForm.strategy.homeOffice || ""}
             onChange={(e) => {
               const value = e.target.value;
+=======
+>>>>>>> 267f7ae36c8483379c1ea112f0ddf723d4bd1c06
 
-              if (value === "") {
-                setMaxHomeOfficeAlert(false);
-                handleChange(e);
-              } else {
-                const parsedValue = parseInt(value, 10);
-
-                if (parsedValue > 1500) {
-                  setMaxHomeOfficeAlert(true);
-                  handleChange({
-                    target: { name: "strategy.homeOffice", value: value },
-                  });
-                } else if (parsedValue >= 0 && parsedValue < 1501) {
-                  setMaxHomeOfficeAlert(false);
-                  handleChange(e);
-                } else if (parsedValue >= 1501) {
-                  setMaxHomeOfficeAlert(false);
-                  handleChange(e);
-                } else {
-                  setMaxHomeOfficeAlert(false);
-                }
-              }
-            }}
-            min="0"
-            max="1501"
-          />
-
-          {maxHomeOfficeAlert && (
-            <p className="text-red-500 text-base mt-2">
-              Please enter a number between 0 and 1500
+          {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
+            <p className="mt-2 text-sm text-red-500">
+              Maximum home office deduction is $1,500.
             </p>
-          )} */}
+          )}
         </div>
 
         {/* Depreciation */}
