@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { PiInfo } from "react-icons/pi";
 import { toast } from "react-toastify";
 import Loader from "../shared/ui/Loader";
 
@@ -105,7 +104,7 @@ const Dependents = ({
     <form onSubmit={handleSubmitFormData}>
       {/*Form*/}
       <div className="flex items-center space-x-6 py-3">
-        <div className="w-full">
+        <div className="w-1/2">
           <label
             htmlFor="name-icon"
             className="block mb-2 text-lg font-normal text-gray-900"
@@ -121,71 +120,6 @@ const Dependents = ({
             placeholder="0"
             name="dependents.underAge17"
             value={clientInfoForm.dependents.underAge17 || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="w-full">
-          <div className=" mb-2 flex items-center space-x-1">
-            <label className="text-lg font-normal text-gray-90">
-              Full- time students age 17 - 23
-            </label>
-            <span className="text-primary hover:text-hoverColor cursor-pointer">
-              <PiInfo />
-            </span>
-          </div>
-
-          <input
-            autoComplete="off"
-            type="text"
-            id="email-address-icon"
-            className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-            placeholder="0"
-            name="dependents.fullTimeStudentsAge17To23"
-            value={clientInfoForm.dependents.fullTimeStudentsAge17To23 || ""}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      <div className="flex items-center space-x-6 py-3">
-        <div className="w-full">
-          <div className=" mb-2 flex items-center space-x-1">
-            <label className="text-lg font-normal text-gray-90">
-              Other dependents
-            </label>
-            <span className="text-primary hover:text-hoverColor cursor-pointer">
-              <PiInfo />
-            </span>
-          </div>
-
-          <input
-            autoComplete="off"
-            type="text"
-            id="email-address-icon"
-            className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-            placeholder="0"
-            name="dependents.otherDependents"
-            value={clientInfoForm.dependents.otherDependents || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="w-full">
-          <div className=" mb-2 flex items-center space-x-1">
-            <label className="text-lg font-normal text-gray-90">
-              Total number of dependents
-            </label>
-            <span className="text-primary hover:text-hoverColor cursor-pointer">
-              <PiInfo />
-            </span>
-          </div>
-
-          <input
-            autoComplete="off"
-            type="text"
-            id="email-address-icon"
-            className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
-            placeholder="0"
-            name="dependents.totalNumberOfDependents"
-            value={clientInfoForm.dependents.totalNumberOfDependents || ""}
             onChange={handleChange}
           />
         </div>

@@ -108,7 +108,6 @@ const AddNewClientForm = ({ session }: any) => {
   };
 
   // Handler for form input changes
-  // Handler for form input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -153,10 +152,20 @@ const AddNewClientForm = ({ session }: any) => {
   }
 
   const handleDateChange = (dateString: string) => {
-    setClientInfoForm((prev) => ({
+    setClientInfoForm((prev: any) => ({
       ...prev,
       basicInformation: {
         ...prev.basicInformation,
+        dateOfBirth: dateString,
+      },
+    }));
+  };
+
+  const handleSpouseDateChange = (dateString: string) => {
+    setClientInfoForm((prev: any) => ({
+      ...prev,
+      basicInformation: {
+        ...prev.basicInformation?.spouseDetails,
         dateOfBirth: dateString,
       },
     }));
@@ -264,7 +273,7 @@ const AddNewClientForm = ({ session }: any) => {
                   type="text"
                   id="clientInfoForm.fullName"
                   className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 active:border-primary outline-none"
-                  placeholder="Carlos Rosario"
+                  placeholder="Client name"
                   name="basicInformation.fullName"
                   value={clientInfoForm.basicInformation.fullName || ""}
                   onChange={handleChange}
@@ -527,7 +536,20 @@ const AddNewClientForm = ({ session }: any) => {
                       />
                     </div>
 
-                    <div className="relative w-full">
+                    <div className="w-full">
+                      <DatePickerInputField
+                        id="basicInformation.dateOfBirth"
+                        name="basicInformation.dateOfBirth"
+                        value={
+                          clientInfoForm?.basicInformation?.spouseDetails
+                            ?.dateOfBirth
+                        }
+                        onChange={handleSpouseDateChange}
+                        placeholder="Select birth date"
+                      />
+                    </div>
+
+                    {/* <div className="relative w-full">
                       <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                         <svg
                           className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -551,7 +573,7 @@ const AddNewClientForm = ({ session }: any) => {
                         }
                         onChange={handleChange}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

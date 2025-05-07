@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import BasicInformation from "./BasicInformation";
 import Dependents from "./Dependents";
@@ -135,7 +135,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       depreciation: clientDetails?.strategy?.depreciation || "",
       travel: clientDetails?.strategy?.travel || "",
       meals: clientDetails?.strategy?.meals || "",
-      hiringChildren: clientDetails?.strategy?.hiringChildren || "",
+      hiringChildren: clientDetails?.dependents?.underAge17 * 1500 || "",
       scheduleCToSCorp: clientDetails?.strategy?.scheduleCToSCorp || "",
       costSegregation: clientDetails?.strategy?.costSegregation || "",
       rentHomeToCorporation:
@@ -169,6 +169,21 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       },
     }));
   };
+
+  // Hiring Children Value Calculation
+
+  useEffect(() => {
+    if (clientInfoForm?.dependents?.underAge17) {
+      const hiringChildrenValue = clientInfoForm.dependents.underAge17 * 1500;
+      setClientInfoForm((prevState: any) => ({
+        ...prevState,
+        strategy: {
+          ...prevState.strategy,
+          hiringChildren: hiringChildrenValue,
+        },
+      }));
+    }
+  }, [clientInfoForm?.dependents?.underAge17]);
 
   return (
     <div className="container py-10">

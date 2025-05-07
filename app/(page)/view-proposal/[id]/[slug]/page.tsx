@@ -1,8 +1,9 @@
+import { auth } from "@/auth";
 import ViewTaxPlanAndEdit from "@/components/generatePlan/ViewTaxPlanAndEdit";
 import ViewTaxProposalEdit from "@/components/generatePlan/ViewTaxProposalEdit";
-
 const Page = async ({ params }: any) => {
   const { slug, id } = await params;
+  const session = await auth();
 
   return (
     <div className="p-7 bg-[#eeeeee]">
@@ -11,7 +12,7 @@ const Page = async ({ params }: any) => {
           {slug === "tax-plan" ? (
             <ViewTaxPlanAndEdit />
           ) : (
-            <ViewTaxProposalEdit />
+            <ViewTaxProposalEdit session={session?.user?.accessToken} />
           )}
         </div>
       </div>

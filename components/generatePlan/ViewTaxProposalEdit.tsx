@@ -3,28 +3,87 @@
 import { updateDataField } from "@/redux/features/taxInfoSlice";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FiDollarSign } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Loader from "../shared/ui/Loader";
 
-const ViewTaxProposalEdit = () => {
+import { TbEditCircle } from "react-icons/tb";
+import { toast } from "react-toastify";
+
+const ViewTaxProposalEdit = ({ session }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const taxInfo = useSelector((state: RootState) => state.taxInfo);
 
-  const [estimatedPay, setEstimatedPay] = useState({
-    year2023: taxInfo?.data?.taxProposalInfo?.year2023 || 35822,
-    year2024: taxInfo?.data?.taxProposalInfo?.year2024 || 42563,
-    year2025: taxInfo?.data?.taxProposalInfo?.year2025 || 25631,
-    lastyearLost: taxInfo?.data?.taxProposalInfo?.lastyearLost || 58741,
+  const [estimatedTaxPay, setEstimatedTaxPay] = useState(
+    taxInfo?.data?.taxInfo?.calculatedTax || 0
+  );
+
+  const [estimatedOverpaymentOneFlag, setEstimatedOverpaymentOneFlag] =
+    useState(false);
+  const [estimatedOverpaymentTwoFlag, setEstimatedOverpaymentOneFlagTwo] =
+    useState(false);
+  const [ourEstimatedOverpaymentFlag, setOurEstimatedOverpaymentFlag] =
+    useState(false);
+
+  const [estimatedOverpaymentOne, setEstimatedOverpaymentOne] = useState({
+    year:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne?.year || "2023",
+    amount:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne?.amount || 0,
+    lastYearLost:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne?.lastYearLost ||
+      0,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [estimatedOverpaymentTwo, setEstimatedOverpaymentTwo] = useState({
+    year:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.year || "2023",
+    amount:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.amount || 0,
+    lastYearLost:
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.lastYearLost ||
+      0,
+  });
+
+  const [ourEstimatedOverpayment, setOurEstimatedOverpayment] = useState({
+    year:
+      taxInfo?.data?.taxProposalInfo?.ourEstimatedOverpayment?.year || "2025",
+    amount: taxInfo?.data?.taxInfo?.calculatedTax || 0,
+    estimatedLostLastYear:
+      taxInfo?.data?.taxProposalInfo?.ourEstimatedOverpayment
+        ?.estimatedLostLastYear || 0,
+  });
+
+  const handleEstimatedOverpaymentOne = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
-    setEstimatedPay((prev) => ({
+    setEstimatedOverpaymentOne((prev) => ({
+      ...prev,
+      [name]: Number(value),
+    }));
+  };
+
+  const handleEstimatedOverpaymentTwo = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setEstimatedOverpaymentTwo((prev) => ({
+      ...prev,
+      [name]: Number(value),
+    }));
+  };
+
+  const handleOurEstimatedOverpayment = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setOurEstimatedOverpayment((prev) => ({
       ...prev,
       [name]: Number(value),
     }));
@@ -33,27 +92,100 @@ const ViewTaxProposalEdit = () => {
   const taxPlanData = {
     clientId: taxInfo?.data?.client,
     taxInfo: taxInfo?.data?.taxInfo,
-    taxProposalInfo: estimatedPay,
+    taxProposalInfo: {
+      estimatedOverpaymentOne,
+      estimatedOverpaymentTwo,
+      ourEstimatedOverpayment,
+    },
   };
 
-  const handleUpdateTaxProposal = () => {
+  useEffect(() => {
+    const lostValue = estimatedOverpaymentOne?.amount - estimatedTaxPay;
+    setEstimatedOverpaymentOne((prev) => ({
+      ...prev,
+      lastYearLost: lostValue,
+    }));
+  }, [estimatedOverpaymentOne?.amount]);
+
+  useEffect(() => {
+    const lostValue = estimatedOverpaymentTwo?.amount - estimatedTaxPay;
+    setEstimatedOverpaymentTwo((prev) => ({
+      ...prev,
+      lastYearLost: lostValue,
+    }));
+  }, [estimatedOverpaymentTwo?.amount]);
+
+  useEffect(() => {
+    if (
+      estimatedOverpaymentOne?.lastYearLost &&
+      estimatedOverpaymentTwo?.lastYearLost
+    ) {
+      const estimatedLostLastYear =
+        estimatedOverpaymentOne?.lastYearLost +
+        estimatedOverpaymentTwo?.lastYearLost;
+      setOurEstimatedOverpayment((prev) => ({
+        ...prev,
+        estimatedLostLastYear: estimatedLostLastYear,
+      }));
+    }
+  }, [
+    estimatedOverpaymentOne?.lastYearLost,
+    estimatedOverpaymentTwo?.lastYearLost,
+  ]);
+
+  const handleUpdateTaxProposal = async () => {
     setLoading(true);
 
-    dispatch(
-      updateDataField({
-        key: "taxProposalInfo",
-        value: estimatedPay,
-      })
-    );
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tax-plan/${taxInfo?.data?._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${session}`,
+          },
+          body: JSON.stringify(taxPlanData),
+        }
+      );
 
-    setTimeout(() => {
-      setLoading(false);
-      router.back();
-    }, 300);
+      const result = await response.json();
+
+      if (result) {
+        dispatch(
+          updateDataField({
+            key: "taxProposalInfo",
+            value: taxPlanData?.taxProposalInfo,
+          })
+        );
+
+        toast.success("Tax plan updated successfully!");
+
+        setTimeout(() => {
+          setLoading(false);
+          router.back();
+        }, 300);
+      } else {
+        toast.error("Failed to update tax plan.");
+        setLoading(false);
+        const errorMessage = result?.error || "Failed to create tax plan.";
+        throw new Error(errorMessage);
+      }
+    } catch (error: any) {
+      console.error("Error creating tax plan:", error);
+      setError(
+        error.message || "Something went wrong while creating the tax plan."
+      );
+    }
+  };
+
+  const handleBack = () => {
+    router.back();
   };
 
   return (
-    <div className="flex flex-col gap-6 2xl:gap-10 container">
+    <div className="space-y-6 2xl:space-y-10 container">
+      {/* Top Heading Part */}
       <div
         style={{
           backgroundImage: "url('/assets/generate-plan/bg.png')",
@@ -78,7 +210,7 @@ const ViewTaxProposalEdit = () => {
         </div>
         <div className="absolute bottom-10 right-10">
           <Image
-            src="/assets/generate-plan/apex-advisor-logo.png"
+            src="/assets/site-logo/10x-tax.png"
             alt="apex advisor logo"
             width={300}
             height={200}
@@ -86,6 +218,7 @@ const ViewTaxProposalEdit = () => {
           ></Image>
         </div>
       </div>
+      {/* Important Information Part */}
       <div className="text-black text-start px-10 pt-10 pb-32 2xl:px-20 2xl:pt-20 2xl:pb-40 relative min-h-[750px] flex items-center bg-[#F0F3F7] border-t-8 border-primary">
         <div className="flex  gap-10 2xl:gap-20 items-start">
           <div>
@@ -146,7 +279,7 @@ const ViewTaxProposalEdit = () => {
         </div>
         <div className="absolute bottom-10 right-10">
           <Image
-            src="/assets/generate-plan/apex-advisor-logo.png"
+            src="/assets/site-logo/10x-tax.png"
             alt="apex advisor logo"
             width={300}
             height={200}
@@ -154,8 +287,11 @@ const ViewTaxProposalEdit = () => {
           ></Image>
         </div>
       </div>
+
+      {/*   TABLE OF CONTENTS */}
+
       <div>
-        <div className="min-h-[750px] h-full relative flex  ">
+        <div className="min-h-[750px] h-full flex">
           {/* Left Blue Section */}
           <div className="bg-primary w-1/4 "></div>
 
@@ -213,15 +349,15 @@ const ViewTaxProposalEdit = () => {
           </div>
 
           {/* Logo Section */}
-          <div className="absolute bottom-10 right-10 z-50">
+          {/* <div className="absolute bottom-10 right-10 z-50">
             <Image
-              src="/assets/generate-plan/apex-advisor-logo.png"
+              src="/assets/site-logo/10x-tax.png"
               alt="apex advisor logo"
               width={300}
               height={200}
               className="max-w-32 w-full"
             />
-          </div>
+          </div> */}
         </div>
         <div className="mt-6">
           <p className="text-sm">
@@ -260,102 +396,236 @@ const ViewTaxProposalEdit = () => {
           </p>
         </div>
       </div>
+
+      {/*   Your Estimated Tax Savings */}
+
       <div>
-        <div className="min-h-[750px] h-full relative flex  ">
-          <div className="text-black text-start px-10 pt-10 pb-10 2xl:px-20 2xl:pt-20 2xl:pb-20 relative min-h-[750px] flex items-center bg-[#F0F3F7] border-t-8 border-primary w-full">
-            <div className="flex flex-col h-full gap-8 2xl:gap-14 ">
-              <div>
-                <h2 className="text-4xl 2xl:text-5xl text-black font-bold mb-3">
-                  Your Estimated Tax Savings
-                </h2>
-                <p className="text-lg 2xl:text-xl font-normal mb-4 text-black">
-                  Based on preliminary information, this is how much we estimate
-                  you can save in taxes based on your current situation and
-                  projections.
+        <div className="text-black text-start bg-[#F0F3F7] border-t-8 border-primary p-10">
+          <div>
+            <h2 className="text-4xl 2xl:text-5xl text-black font-bold mb-3">
+              Your Estimated Tax Savings
+            </h2>
+            <p className="text-lg 2xl:text-xl font-normal mb-4 text-black">
+              Based on preliminary information, this is how much we estimate you
+              can save in taxes based on your current situation and projections.
+            </p>
+          </div>
+
+          <div className="flex justify-between items-center h-full w-full space-x-10 my-24 divide-x-2 divide-primary">
+            {/* 2023 */}
+            <div className="flex justify-between space-x-6 items-center w-full">
+              <div className="flex flex-col justify-center center ml-10">
+                <div className="flex items-center space-x-1">
+                  <div className="w-[100px]">
+                    {estimatedOverpaymentOneFlag ? (
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        id="clientInfoForm.fullName"
+                        className="bg-[#eeeeeed6] text-3xl font-bold text-primary rounded-lg focus:ring-none pxcus:border-none w-[100px] pl-2 placeholder-gray-400 active:border-none outline-none"
+                        placeholder=""
+                        name="year"
+                        value={estimatedOverpaymentOne.year}
+                        onChange={handleEstimatedOverpaymentOne}
+                      />
+                    ) : (
+                      <h4 className="text-3xl font-bold text-primary">
+                        {estimatedOverpaymentOne.year}
+                      </h4>
+                    )}
+                  </div>
+
+                  <button
+                    className="cursor-pointer"
+                    onClick={() =>
+                      setEstimatedOverpaymentOneFlag(
+                        !estimatedOverpaymentOneFlag
+                      )
+                    }
+                  >
+                    <TbEditCircle className="text-gray-800 size-5 hover:text-primary" />
+                  </button>
+                </div>
+                <p className="text-xl font-semibold leading-6 mt-4">
+                  Estimated <br />
+                  Overpayment
                 </p>
               </div>
-              <div className="grid grid-cols-3 ">
-                <div className="flex  justify-between items-end gap-2 pe-6 2xl:pe-20 py-5">
-                  <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2023</h4>
-                    <p className="text-end text-lg leading-[130%]">
-                      Estimated <br /> Overpayment
-                    </p>
-                  </div>
 
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    id="clientInfoForm.fullName"
-                    className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-none block w-full pl-4 py-2 placeholder-gray-400 active:border-none outline-none ml-10"
-                    placeholder="$"
-                    name="year2023"
-                    value={estimatedPay.year2023}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="flex  justify-between items-end gap-2 px-6 2xl:px-20 border-x-2 border-primary py-5">
-                  <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2024</h4>
-                    <p className="text-end text-lg leading-[130%]">
-                      Estimated <br /> Overpayment
+              <div className="w-[180px] flex items-center">
+                <FiDollarSign className="text-gray-700 mt-1 w-8" />
+                <div className="">
+                  {estimatedOverpaymentOneFlag ? (
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      id="clientInfoForm.fullName"
+                      className="bg-[#eeeeeed6] text-2xl font-semibold rounded-lg focus:ring-none focus:border-none block w-full pl-1 placeholder-gray-400 active:border-none outline-none"
+                      placeholder=""
+                      name="amount"
+                      value={estimatedOverpaymentOne?.amount}
+                      onChange={handleEstimatedOverpaymentOne}
+                    />
+                  ) : (
+                    <p className="text-2xl font-semibold pl-1">
+                      {estimatedOverpaymentOne?.amount?.toFixed(2)}
                     </p>
-                  </div>
-
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    id="clientInfoForm.fullName"
-                    className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-none block w-full pl-4 py-2 placeholder-gray-400 active:border-none outline-none ml-10"
-                    placeholder="$"
-                    name="year2024"
-                    value={estimatedPay.year2024}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="flex  justify-between items-end gap-2 ps-6 2xl:ps-20 py-5">
-                  <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2025</h4>
-                    <p className="text-end text-lg leading-[130%]">
-                      Estimated <br /> Overpayment
-                    </p>
-                  </div>
-
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    id="clientInfoForm.fullName"
-                    className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-none block w-full pl-4 py-2 placeholder-gray-400 active:border-none outline-none ml-10"
-                    placeholder="$"
-                    name="year2025"
-                    value={estimatedPay.year2025}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-3 mt-10">
-                <div>
-                  <p className=" text-base text-justify leading-[130%] pe-10 2xl:pe-20 border-r-2  border-primary py-5">
-                    These are estimated tax savings based on the information we
-                    have received from you via conversations, emails, tax
-                    returns etc. These are preliminary estimates and will change
-                    if we decide to engage in a tax planning engagement.
-                  </p>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="absolute bottom-10 right-10">
-              <Image
-                src="/assets/generate-plan/apex-advisor-logo.png"
-                alt="apex advisor logo"
-                width={300}
-                height={200}
-                className="max-w-32 w-full"
-              ></Image>
+            {/* 2024 */}
+
+            <div className="flex justify-between space-x-6 items-center w-full">
+              <div className="flex flex-col justify-center center ml-10">
+                <div className="flex items-center space-x-1">
+                  <div className="w-[100px]">
+                    {estimatedOverpaymentTwoFlag ? (
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        id="clientInfoForm.fullName"
+                        className="bg-[#eeeeeed6] text-3xl font-bold text-primary rounded-lg focus:ring-none pxcus:border-none w-[100px] pl-2 placeholder-gray-400 active:border-none outline-none"
+                        placeholder=""
+                        name="year"
+                        value={estimatedOverpaymentTwo.year}
+                        onChange={handleEstimatedOverpaymentTwo}
+                      />
+                    ) : (
+                      <h4 className="text-3xl font-bold text-primary">
+                        {estimatedOverpaymentTwo.year}
+                      </h4>
+                    )}
+                  </div>
+
+                  <button
+                    className="cursor-pointer"
+                    onClick={() =>
+                      setEstimatedOverpaymentOneFlagTwo(
+                        !estimatedOverpaymentTwoFlag
+                      )
+                    }
+                  >
+                    <TbEditCircle className="text-gray-800 size-5 hover:text-primary" />
+                  </button>
+                </div>
+                <p className="text-xl font-semibold leading-6 mt-4">
+                  Estimated <br />
+                  Overpayment
+                </p>
+              </div>
+
+              <div className="w-[180px] flex items-center">
+                <FiDollarSign className="text-gray-700 mt-1 w-8" />
+                <div className="">
+                  {estimatedOverpaymentTwoFlag ? (
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      id="clientInfoForm.fullName"
+                      className="bg-[#eeeeeed6] text-2xl font-semibold rounded-lg focus:ring-none focus:border-none block w-full pl-1 placeholder-gray-400 active:border-none outline-none"
+                      placeholder=""
+                      name="amount"
+                      value={estimatedOverpaymentTwo?.amount}
+                      onChange={handleEstimatedOverpaymentTwo}
+                    />
+                  ) : (
+                    <p className="text-2xl font-semibold pl-1">
+                      {estimatedOverpaymentTwo?.amount?.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* 2025 */}
+
+            <div className="flex justify-between space-x-6 items-center w-full">
+              <div className="flex flex-col justify-center center ml-10">
+                <div className="flex items-center space-x-1">
+                  <div className="w-[100px]">
+                    {ourEstimatedOverpaymentFlag ? (
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        id="clientInfoForm.fullName"
+                        className="bg-[#eeeeeed6] text-3xl font-bold text-primary rounded-lg focus:ring-none pxcus:border-none w-[100px] pl-2 placeholder-gray-400 active:border-none outline-none"
+                        placeholder=""
+                        name="year"
+                        value={ourEstimatedOverpayment.year}
+                        onChange={handleOurEstimatedOverpayment}
+                      />
+                    ) : (
+                      <h4 className="text-3xl font-bold text-primary">
+                        {ourEstimatedOverpayment.year}
+                      </h4>
+                    )}
+                  </div>
+
+                  <button
+                    className="cursor-pointer"
+                    onClick={() =>
+                      setOurEstimatedOverpaymentFlag(
+                        !ourEstimatedOverpaymentFlag
+                      )
+                    }
+                  >
+                    <TbEditCircle className="text-gray-800 size-5 hover:text-primary" />
+                  </button>
+                </div>
+                <p className="text-xl font-semibold leading-6 mt-4">
+                  Estimated <br />
+                  Overpayment
+                </p>
+              </div>
+
+              <div className="w-[180px] flex items-center">
+                <FiDollarSign className="text-gray-700 mt-1 w-8" />
+                <div className="">
+                  {ourEstimatedOverpaymentFlag ? (
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      id="clientInfoForm.fullName"
+                      className="bg-[#eeeeeed6] text-2xl font-semibold rounded-lg focus:ring-none focus:border-none block w-full pl-1 placeholder-gray-400 active:border-none outline-none"
+                      placeholder=""
+                      name="amount"
+                      value={ourEstimatedOverpayment?.amount}
+                      onChange={handleOurEstimatedOverpayment}
+                    />
+                  ) : (
+                    <p className="text-2xl font-semibold pl-1">
+                      {ourEstimatedOverpayment?.amount?.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
+
+          <div className="grid grid-cols-3 mt-10">
+            <div>
+              <p className=" text-base text-justify leading-[130%] pe-10 2xl:pe-20 border-r-2  border-primary py-5">
+                These are estimated tax savings based on the information we have
+                received from you via conversations, emails, tax returns etc.
+                These are preliminary estimates and will change if we decide to
+                engage in a tax planning engagement.
+              </p>
+            </div>
+          </div>
+
+          <div className="absolute bottom-10 right-10">
+            {/* <Image
+              src="/assets/site-logo/10x-tax.png"
+              alt="apex advisor logo"
+              width={300}
+              height={200}
+              className="max-w-32 w-full"
+            ></Image> */}
+          </div>
         </div>
+
         <div className="mt-6">
           <p className="text-sm">
             This Presentation, including all associated materials (collectively
@@ -393,8 +663,9 @@ const ViewTaxProposalEdit = () => {
           </p>
         </div>
       </div>
+      {/* Bottom Part */}
       <div>
-        <div className="min-h-[750px] h-full relative flex  ">
+        <div className="min-h-[750px] h-full flex ">
           <div className="text-black text-start px-10 pt-10 pb-10 2xl:px-10 2xl:pt-20 2xl:pb-20 relative min-h-[750px] flex items-center bg-[#F0F3F7] border-t-8 border-primary w-full">
             <div className="flex flex-col h-full gap-10 2xl:gap-20 w-full justify-center items-center">
               <div>
@@ -409,7 +680,9 @@ const ViewTaxProposalEdit = () => {
               <div className="flex items-end justify-between gap-2 w-full">
                 <div className="flex  justify-between items-end gap-2 ">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2023</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {estimatedOverpaymentOne?.year}
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Fee To <br /> Accountant
                     </p>
@@ -419,7 +692,9 @@ const ViewTaxProposalEdit = () => {
                 <h4 className="text-3xl font-bold text-primary ">+</h4>
                 <div className="flex  justify-between items-end gap-2 ">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2024</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {estimatedOverpaymentTwo?.year}
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Estimated <br /> Overpayment
                     </p>
@@ -429,16 +704,9 @@ const ViewTaxProposalEdit = () => {
                 <div className="text-3xl font-bold text-black mb-[3px]"></div>
                 <h4 className="text-3xl font-bold text-primary">=</h4>
                 <div className="text-start text-base font-bold leading-[130%] max-w-xs">
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    id="clientInfoForm.fullName"
-                    className="bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-none  pl-4 py-2 placeholder-gray-400 active:border-none outline-none ml-10"
-                    placeholder="$"
-                    name="lastyearLost"
-                    value={estimatedPay.lastyearLost}
-                    onChange={handleInputChange}
-                  />
+                  <h4 className="text-3xl font-bold text-primary">
+                    {ourEstimatedOverpayment?.estimatedLostLastYear?.toFixed(2)}
+                  </h4>
                 </div>
               </div>
               <div className="grid grid-cols-3 mt-10">
@@ -454,7 +722,7 @@ const ViewTaxProposalEdit = () => {
             </div>
             <div className="absolute bottom-10 right-10">
               <Image
-                src="/assets/generate-plan/apex-advisor-logo.png"
+                src="/assets/site-logo/10x-tax.png"
                 alt="apex advisor logo"
                 width={300}
                 height={200}
@@ -502,7 +770,13 @@ const ViewTaxProposalEdit = () => {
       </div>
       <div className="w-full flex items-center  justify-center space-x-6  mt-5">
         <button
-          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[200px] w-full h-12"
+          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[160px] w-full h-12"
+          onClick={handleBack}
+        >
+          Back
+        </button>
+        <button
+          className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[160px] w-full h-12"
           onClick={handleUpdateTaxProposal}
         >
           {loading ? (

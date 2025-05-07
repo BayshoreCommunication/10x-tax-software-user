@@ -13,6 +13,18 @@ const ViewTaxPlanAndEdit = () => {
     window.history.go(-2);
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+    }).format(amount);
+  };
+
   return (
     <div className="w-full">
       <div className="p-5 2xl:p-8 max-w-5xl mx-auto bg-white rounded-lg shadow-[0px_0px_10px_rgba(0,0,0,0.15)]">
@@ -22,7 +34,7 @@ const ViewTaxPlanAndEdit = () => {
           </h2>
           <p className="text-xl text-[#555555]">Federal income tax breakdown</p>
           <h3 className="text-[#B50302] text-4xl font-semibold mt-3">
-            ${taxInfo?.data?.taxInfo?.calculatedTax?.toFixed(2)}
+            {formatCurrency(taxInfo?.data?.taxInfo?.calculatedTax ?? 0)}
           </h3>
         </div>
         <div className="mt-10 2xl:mt-14 flex flex-col gap-8">
@@ -36,53 +48,18 @@ const ViewTaxPlanAndEdit = () => {
                   Gross income
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.annualGrossIncome}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Standard deduction
-                  {/* {clientInfoForm?.deduction
-                    ? "Itemized deductions"
-                    : "Standard deduction"} */}
-                </span>
-                <span className="text-base font-normal text-[#126742]">
-                  $
-                  {(taxInfo?.data?.taxInfo?.standardAndItemizedDeduction ?? 0) +
-                    (taxInfo?.data?.taxInfo?.ageDeductions ?? 0)}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Strategy Deductions
-                </span>
-                <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.strategyDeductions || 0}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Dependents Deduction
-                </span>
-                <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.dependentsDeduction || 0}
+                  {formatCurrency(
+                    taxInfo?.data?.taxInfo?.annualGrossIncome ?? 0
+                  )}
                 </span>
               </li>
 
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Retirement contributions
+                  <span>-</span> Total Deductions
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.retirementDeduction || 0}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Other deductions
-                </span>
-                <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.otherDeductions}
+                  {formatCurrency(taxInfo?.data?.taxInfo?.totalDeductions ?? 0)}
                 </span>
               </li>
             </ul>
@@ -91,7 +68,7 @@ const ViewTaxPlanAndEdit = () => {
                 Taxable income
               </span>
               <span className="text-lg font-medium text-[#dca100f9]">
-                ${taxInfo?.data?.taxInfo?.taxableIncome?.toFixed(2)}
+                {formatCurrency(taxInfo?.data?.taxInfo?.taxableIncome ?? 0)}
               </span>
             </p>
           </div>
@@ -102,35 +79,33 @@ const ViewTaxPlanAndEdit = () => {
             <ul className="space-y-2 py-4 mb-3 border-b">
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
-                  Estimated taxes before adjustments
+                  Total Tax Without Deduction
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.beforAdjustingTax?.toFixed(2)}
+                  {formatCurrency(
+                    taxInfo?.data?.taxInfo?.totalTaxWithoutDeduction ?? 0
+                  )}
                 </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Federal taxes withheld
+                  <span>-</span> Total Tax After Deduction
                 </span>
                 <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.taxesWithheld}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-base font-normal text-[#555555]">
-                  <span>-</span> Tax credits
-                </span>
-                <span className="text-base font-normal text-[#126742]">
-                  ${taxInfo?.data?.taxInfo?.taxCredits}
+                  {formatCurrency(
+                    taxInfo?.data?.taxInfo?.totalTaxAfterDeduction ?? 0
+                  )}
                 </span>
               </li>
             </ul>
             <p className="flex justify-between">
               <span className="text-base font-medium text-[#555555]">
-                Taxes owed
+                Tax Saved by Deductions
               </span>
               <span className="text-lg font-medium text-[#B50302]">
-                ${taxInfo?.data?.taxInfo?.taxesOwed?.toFixed(2)}
+                {formatCurrency(
+                  taxInfo?.data?.taxInfo?.taxSavedByDeductions ?? 0
+                )}
               </span>
             </p>
           </div>
@@ -156,10 +131,16 @@ const ViewTaxPlanAndEdit = () => {
           </div>
         </div>
 
-        <div className="w-full flex items-center  justify-start space-x-6  ">
+        <div className="w-full flex items-center  justify-center space-x-6 mt-10 ">
+          <button
+            onClick={handleBack}
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[160px] w-full"
+          >
+            Back
+          </button>
           <button
             onClick={goBackTwoSteps}
-            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[200px] w-full"
+            className="px-4 py-2  text-white rounded-md font-medium text-lg bg-primary hover:bg-hoverColor hover:text-white text-center max-w-[160px] w-full"
           >
             Edit
           </button>

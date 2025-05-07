@@ -7,7 +7,6 @@ import {
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GoQuestion } from "react-icons/go";
-import { IoIosArrowDown } from "react-icons/io";
 
 const CalculateValueLeftSide = ({
   clientInfoForm,
@@ -208,413 +207,115 @@ const CalculateValueLeftSide = ({
               Maximum home office deduction is $1,500.
             </p>
           )}
-          {/* <input
-            autoComplete="off"
-            type="text"
-            id="email-address-icon"
-            className={`border-opacity-10 text-lg rounded-md focus:ring-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80 outline-none text-white !appearance-none ${maxHomeOfficeAlert ? "bg-[#ffaca942] border border-[#db615c] focus:border-red-300" : "bg-[#383E54] border border-white focus:border-primary"}`}
-            placeholder="$"
-            name="strategy.homeOffice"
-            value={clientInfoForm.strategy.homeOffice || ""}
-            onChange={(e) => {
-              const value = e.target.value;
-
-          {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
-            <p className="mt-2 text-sm text-red-500">
-              Maximum home office deduction is $1,500.
-            </p>
-          )}
         </div>
 
         {/* Depreciation */}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
-            >
-              Depreciation
+        <div className="w-full">
+          <label
+            htmlFor="name-icon"
+            className="block mb-2 text-lg font-normal text-white"
+          >
+            Depreciation
+          </label>
+
+          <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            placeholder="$"
+            name="strategy.depreciation"
+            value={clientInfoForm.strategy.depreciation || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Travel */}
+        <div className="w-full">
+          <label
+            htmlFor="name-icon"
+            className="block mb-2 text-lg font-normal text-white"
+          >
+            Travel
+          </label>
+
+          <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            placeholder="$"
+            name="strategy.travel"
+            value={clientInfoForm.strategy.travel || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Meals */}
+        <div className="w-full">
+          <label
+            htmlFor="name-icon"
+            className="block mb-2 text-lg font-normal text-white"
+          >
+            Meals
+          </label>
+
+          <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            placeholder="$"
+            name="strategy.meals"
+            value={clientInfoForm.strategy.meals || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Hiring Children */}
+        <div className="w-full">
+          <label
+            htmlFor="name-icon"
+            className="block mb-2 text-lg font-normal text-white"
+          >
+            Hiring Children
+          </label>
+
+          <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            placeholder="$"
+            name="strategy.hiringChildren"
+            value={clientInfoForm.strategy.hiringChildren || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Annual gross income */}
+        <div className="w-full">
+          <div className=" mb-2 flex items-center space-x-2 ">
+            <label className="text-lg font-normal text-white">
+              Annual gross income
             </label>
-
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$"
-              name="strategy.depreciation"
-              value={clientInfoForm.strategy.depreciation || ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Travel */}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
+            <span
+              className="text-primary hover:text-hoverColor  text-lg"
+              title="Annual gross income"
             >
-              Travel
-            </label>
-
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$"
-              name="strategy.travel"
-              value={clientInfoForm.strategy.travel || ""}
-              onChange={handleChange}
-            />
+              <GoQuestion />
+            </span>
           </div>
-
-          {/* Hiring Children */}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
-            >
-              Hiring Children
-            </label>
-
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$"
-              name="strategy.hiringChildren"
-              value={clientInfoForm.strategy.hiringChildren || ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Meals */}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
-            >
-              Meals
-            </label>
-
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$"
-              name="strategy.meals"
-              value={clientInfoForm.strategy.meals || ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Annual gross income */}
-          <div className="w-full">
-            <div className=" mb-2 flex items-center space-x-2 ">
-              <label className="text-lg font-normal text-white">
-                Annual gross income
-              </label>
-              <span
-                className="text-primary hover:text-hoverColor  text-lg"
-                title="Annual gross income"
-              >
-                <GoQuestion />
-              </span>
-            </div>
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$100,000"
-              name="basicInformation.annualGrossIncome"
-              value={clientInfoForm.basicInformation.annualGrossIncome ?? ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Age (as of Jan 1, 2024)*/}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
-            >
-              Age (current)
-            </label>
-
-            <input
-              autoComplete="off"
-              className={`bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white  ${
-                Number(clientAge) < 80 && Number(clientAge) < 18
-                  ? "border-red-300 focus:ring-red-300 focus:border-red-300"
-                  : "border-gray-300 focus:ring-primary focus:border-primary"
-              }"`}
-              placeholder="35"
-              type="text"
-              id="age"
-              value={Number(clientAge) ?? ""}
-              onChange={(e) => setClientAge(Number(e.target.value))}
-            />
-            {clientAge &&
-              (Number(clientAge) < 18 || Number(clientAge) > 80) && (
-                <p className="mt-2 text-sm text-red-500">
-                  Please enter a number between 18 and 80
-                </p>
-              )}
-          </div>
-
-          {/* You standard deduction: $13,850  */}
-          <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-white"
-            >
-              Your standard deduction: $13,850
-            </label>
-
-            <div className="flex flex-col gap-2">
-              {/* Itemized Deduction */}
-              <div className="flex items-center ps-4 bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md w-full text-white ">
-                <input
-                  id="bordered-radio-1"
-                  type="radio"
-                  name="bordered-radio"
-                  className="w-5 h-5 bg-[#383E54] border border-white border-opacity-10 rounded-md text-white focus:ring-primary focus:border-primary !cursor-pointer"
-                  checked={!standardDeductionFlag} // Unchecked if standard deduction is selected
-                  onChange={() => setStandardDeductionFlag(false)}
-                />
-                <label
-                  htmlFor="bordered-radio-1"
-                  className="w-full py-4 ms-2 text-lg font-normal text-white"
-                >
-                  Standard Deduction
-                </label>
-              </div>
-
-              {/* Standard Deduction */}
-              <div className="flex items-center ps-4 bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md w-full text-white cursor-pointer">
-                <input
-                  id="bordered-radio-2"
-                  type="radio"
-                  name="bordered-radio"
-                  className="w-5 h-5 bg-[#383E54] border border-white border-opacity-10 rounded-md text-white focus:ring-primary focus:border-primary  !cursor-pointer"
-                  checked={standardDeductionFlag}
-                  onChange={() => setStandardDeductionFlag(true)}
-                />
-                <label
-                  htmlFor="bordered-radio-2"
-                  className="w-full py-4 ms-2 text-lg font-normal text-white"
-                >
-                  Itemized Deduction
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* Itemized deduction */}
-          {standardDeductionFlag ? (
-            <motion.div
-              className="overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={
-                standardDeductionFlag
-                  ? { height: "auto", opacity: 1 }
-                  : { height: 0, opacity: 0 }
-              }
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <div className="w-full">
-                <div className=" mb-2 flex items-center space-x-2 ">
-                  <label className="text-lg font-normal text-white">
-                    Itemized deduction
-                  </label>
-                  <span
-                    className="text-primary hover:text-hoverColor  text-lg"
-                    title="Itemized deduction"
-                  >
-                    <GoQuestion />
-                  </span>
-                </div>
-
-                <input
-                  autoComplete="off"
-                  type="text"
-                  id="email-address-icon"
-                  className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-                  placeholder="$"
-                  name="standardDeduction.itemizedDeduction"
-                  value={
-                    clientInfoForm.standardDeduction.itemizedDeduction || ""
-                  }
-                  onChange={handleChange}
-                />
-              </div>
-            </motion.div>
-          ) : (
-            ""
-          )}
-
-          {/* Taxes withheld  */}
-          <div className="w-full">
-            <div className=" mb-2 flex items-center space-x-2 ">
-              <label className="text-lg font-normal text-white">
-                Taxes withheld
-              </label>
-              <span
-                className="text-primary hover:text-hoverColor  text-lg"
-                title="Taxes withheld"
-              >
-                <GoQuestion />
-              </span>
-            </div>
-            <input
-              autoComplete="off"
-              type="text"
-              id="email-address-icon"
-              className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-              placeholder="$"
-              name="standardDeduction.taxesWithheld"
-              value={clientInfoForm.standardDeduction.taxesWithheld || ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Show Advanced */}
-          <div>
-            <div className="w-full">
-              <button
-                onClick={() => setShowAdvancedFlag(!showAdvancedFlag)}
-                className=" mb-2 flex items-center space-x-3  py-5 justify-between !cursor-pointer"
-              >
-                <label className="text-lg font-semibold text-primary !cursor-pointer">
-                  Show Advanced
-                </label>
-                <span
-                  className="text-primary hover:text-hoverColor  text-2xl font-semibold"
-                  title="Taxes withheld"
-                >
-                  <IoIosArrowDown
-                    className={`size-5 text-primary transform transition-transform duration-300 ${
-                      showAdvancedFlag ? "rotate-180" : "rotate-0"
-                    }`}
-                  />
-                </span>
-              </button>
-              {showAdvancedFlag ? (
-                <motion.div
-                  className="flex flex-col space-y-3 2xl:space-y-5 overflow-hidden"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={
-                    showAdvancedFlag
-                      ? { height: "auto", opacity: 1 }
-                      : { height: 0, opacity: 0 }
-                  }
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                >
-                  {/* 40(K) contributations  */}
-                  <div className="w-full">
-                    <div className=" mb-2 flex items-center space-x-2 ">
-                      <label className="text-lg font-normal text-white">
-                        40(K) contributations
-                      </label>
-                      <span
-                        className="text-primary hover:text-hoverColor  text-lg"
-                        title="40(K) contributations"
-                      >
-                        <GoQuestion />
-                      </span>
-                    </div>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      id="email-address-icon"
-                      className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-                      placeholder="$"
-                      name="advanced.contributations"
-                      value={clientInfoForm.advanced.contributations || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {/* IRA contributations  */}
-                  <div className="w-full">
-                    <div className=" mb-2 flex items-center space-x-2 ">
-                      <label className="text-lg font-normal text-white">
-                        IRA contributations
-                      </label>
-                      <span
-                        className="text-primary hover:text-hoverColor  text-lg"
-                        title="IRA contributations"
-                      >
-                        <GoQuestion />
-                      </span>
-                    </div>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      id="email-address-icon"
-                      className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-                      placeholder="$"
-                      name="advanced.iRAContributations"
-                      value={clientInfoForm.advanced.iRAContributations || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {/* Other deductions  */}
-                  <div className=" w-full">
-                    <div className=" mb-2 flex items-center space-x-2 ">
-                      <label className="text-lg font-normal text-white">
-                        Other deductions
-                      </label>
-                      <span
-                        className="text-primary hover:text-hoverColor  text-lg"
-                        title="Other deductions"
-                      >
-                        <GoQuestion />
-                      </span>
-                    </div>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      id="email-address-icon"
-                      className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-                      placeholder="$"
-                      name="advanced.otherDeductions"
-                      value={clientInfoForm.advanced.otherDeductions || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {/* Tax credits */}
-                  <div className="w-full">
-                    <div className=" mb-2 flex items-center space-x-2 ">
-                      <label className="text-lg font-normal text-white">
-                        Tax credits
-                      </label>
-                      <span
-                        className="text-primary hover:text-hoverColor  text-lg"
-                        title="Taxes withheld"
-                      >
-                        <GoQuestion />
-                      </span>
-                    </div>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      id="email-address-icon"
-                      className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
-                      placeholder="$"
-                      name="advanced.taxCredits"
-                      value={clientInfoForm.advanced.taxCredits || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </motion.div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
+          <input
+            autoComplete="off"
+            type="text"
+            id="email-address-icon"
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
+            placeholder="$100,000"
+            name="basicInformation.annualGrossIncome"
+            value={clientInfoForm.basicInformation.annualGrossIncome ?? ""}
+            onChange={handleChange}
+          />
         </div>
       </div>
     </div>

@@ -128,7 +128,7 @@ const FillingStatus = ({
     <div>
       <div className="flex items-center space-x-6 pb-3">
         <form className="w-full" onSubmit={handleSubmitFormData}>
-          <div className="w-full">
+          <div className="w-1/2">
             <label
               htmlFor="marital-status-dropdown"
               className="block mb-2 text-lg font-normal text-gray-900"

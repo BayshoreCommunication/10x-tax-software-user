@@ -174,7 +174,8 @@ const ForgetPasswordOtpVerificationForm = ({
       </h2>
 
       <p className="font-light text-lg text-gray-600">
-        We have sent an OTP to this email
+        We have sent an OTP to this email{" "}
+        <span className="text-sm italic">{`( Please check for spam as well. )`}</span>
       </p>
       <p className="font-normal text-lg text-black">
         {maskEmail(userForgotPasswordInfo?.email)}

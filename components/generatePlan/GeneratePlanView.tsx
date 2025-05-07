@@ -7,93 +7,21 @@ import { useDispatch } from "react-redux";
 import Loader from "../shared/ui/Loader";
 
 import { removeData, setData } from "@/redux/features/taxInfoSlice";
+import { ClientInfoForm } from "@/types/clientInfo";
 import CalculateValueLeftSide from "./TaxCalculate/CalculateValueLeftSide";
 import ShowCalculateValueRightSide from "./TaxCalculate/ShowCalculateValueRightSide";
 
-interface SpouseDetails {
-  fullName: string;
-  profession: string;
-  income: number | null;
-  dateOfBirth: string;
-}
-
-interface BasicInformation {
-  fullName: string;
-  phone: string;
-  email: string;
-  profession: string;
-  annualGrossIncome: number | null;
-  dateOfBirth: string;
-  maritalStatus: string;
-  address: string;
-  spouseDetails: SpouseDetails;
-}
-
-interface Strategy {
-  homeOffice: string;
-  depreciation: string;
-  travel: string;
-  meals: string;
-  hiringChildren: string;
-  scheduleCToSCorp: string;
-  costSegregation: string;
-  rentHomeToCorporation: string;
-  healthInsurance: string;
-  fringeBenefits: string;
-  accountablePlan: string;
-  other: string;
-}
-
-interface Dependents {
-  underAge17: string;
-  fullTimeStudentsAge17To23: string;
-  otherDependents: string;
-  totalNumberOfDependents: string;
-}
-
-standardDeduction: interface StandardDeduction {
-  itemizedDeduction: string;
-  taxesWithheld: string;
-}
-interface Advanced {
-  contributations: string;
-  iRAContributations: string;
-  otherDeductions: string;
-  taxCredits: string;
-}
-
-type FilingStatus =
-  | "single"
-  | "marriedFilingJointly"
-  | "marriedFilingSeparately"
-  | "headOfHousehold";
-interface ClientInfoForm {
-  fillingStatus: FilingStatus;
-  deduction: boolean;
-  basicInformation: BasicInformation;
-  strategy: Strategy;
-  dependents: Dependents;
-  standardDeduction: StandardDeduction;
-  advanced: Advanced;
-}
-
 type TaxState = {
   calculatedTax: number;
-  otherDeductions: number;
-  strategyDeductions: number;
-  standardAndItemizedDeduction: number;
   marginalTaxRate: number;
   effectiveTaxRate: number;
   taxableIncome: number;
-  ageDeductions: number;
   taxesOwed: number;
-  beforAdjustingTax: number;
-  taxCredits: number;
   totalDeductions: number;
-  taxesWithheld: number;
   annualGrossIncome: number;
-  retirementDeduction: number;
-  dependentsDeduction: number;
+  totalTaxWithoutDeduction: number;
+  totalTaxAfterDeduction: number;
+  taxSavedByDeductions: number;
 };
 
 const GeneratePlanView = ({ id, session, clientDetails }: any) => {
@@ -138,55 +66,42 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       costSegregation: clientDetails?.strategy?.costSegregation || "",
       rentHomeToCorporation:
         clientDetails?.strategy?.rentHomeToCorporation || "",
-      healthInsurance: clientDetails?.strategy?.healthInsurance || "",
-      fringeBenefits: clientDetails?.strategy?.fringeBenefits || "",
-      accountablePlan: clientDetails?.strategy?.accountablePlan || "",
-      other: clientDetails?.strategy?.other || "",
     },
 
     dependents: {
       underAge17: clientDetails?.dependents?.underAge17 || "",
-      fullTimeStudentsAge17To23:
-        clientDetails?.dependents?.fullTimeStudentsAge17To23 || "",
-      otherDependents: clientDetails?.dependents?.otherDependents || "",
-      totalNumberOfDependents:
-        clientDetails?.dependents?.totalNumberOfDependents || "",
     },
 
-    deduction: clientDetails?.deduction || "",
-    standardDeduction: {
-      itemizedDeduction:
-        clientDetails?.standardDeduction?.itemizedDeduction || "",
-      taxesWithheld: clientDetails?.standardDeduction?.taxesWithheld || "",
-    },
+    totalTaxWithoutDeduction: 0,
+    totalTaxAfterDeduction: 0,
+    taxSavedByDeductions: 0,
+    // standardDeduction: {
+    //   itemizedDeduction:
+    //     clientDetails?.standardDeduction?.itemizedDeduction || "",
+    //   taxesWithheld: clientDetails?.standardDeduction?.taxesWithheld || "",
+    // },
 
-    advanced: {
-      contributations: clientDetails?.advanced?.contributations || "",
-      iRAContributations: clientDetails?.advanced?.iRAContributations || "",
-      otherDeductions: clientDetails?.advanced?.otherDeductions || "",
-      taxCredits: clientDetails?.advanced?.taxCredits || "",
-    },
+    // advanced: {
+    //   contributations: clientDetails?.advanced?.contributations || "",
+    //   iRAContributations: clientDetails?.advanced?.iRAContributations || "",
+    //   otherDeductions: clientDetails?.advanced?.otherDeductions || "",
+    //   taxCredits: clientDetails?.advanced?.taxCredits || "",
+    // },
   });
 
   // Taxcalculate
 
   const [taxDetails, setTaxDetails] = useState<TaxState | null>({
-    ageDeductions: 0,
     calculatedTax: 0,
     effectiveTaxRate: 0,
     marginalTaxRate: 0,
     taxableIncome: 0,
     totalDeductions: 0,
-    standardAndItemizedDeduction: 0,
-    otherDeductions: 0,
-    strategyDeductions: 0,
-    taxesWithheld: 0,
-    taxCredits: 0,
     taxesOwed: 0,
-    beforAdjustingTax: 0,
     annualGrossIncome: 0,
-    retirementDeduction: 0,
-    dependentsDeduction: 0,
+    totalTaxWithoutDeduction: 0,
+    totalTaxAfterDeduction: 0,
+    taxSavedByDeductions: 0,
   });
 
   // Test Data
@@ -195,10 +110,21 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
     clientId: id,
     taxInfo: taxDetails,
     taxProposalInfo: {
-      year2023: 2541111,
-      year2024: 5816525,
-      year2025: taxDetails?.calculatedTax,
-      lastyearLost: 51111,
+      estimatedOverpaymentOne: {
+        year: "2023",
+        amount: 0,
+        lastYearLost: 0,
+      },
+      estimatedOverpaymentTwo: {
+        year: "2023",
+        amount: 0,
+        lastYearLost: 0,
+      },
+      ourEstimatedOverpayment: {
+        year: "2025",
+        amount: 0,
+        estimatedLostLastYear: 0,
+      },
     },
   };
 
@@ -258,6 +184,15 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       if (updateResponse.ok) {
         // Successfully updated, proceed to create tax plan
         await createTaxPlanByClient();
+
+        // if (result) {
+        //   dispatch(removeData());
+        //   router.push(`/view-proposal/${id}`);
+        //   dispatch(setData(result?.payload?.newTaxPlan));
+        // } else {
+        //   const errorMessage = result?.error || "Failed to create tax plan.";
+        //   throw new Error(errorMessage);
+        // }
       } else {
         const errorMessage =
           updateResult?.error || "Failed to update client data.";
@@ -276,7 +211,7 @@ const GeneratePlanView = ({ id, session, clientDetails }: any) => {
       <div className="bg-white p-10">
         <div className="flex justify-between items-start space-x-4">
           {/* Tax Generator / Left Side */}
-          <div className="w-[30%] bg-secondary p-5 2xl:p-8">
+          <div className="w-[30%] bg-secondary p-5 2xl:p-8  min-h-[840px]">
             <CalculateValueLeftSide
               clientInfoForm={clientInfoForm}
               setClientInfoForm={setClientInfoForm}

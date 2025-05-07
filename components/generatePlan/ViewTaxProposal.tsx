@@ -32,7 +32,7 @@ const ViewTaxProposal = () => {
         </div>
         <div className="absolute bottom-10 right-10">
           <Image
-            src="/assets/generate-plan/apex-advisor-logo.png"
+            src="/assets/site-logo/10x-tax.png"
             alt="apex advisor logo"
             width={300}
             height={200}
@@ -100,7 +100,7 @@ const ViewTaxProposal = () => {
         </div>
         <div className="absolute bottom-10 right-10">
           <Image
-            src="/assets/generate-plan/apex-advisor-logo.png"
+            src="/assets/site-logo/10x-tax.png"
             alt="apex advisor logo"
             width={300}
             height={200}
@@ -169,7 +169,7 @@ const ViewTaxProposal = () => {
           {/* Logo Section */}
           <div className="absolute bottom-10 right-10 z-50">
             <Image
-              src="/assets/generate-plan/apex-advisor-logo.png"
+              src="/assets/site-logo/10x-tax.png"
               alt="apex advisor logo"
               width={300}
               height={200}
@@ -231,35 +231,59 @@ const ViewTaxProposal = () => {
               <div className="grid grid-cols-3 ">
                 <div className="flex  justify-between items-end gap-2 pe-6 2xl:pe-20 py-5">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2023</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {
+                        taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne
+                          ?.year
+                      }
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Estimated <br /> Overpayment
                     </p>
                   </div>
                   <h4 className="text-3xl font-bold text-black mb-[3px]">
-                    ${taxInfo?.data?.taxProposalInfo?.year2023 || 0}
+                    $
+                    {taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne.amount?.toFixed(
+                      2
+                    ) || 0}
                   </h4>
                 </div>
                 <div className="flex  justify-between items-end gap-2 px-6 2xl:px-20 border-x-2 border-primary py-5">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2024</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {
+                        taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo
+                          ?.year
+                      }
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Estimated <br /> Overpayment
                     </p>
                   </div>
                   <h4 className="text-3xl font-bold text-black mb-[3px]">
-                    ${taxInfo?.data?.taxProposalInfo?.year2024 || 0}
+                    $
+                    {taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo.amount?.toFixed(
+                      2
+                    ) || 0}
                   </h4>
                 </div>
                 <div className="flex  justify-between items-end gap-2 ps-6 2xl:ps-20 py-5">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2025</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {
+                        taxInfo?.data?.taxProposalInfo?.ourEstimatedOverpayment
+                          ?.year
+                      }
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Estimated <br /> Overpayment
                     </p>
                   </div>
                   <h4 className="text-3xl font-bold text-black mb-[3px]">
-                    ${taxInfo?.data?.taxProposalInfo?.year2025}
+                    $
+                    {taxInfo?.data?.taxProposalInfo?.ourEstimatedOverpayment?.amount?.toFixed(
+                      2
+                    ) || 0}
                   </h4>
                 </div>
               </div>
@@ -277,7 +301,7 @@ const ViewTaxProposal = () => {
 
             <div className="absolute bottom-10 right-10">
               <Image
-                src="/assets/generate-plan/apex-advisor-logo.png"
+                src="/assets/site-logo/10x-tax.png"
                 alt="apex advisor logo"
                 width={300}
                 height={200}
@@ -339,7 +363,12 @@ const ViewTaxProposal = () => {
               <div className="flex items-end justify-between gap-2 w-full">
                 <div className="flex  justify-between items-end gap-2 ">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2023</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {
+                        taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentOne
+                          ?.year
+                      }
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Fee To <br /> Accountant
                     </p>
@@ -349,7 +378,12 @@ const ViewTaxProposal = () => {
                 <h4 className="text-3xl font-bold text-primary ">+</h4>
                 <div className="flex  justify-between items-end gap-2 ">
                   <div className="flex flex-col justify-between items-end gap-2">
-                    <h4 className="text-3xl font-bold text-primary">2023</h4>
+                    <h4 className="text-3xl font-bold text-primary">
+                      {
+                        taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo
+                          ?.year
+                      }
+                    </h4>
                     <p className="text-end text-lg leading-[130%]">
                       Estimated <br /> Overpayment
                     </p>
@@ -358,7 +392,10 @@ const ViewTaxProposal = () => {
                 <h4 className="text-3xl font-bold ">?</h4>
                 <h4 className="text-3xl font-bold text-primary">=</h4>
                 <p className="text-start text-base font-bold leading-[130%] max-w-xs">
-                  ${taxInfo?.data?.taxProposalInfo?.lastyearLost}
+                  $
+                  {taxInfo?.data?.taxProposalInfo?.ourEstimatedOverpayment?.estimatedLostLastYear?.toFixed(
+                    2
+                  )}
                 </p>
               </div>
               <div className="grid grid-cols-3 mt-10">
@@ -374,7 +411,7 @@ const ViewTaxProposal = () => {
             </div>
             <div className="absolute bottom-10 right-10">
               <Image
-                src="/assets/generate-plan/apex-advisor-logo.png"
+                src="/assets/site-logo/10x-tax.png"
                 alt="apex advisor logo"
                 width={300}
                 height={200}
