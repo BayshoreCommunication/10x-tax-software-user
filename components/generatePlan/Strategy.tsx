@@ -78,8 +78,6 @@ const Strategy = ({
     }
   };
 
-  console.log("clientInfoForm", clientInfoForm?.dependents?.underAge17 * 1500);
-
   return (
     <div>
       <form onSubmit={handleSubmitFormData}>
@@ -92,6 +90,10 @@ const Strategy = ({
                 className="block mb-2 text-lg font-normal text-gray-900"
               >
                 Home Office
+                <span className="italic text-sm">
+                  {" "}
+                  {`(Note: Additional text to be added later as per client's request.)`}
+                </span>
               </label>
               <input
                 type="text"

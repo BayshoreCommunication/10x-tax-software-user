@@ -207,6 +207,10 @@ const BasicInformation = ({
               className="block mb-2 text-lg font-normal text-gray-900"
             >
               Annual Gross Income<span className="text-primary">*</span>
+              <span className="italic text-sm">
+                {" "}
+                {`(Note: Additional text to be added later as per client's request.)`}
+              </span>
             </label>
 
             <input
