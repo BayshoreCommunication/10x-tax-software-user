@@ -11,15 +11,18 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(
+    userData?.logoUrl || null
+  );
   const [brandColor, setBrandColor] = useState<string>("#D5AD45");
+
   const [businessInfoForm, setBusinessInfoForm] = useState({
-    image: "",
+    image: userData?.logoUrl || "",
     businessName: userData?.businessName || "",
-    businessWebsite: "",
+    businessWebsite: userData?.businessWebsite || "",
     phone: userData?.phone || "",
-    address: "",
-    website: "",
+    address: userData?.address || "",
+    website: userData?.website || "",
     brandColor: brandColor,
   });
 
@@ -69,8 +72,6 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
     setError(null);
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -102,6 +103,8 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
       setLoading(false);
     }
   };
+
+  console.log("businessInfoForm", userData?.logoUrl);
 
   return (
     <div className="py-10 flex items-center justify-center">
@@ -322,7 +325,7 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
                     <p>Creating...</p>
                   </div>
                 ) : (
-                  <p>Create</p>
+                  <p>Update</p>
                 )}
               </button>
             </div>
@@ -334,50 +337,3 @@ const BusinessInformationForm = ({ userData }: { userData: any }) => {
 };
 
 export default BusinessInformationForm;
-
-// "use client";
-
-// import { useState } from "react";
-// import { userImageUpload } from "../app/action/testImage";
-
-// const UploadImage = () => {
-//   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-//   const [uploadStatus, setUploadStatus] = useState<string>("");
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     setSelectedFile(file || null);
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     if (!selectedFile) {
-//       setUploadStatus("No file selected");
-//       return;
-//     }
-
-//     const formData = new FormData();
-//     formData.append("image", selectedFile);
-
-//     try {
-//       const result = await userImageUpload(formData);
-//       setUploadStatus(result.message);
-//     } catch (error) {
-//       setUploadStatus("An error occurred during upload");
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Upload Image</h1>
-//       <form onSubmit={handleSubmit}>
-//         <input type="file" onChange={handleFileChange} accept="image/*" />
-//         <button type="submit">Upload</button>
-//       </form>
-//       {uploadStatus && <p>{uploadStatus}</p>}
-//     </div>
-//   );
-// };
-
-// export default UploadImage;
