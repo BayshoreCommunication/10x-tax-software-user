@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import DatePickerInputField from "../shared/ui/DatePickerInputField";
+import DatePickerInputForSpouse from "../shared/ui/DatePickerInputForSpouse";
 // Define the types for the form
 interface SpouseDetails {
   fullName: string;
@@ -160,6 +161,19 @@ const EditClient = ({ session, id, clientDetails }: any) => {
       basicInformation: {
         ...prev.basicInformation,
         dateOfBirth: dateString,
+      },
+    }));
+  };
+
+  const handleSpouseDateChange = (dateString: string) => {
+    setClientInfoForm((prev: any) => ({
+      ...prev,
+      basicInformation: {
+        ...prev.basicInformation,
+        spouseDetails: {
+          ...prev.basicInformation?.spouseDetails,
+          dateOfBirth: dateString,
+        },
       },
     }));
   };
@@ -477,29 +491,17 @@ const EditClient = ({ session, id, clientDetails }: any) => {
                       />
                     </div>
 
-                    <div className="relative w-full">
-                      <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                        </svg>
-                      </div>
-                      <input
-                        id="basicInformation.spouseDetails.dateOfBirth"
-                        type="date"
-                        className="bg-white border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none p-4 ps-10"
-                        placeholder="Date of Birth"
-                        name="basicInformation.spouseDetails.dateOfBirth"
+                    <div className="w-full">
+                      <DatePickerInputForSpouse
+                        id=""
+                        name="basicInformation?.spouseDetails
+                            ?.dateOfBirth"
                         value={
                           clientInfoForm?.basicInformation?.spouseDetails
-                            ?.dateOfBirth || ""
+                            ?.dateOfBirth
                         }
-                        onChange={handleChange}
+                        onChange={handleSpouseDateChange}
+                        placeholder="Select birth date"
                       />
                     </div>
                   </div>

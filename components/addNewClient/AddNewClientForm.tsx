@@ -174,7 +174,6 @@ const AddNewClientForm = ({ session }: any) => {
       },
     }));
   };
-  
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -502,8 +501,8 @@ const AddNewClientForm = ({ session }: any) => {
                         placeholder="Name"
                         name="basicInformation.spouseDetails.fullName"
                         value={
-                          clientInfoForm.basicInformation?.spouseDetails?
-                            .fullName || ""
+                          clientInfoForm.basicInformation?.spouseDetails
+                            ?.fullName || ""
                         }
                         onChange={handleChange}
                       />
