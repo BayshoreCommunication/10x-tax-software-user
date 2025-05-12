@@ -182,12 +182,20 @@ const CalculateValueLeftSide = ({
 
         {/* Home Office */}
         <div className="w-full">
-          <label
-            htmlFor="name-icon"
-            className="block mb-2 text-lg font-normal text-white"
-          >
-            Home Office
-          </label>
+          <div className="mb-2 flex items-center space-x-1 relative">
+            <label className="block text-lg font-normal text-white">
+              Home Office
+            </label>
+
+            <span className="group text-primary hover:text-hoverColor text-lg cursor-pointer relative">
+              <GoQuestion />
+
+              <div className="absolute left-1/2 top-full mt-1 hidden w-max -translate-x-1/2 rounded bg-gray-500 p-2 text-sm text-white group-hover:block z-10">
+                Note: Additional text to be added later <br />
+                as per client's request.
+              </div>
+            </span>
+          </div>
           <input
             autoComplete="off"
             type="text"
@@ -295,17 +303,21 @@ const CalculateValueLeftSide = ({
 
         {/* Annual gross income */}
         <div className="w-full">
-          <div className=" mb-2 flex items-center space-x-2 ">
-            <label className="text-lg font-normal text-white">
+          <div className="mb-2 flex items-center space-x-1 relative">
+            <label className="block text-lg font-normal text-white">
               Annual gross income
             </label>
-            <span
-              className="text-primary hover:text-hoverColor  text-lg"
-              title="Annual gross income"
-            >
+
+            <span className="group text-primary hover:text-hoverColor text-lg cursor-pointer relative">
               <GoQuestion />
+
+              <div className="absolute left-1/2 top-full mt-1 hidden w-max -translate-x-1/2 rounded bg-gray-500 p-2 text-sm text-white group-hover:block z-10">
+                Note: Additional text to be added later <br />
+                as per client's request.
+              </div>
             </span>
           </div>
+
           <input
             autoComplete="off"
             type="text"

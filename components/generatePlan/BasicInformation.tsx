@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { GoQuestion } from "react-icons/go";
 import { toast } from "react-toastify";
 import DatePickerInputField from "../shared/ui/DatePickerInputField";
 import Loader from "../shared/ui/Loader";
@@ -202,16 +203,20 @@ const BasicInformation = ({
 
         <div className="flex items-center space-x-6 py-3">
           <div className="w-full">
-            <label
-              htmlFor="name-icon"
-              className="block mb-2 text-lg font-normal text-gray-900"
-            >
-              Annual Gross Income<span className="text-primary">*</span>
-              <span className="italic text-sm">
-                {" "}
-                {`(Note: Additional text to be added later as per client's request.)`}
+            <div className="mb-2 flex items-center space-x-1 relative">
+              <label className="block text-lg font-normal text-gray-900">
+                Annual gross income
+              </label>
+
+              <span className="group text-primary hover:text-hoverColor text-lg cursor-pointer relative">
+                <GoQuestion />
+
+                <div className="absolute left-1/2 top-full mt-1 hidden w-max -translate-x-1/2 rounded bg-gray-500 p-2 text-sm text-white group-hover:block z-10">
+                  Note: Additional text to be added later <br />
+                  as per client's request.
+                </div>
               </span>
-            </label>
+            </div>
 
             <input
               autoComplete="off"

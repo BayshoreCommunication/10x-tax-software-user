@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { GoQuestion } from "react-icons/go";
 import Loader from "../shared/ui/Loader";
 
 const Strategy = ({
@@ -85,16 +86,20 @@ const Strategy = ({
         <div className="flex items-center space-x-6 py-3">
           <div className="w-full h-[90px]">
             <div>
-              <label
-                htmlFor="home-office"
-                className="block mb-2 text-lg font-normal text-gray-900"
-              >
-                Home Office
-                <span className="italic text-sm">
-                  {" "}
-                  {`(Note: Additional text to be added later as per client's request.)`}
+              <div className="mb-2 flex items-center space-x-1 relative">
+                <label className="block text-lg font-normal text-gray-900">
+                  Home Office
+                </label>
+
+                <span className="group text-primary hover:text-hoverColor text-lg cursor-pointer relative">
+                  <GoQuestion />
+
+                  <div className="absolute left-1/2 top-full mt-1 hidden w-max -translate-x-1/2 rounded bg-gray-500 p-2 text-sm text-white group-hover:block z-10">
+                    Note: Additional text to be added later <br />
+                    as per client's request.
+                  </div>
                 </span>
-              </label>
+              </div>
               <input
                 type="text"
                 id="home-office"

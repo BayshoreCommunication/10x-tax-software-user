@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import DatePickerInputField from "../shared/ui/DatePickerInputField";
+import DatePickerInputForSpouse from "../shared/ui/DatePickerInputForSpouse";
 // Define the types for the form
 interface SpouseDetails {
   fullName: string;
@@ -165,11 +166,15 @@ const AddNewClientForm = ({ session }: any) => {
     setClientInfoForm((prev: any) => ({
       ...prev,
       basicInformation: {
-        ...prev.basicInformation?.spouseDetails,
-        dateOfBirth: dateString,
+        ...prev.basicInformation,
+        spouseDetails: {
+          ...prev.basicInformation?.spouseDetails,
+          dateOfBirth: dateString,
+        },
       },
     }));
   };
+  
 
   const handleSubmitFormData = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -497,7 +502,7 @@ const AddNewClientForm = ({ session }: any) => {
                         placeholder="Name"
                         name="basicInformation.spouseDetails.fullName"
                         value={
-                          clientInfoForm.basicInformation?.spouseDetails
+                          clientInfoForm.basicInformation?.spouseDetails?
                             .fullName || ""
                         }
                         onChange={handleChange}
@@ -537,9 +542,10 @@ const AddNewClientForm = ({ session }: any) => {
                     </div>
 
                     <div className="w-full">
-                      <DatePickerInputField
-                        id="basicInformation.dateOfBirth"
-                        name="basicInformation.dateOfBirth"
+                      <DatePickerInputForSpouse
+                        id=""
+                        name="basicInformation?.spouseDetails
+                            ?.dateOfBirth"
                         value={
                           clientInfoForm?.basicInformation?.spouseDetails
                             ?.dateOfBirth

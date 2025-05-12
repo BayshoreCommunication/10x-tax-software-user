@@ -4,8 +4,18 @@ export const formatDate = (isoDate: string): string => {
   const month = date.getUTCMonth() + 1;
   const year = date.getUTCFullYear();
 
-  return `${day}-${month}-${year}`;
+  return `${month}-${day}-${year}`;
 };
+
+// export const formatDate = (isoDate: string): string => {
+//   const date = new Date(isoDate);
+
+//   return date.toLocaleDateString('en-US', {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//   });
+// };
 
 export const calculateRemainingDays = (expiryDate: string): number => {
   const currentTime = new Date();
