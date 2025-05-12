@@ -170,7 +170,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
     }));
   };
 
-  // Hiring Children Value Calculation
+  // Hiring Children Value Calculation 
 
   useEffect(() => {
     if (clientInfoForm?.dependents?.underAge17) {

@@ -331,6 +331,8 @@ const ShowCalculateValueRightSide: React.FC<
       let totalTax = 0;
       let remainingIncome = income;
 
+      console.log("calculateTotalTax 123", income, filingStatus, taxBrackets);
+
       for (let i = 0; i < taxBrackets?.length; i++) {
         const { min, max, rate } = taxBrackets[i];
 
@@ -349,6 +351,29 @@ const ShowCalculateValueRightSide: React.FC<
       return totalTax;
     };
 
+    // const calculateTotalTax = (
+    //   income: number,
+    //   filingStatus: FilingStatus
+    // ): number => {
+    //   const taxBrackets = taxRangeSheet[filingStatus];
+    //   if (!taxBrackets || income <= 0) return 0;
+
+    //   let totalTax = 0;
+
+    //   for (const { min, max, rate } of taxBrackets) {
+    //     if (income <= min) break;
+
+    //     const upperLimit = max ?? income; // If max is null/undefined, use income as upper limit
+    //     const taxableIncomeInBracket = Math.min(income, upperLimit) - min;
+
+    //     totalTax += taxableIncomeInBracket * (rate / 100);
+
+    //     if (!max || income <= max) break;
+    //   }
+
+    //   return totalTax;
+    // };
+
     const calculateEffectiveTaxRate = (
       income: number,
       totalTax: number
@@ -360,6 +385,8 @@ const ShowCalculateValueRightSide: React.FC<
       taxableIncome,
       clientInfoForm?.fillingStatus
     );
+
+    console.log("totalTax", totalTax);
 
     const effectiveTaxRate = calculateEffectiveTaxRate(
       clientInfoForm?.basicInformation?.annualGrossIncome || 0,
@@ -401,6 +428,8 @@ const ShowCalculateValueRightSide: React.FC<
       minimumFractionDigits: 2,
     }).format(amount);
   };
+
+  console.log("taxDetails", taxDetails);
 
   return (
     <div>
