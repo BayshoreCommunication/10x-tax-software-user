@@ -188,6 +188,8 @@ export async function userSignUpOtpCheck(
       body: JSON.stringify({ email, otp }),
     });
 
+    console.log("check this message 99", response);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
