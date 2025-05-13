@@ -130,8 +130,10 @@ const SignupOtpVerification = ({
 
       const response = await userSignUpOtpCheck(formData);
 
-      if (!response) {
-        setError("Invalid Sign up OTP.");
+      console.log("Response from OTP verification:", response);
+
+      if (!response.ok) {
+        setError(response?.error || "Invalid Sign up OTP.");
       } else {
         router.push("/sign-in");
         toast.success("Successfully Sign up!");
