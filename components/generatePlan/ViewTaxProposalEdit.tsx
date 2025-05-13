@@ -42,7 +42,7 @@ const ViewTaxProposalEdit = ({ session }: any) => {
 
   const [estimatedOverpaymentTwo, setEstimatedOverpaymentTwo] = useState({
     year:
-      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.year || "2023",
+      taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.year || "2024",
     amount:
       taxInfo?.data?.taxProposalInfo?.estimatedOverpaymentTwo?.amount || 0,
     lastYearLost:
