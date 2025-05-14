@@ -1,3 +1,4 @@
+import MobileBlocker from "@/components/shared/ui/MobileBlocker";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { ReactNode } from "react";
@@ -25,7 +26,10 @@ export default async function RootLayout({
       <head>
         <style>{`:root { --primary-color: ${brandColor || "#D5AD45"}; --hover-color: ${hoverColor}; }`}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <MobileBlocker />
+        {children}
+      </body>
     </html>
   );
 }
