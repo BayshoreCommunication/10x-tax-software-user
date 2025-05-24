@@ -200,21 +200,12 @@ const CalculateValueLeftSide = ({
             autoComplete="off"
             type="text"
             id="email-address-icon"
-            className={`bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white  ${
-              Number(clientInfoForm.strategy.homeOffice) > 1500
-                ? "border-red-300 focus:ring-red-300 focus:border-red-300"
-                : "border-gray-300 focus:ring-primary focus:border-primary"
-            }"`}
+            className="bg-[#383E54] border border-white border-opacity-10 text-lg rounded-md focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-white placeholder-opacity-80  active:border-primary outline-none text-white"
             placeholder="$"
             name="strategy.homeOffice"
             value={clientInfoForm.strategy.homeOffice || ""}
             onChange={handleChange}
           />
-          {Number(clientInfoForm.strategy.homeOffice) > 1500 && (
-            <p className="mt-2 text-sm text-red-500">
-              Maximum home office deduction is $1,500.
-            </p>
-          )}
         </div>
 
         {/* Depreciation */}

@@ -135,7 +135,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
       depreciation: clientDetails?.strategy?.depreciation || "",
       travel: clientDetails?.strategy?.travel || "",
       meals: clientDetails?.strategy?.meals || "",
-      hiringChildren: clientDetails?.dependents?.underAge17 * 1500 || "",
+      hiringChildren: clientDetails?.dependents?.underAge17 * 15000 || "",
       scheduleCToSCorp: clientDetails?.strategy?.scheduleCToSCorp || "",
       costSegregation: clientDetails?.strategy?.costSegregation || "",
       rentHomeToCorporation:
@@ -170,11 +170,11 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
     }));
   };
 
-  // Hiring Children Value Calculation 
+  // Hiring Children Value Calculation
 
   useEffect(() => {
     if (clientInfoForm?.dependents?.underAge17) {
-      const hiringChildrenValue = clientInfoForm.dependents.underAge17 * 1500;
+      const hiringChildrenValue = clientInfoForm.dependents.underAge17 * 15000;
       setClientInfoForm((prevState: any) => ({
         ...prevState,
         strategy: {
