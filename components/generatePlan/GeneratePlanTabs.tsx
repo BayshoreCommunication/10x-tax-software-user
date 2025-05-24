@@ -109,7 +109,7 @@ const GeneratePlanTabs = ({ session, id, clientDetails }: any) => {
   // Initial state with proper typing
 
   const [clientInfoForm, setClientInfoForm] = useState<ClientInfoForm>({
-    fillingStatus: clientDetails?.fillingStatus || "Single",
+    fillingStatus: clientDetails?.fillingStatus || "single",
     basicInformation: {
       fullName: clientDetails?.basicInformation?.fullName || "",
       phone: clientDetails?.basicInformation?.phone || "",

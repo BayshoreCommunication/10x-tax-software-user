@@ -153,25 +153,16 @@ const ShowCalculateValueRightSide: React.FC<
 
   const taxBrackets = taxRangeSheet[clientInfoForm?.fillingStatus];
 
-  const calculateStandardDeductions = (filingStatus: FilingStatus): number => {
-    let deductionsValue = 0;
+  // const calculateStandardDeductions = (filingStatus: FilingStatus): number => {
+  //   let deductionsValue = 0;
 
-    if (filingStatus === "single") deductionsValue = 15000;
-    else if (filingStatus === "marriedFilingJointly") deductionsValue = 30000;
-    else if (filingStatus === "headOfHousehold") deductionsValue = 22500;
-    else if (filingStatus === "marriedFilingSeparately")
-      deductionsValue = 15000;
+  //   if (filingStatus === "single") deductionsValue = 15000;
+  //   else if (filingStatus === "marriedFilingJointly") deductionsValue = 30000;
+  //   else if (filingStatus === "headOfHousehold") deductionsValue = 22500;
+  //   else if (filingStatus === "marriedFilingSeparately")
+  //     deductionsValue = 15000;
 
-    return deductionsValue;
-  };
-
-  // const calculateStrategyDeductions = (
-  //   strategy: Record<string, string>
-  // ): number => {
-  //   return Object.values(strategy).reduce((total, value) => {
-  //     const numericValue = parseFloat(value);
-  //     return total + (isNaN(numericValue) ? 0 : numericValue);
-  //   }, 0);
+  //   return deductionsValue;
   // };
 
   const calculateStrategyDeductions = (strategy: Strategy): number => {
@@ -181,56 +172,13 @@ const ShowCalculateValueRightSide: React.FC<
     }, 0);
   };
 
-  const calculateAgeDeductions = (
-    clientAge: number | null,
-    filingStatus: FilingStatus | undefined
-  ): number => {
-    if (clientAge && clientAge > 65 && filingStatus) {
-      const deductionsMap: Record<FilingStatus, number> = {
-        single: 13850,
-        marriedFilingJointly: 27700,
-        headOfHousehold: 20800,
-        marriedFilingSeparately: 13850,
-      };
-
-      return deductionsMap[filingStatus] || 0;
-    }
-
-    return 0;
-  };
-
-  // const calculateMarginalTaxRate = (
-  //   income: number,
-  //   filingStatus: FilingStatus
-  // ): number => {
-  //   const taxBrackets = taxRangeSheet[filingStatus];
-
-  //   for (let i = 0; i < taxBrackets?.length; i++) {
-  //     const bracket = taxBrackets[i];
-  //     if (
-  //       income >= bracket.min &&
-  //       (bracket.max === null ||
-  //         bracket.max === undefined ||
-  //         income <= bracket.max)
-  //     ) {
-  //       return bracket.rate;
-  //     }
-  //   }
-
-  //   return taxBrackets[taxBrackets?.length - 1]?.rate;
-  // };
-
   const calculateMarginalTaxRate = (
     income: number,
     filingStatus: FilingStatus
   ): number => {
     const taxBrackets = taxRangeSheet[filingStatus];
 
-    // Check if taxBrackets is defined and not empty
     if (!taxBrackets || taxBrackets.length === 0) {
-      // throw new Error(
-      //   "Tax brackets are not defined or empty for the given filing status."
-      // );
       return 0;
     }
 
@@ -246,10 +194,8 @@ const ShowCalculateValueRightSide: React.FC<
       }
     }
 
-    // Ensure the last element is defined before accessing its rate
     const lastBracket = taxBrackets[taxBrackets.length - 1];
     if (!lastBracket) {
-      // throw new Error("The last tax bracket is undefined.");
       return 0;
     }
 
@@ -264,46 +210,35 @@ const ShowCalculateValueRightSide: React.FC<
     return 0;
   };
 
-  const otherAndRetirementDeductions = (value: DeductionInput = {}) => {
-    const { contributations, iRAContributations, otherDeductions } = value;
-
-    const parsedContributations = contributations
-      ? Number(contributations)
-      : undefined;
-    const parsedIRAContributations = iRAContributations
-      ? Number(iRAContributations)
-      : undefined;
-    const parsedOtherDeductions = otherDeductions ? Number(otherDeductions) : 0;
-
-    const retirementDeduction =
-      parsedContributations === undefined ||
-      parsedContributations === null ||
-      parsedContributations === 0
-        ? (parsedIRAContributations ?? 0)
-        : parsedContributations;
-
-    return { retirementDeduction, otherDeduction: parsedOtherDeductions };
-  };
-
   useEffect(() => {
     const strategyDeductions = calculateStrategyDeductions(
       clientInfoForm?.strategy
     );
 
-    const totalStandardDeductions = calculateStandardDeductions(
-      clientInfoForm?.fillingStatus
-    );
+    console.log("check value item 01", strategyDeductions);
+
+    // const totalStandardDeductions = calculateStandardDeductions(
+    //   clientInfoForm?.fillingStatus
+    // );
+
+    // console.log("check value item 02", totalStandardDeductions);
 
     const marginalTaxRate = calculateMarginalTaxRate(
       clientInfoForm?.basicInformation?.annualGrossIncome || 0,
       clientInfoForm?.fillingStatus
     );
 
-    const totalDeductions = strategyDeductions + totalStandardDeductions;
+    console.log("check value item 03", marginalTaxRate);
+
+    const totalDeductions = strategyDeductions;
+
+    console.log("check value item 04", totalDeductions);
 
     const taxableIncome =
       (clientInfoForm?.basicInformation?.annualGrossIncome ?? 0) -
       totalDeductions;
+
+    console.log("check value item 05", taxableIncome);
 
     const calculateTotalTax = (
       income: number,
@@ -338,24 +273,32 @@ const ShowCalculateValueRightSide: React.FC<
       return income > 0 ? (totalTax / income) * 100 : 0;
     };
 
+    console.log("check value item 06", calculateEffectiveTaxRate);
+
     const totalTax = calculateTotalTax(
       taxableIncome,
       clientInfoForm?.fillingStatus
     );
 
-    console.log("totalTax", totalTax);
+    console.log("check value item 07", totalTax);
 
     const effectiveTaxRate = calculateEffectiveTaxRate(
       clientInfoForm?.basicInformation?.annualGrossIncome || 0,
       totalTax
     );
 
+    console.log("check value item 08", effectiveTaxRate);
+
     const totalTaxWithoutDeduction = calculateTotalTax(
       clientInfoForm?.basicInformation?.annualGrossIncome ?? 0,
       clientInfoForm?.fillingStatus
     );
 
+    console.log("check value item 09", totalTaxWithoutDeduction);
+
     const taxSavedByDeductions = totalTaxWithoutDeduction - totalTax;
+
+    console.log("check value item 10", clientInfoForm?.fillingStatus);
 
     setTaxDetails({
       annualGrossIncome:
@@ -372,7 +315,7 @@ const ShowCalculateValueRightSide: React.FC<
       taxSavedByDeductions: taxSavedByDeductions || 0,
     });
   }, [
-    clientInfoForm,
+    JSON.stringify(clientInfoForm),
     clientInfoForm?.strategy,
     clientInfoForm?.fillingStatus,
     taxRangeSheet,
