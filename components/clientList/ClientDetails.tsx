@@ -79,7 +79,7 @@ const ClientDetails = async ({ clientDetails }: any) => {
                     <td className="px-6 py-3 text-[#666666]">
                       Marital Status:
                     </td>
-                    <td className="px-6 py-3 text-[#11142D]">
+                    <td className="px-6 py-3 text-[#11142D] capitalize">
                       {clientDetails?.basicInformation?.maritalStatus}
                     </td>
                   </tr>
