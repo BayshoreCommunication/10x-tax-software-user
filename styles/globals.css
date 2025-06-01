@@ -26,3 +26,20 @@ body {
 ::-webkit-scrollbar-corner {
   background: rgb(199, 199, 199);
 }
+/* for date picker */
+/* input[type="date"] {
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  padding-left: 35px;
+  color: #333;
+  font-size: 16px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: url("custom-calendar-icon.svg") no-repeat center;
+  color: transparent;
+  background-size: contain;
+  cursor: pointer;
+} */

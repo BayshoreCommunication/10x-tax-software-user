@@ -306,8 +306,8 @@ const AddNewClientForm = ({ session }: any) => {
                   Date of Birth<span className="text-primary">*</span>
                 </label>
 
-                <div className="relative max-w-full">
-                  <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                {/* <div className="relative max-w-full">
+                  <div className="absolute inset-y-0 end-0 flex items-center pe-3.5 pointer-events-none">
                     <svg
                       className="w-4 h-4 text-gray-500 dark:text-gray-400"
                       aria-hidden="true"
@@ -321,13 +321,13 @@ const AddNewClientForm = ({ session }: any) => {
                   <input
                     id="basicInformation.dateOfBirth"
                     type="date"
-                    className="ps-10 p-2.5 bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
+                    className=" p-2.5 bg-[#eeeeee] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400  active:border-primary outline-none"
                     placeholder="Select date"
                     name="basicInformation.dateOfBirth"
                     value={clientInfoForm.basicInformation.dateOfBirth || ""}
                     onChange={handleChange}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="flex items-center space-x-6 py-3">
